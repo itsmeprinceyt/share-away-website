@@ -1,13 +1,34 @@
 'use client';
-
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import getBaseUrl from '@/utils/getBaseUrl';
 
 export default function TablePage() {
     const { name } = useParams();
+    const router = useRouter();
     const [data, setData] = useState<object[]>([]);
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        
+        const sessionData = sessionStorage.getItem('userSession');
+
+        if (!sessionData) {
+            router.push('/');
+            return;
+        }
+
+        const parsedSession = JSON.parse(sessionData);
+        const { user, expiry } = parsedSession;
+        const expiryDate = new Date(expiry);
+
+        if (new Date() > expiryDate || user.isAdmin !== 1) {
+            router.push('/');
+            return;
+        }
+
+
+    }, [router]);
 
     useEffect(() => {
         fetch(`${getBaseUrl()}/tables/${name}`)

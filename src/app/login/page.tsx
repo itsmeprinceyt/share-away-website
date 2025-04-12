@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import getBaseUrl from '../../utils/getBaseUrl';
 
@@ -10,6 +10,17 @@ export default function Login() {
     const [password, setPassword] = useState('');
 
     const router = useRouter();
+
+    // Check if the user is already logged in and redirect to profile page
+    useEffect(() => {
+        const userSession = sessionStorage.getItem('userSession');
+        if (userSession) {
+            const userData = JSON.parse(userSession);
+            if (userData.user.username) {
+                router.push(`/profile/${userData.user.uuid}`);
+            }
+        }
+    }, [router]);
 
     const handleLogin = async () => {
         try {
@@ -23,7 +34,7 @@ export default function Login() {
                     password: password,
                 }),
             });
-    
+
             const data = await response.json();
             console.log(data);
             const { uuid, message, ...userDetails } = data;
@@ -31,15 +42,15 @@ export default function Login() {
                 // Store the user details and set an expiry time of 30 days
                 const expiryDate = new Date();
                 expiryDate.setDate(expiryDate.getDate() + 30);  // Expiry date set to 30 days from now
-    
+
                 const sessionData = {
                     user: { uuid, ...userDetails },
                     message,
                     expiry: expiryDate.toISOString(),  // Store expiry as an ISO string
                 };
-    
+
                 sessionStorage.setItem('userSession', JSON.stringify(sessionData));
-    
+
                 // Redirect to the profile page
                 router.push(`/profile/${uuid}`);
             } else {
@@ -50,8 +61,8 @@ export default function Login() {
             console.error('Error during login request:', err);
         }
     };
-    
-    
+
+
 
     return (
         <div className="h-screen flex flex-col justify-center items-center">

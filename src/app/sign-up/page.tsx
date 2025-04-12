@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import getBaseUrl from '../../utils/getBaseUrl';
 
@@ -21,6 +22,19 @@ export default function SignUp() {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
+
+    const router = useRouter();
+
+    // Check if the user is already logged in so there is no need to sign up so it redirect to profile page
+    useEffect(() => {
+        const userSession = sessionStorage.getItem('userSession');
+        if (userSession) {
+            const userData = JSON.parse(userSession);
+            if (userData.user.username) {
+                router.push(`/profile/${userData.user.uuid}`);
+            }
+        }
+    }, [router]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
