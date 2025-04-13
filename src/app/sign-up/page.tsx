@@ -20,7 +20,6 @@ export default function SignUp() {
     });
 
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
 
     const router = useRouter();
@@ -39,31 +38,52 @@ export default function SignUp() {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-
+    
+        // 🔒 File size check (150KB max)
         if (file.size > 150 * 1024) {
             setError("Image must be under 150KB.");
             return;
         }
-
-        const img = new window.Image();
+    
         const reader = new FileReader();
-
+        const img = new window.Image();
+    
         reader.onload = (event) => {
-            if (typeof event.target?.result === "string") {
-                img.src = event.target.result;
-                const result = event.target?.result;
-                img.onload = () => {
-                    if (img.width !== img.height) {
-                        setError("Image must be square (1:1 ratio).");
-                    } else {
-                        setError(null);
-                        setForm((prev) => ({ ...prev, profilePic: result }));
-                        setPreview(result);
-                    }
-                };
+            const base64 = event.target?.result as string;
+    
+            // Guard in case reader fails
+            if (!base64) {
+                setError("Failed to read image.");
+                return;
             }
+    
+            img.src = base64;
+    
+            img.onload = () => {
+                // 🧭 Enforce 1:1 aspect ratio
+                if (img.width !== img.height) {
+                    setError("Image must be square (1:1 ratio).");
+                    return;
+                }
+    
+                // ✅ All good: update state
+                setError(null);
+                setPreview(base64);
+                setForm((prev) => ({
+                    ...prev,
+                    profilePic: base64,
+                }));
+            };
+    
+            img.onerror = () => {
+                setError("Could not load image.");
+            };
         };
-
+    
+        reader.onerror = () => {
+            setError("Failed to read the file.");
+        };
+    
         reader.readAsDataURL(file);
     };
 
@@ -74,7 +94,6 @@ export default function SignUp() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-        setSuccess(null);
 
         if (form.password !== form.confirmPassword) {
             setError("Passwords do not match");
@@ -99,7 +118,6 @@ export default function SignUp() {
             if (!response.ok) {
                 setError(data.message || "Registration failed");
             } else {
-                setSuccess("User registered! Please verify your email.");
                 setForm({
                     username: "",
                     email: "",
@@ -164,7 +182,6 @@ export default function SignUp() {
                 </div>
 
                 {error && <p className="text-red-500">{error}</p>}
-                {success && <p className="text-green-600">{success}</p>}
 
                 <button
                     type="submit"

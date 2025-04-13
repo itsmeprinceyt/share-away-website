@@ -1,6 +1,7 @@
+// User Type without password
 export default interface User {
-    uuid: string;
     id: number;
+    uuid: string;
     pfp: string;
     username: string;
     email: string;

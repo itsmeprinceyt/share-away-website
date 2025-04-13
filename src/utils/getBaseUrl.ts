@@ -1,3 +1,6 @@
+/**
+ * @brief Switches between local and production API URLs based on the environment variable.
+ */
 const getBaseUrl = () => {
     if (process.env.NEXT_PUBLIC_ENV === 'dev') {
         console.log('Using local API URL: ',process.env.NEXT_PUBLIC_LOCAL_API_URL);

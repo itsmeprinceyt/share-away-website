@@ -1,14 +1,13 @@
 "use client";
 import { useRouter } from 'next/navigation';
 
+/**
+ * @brief Logout component that clears the user session and redirects to the login page.
+ */
 export default function Logout() {
     const router = useRouter();
-
     const handleLogout = () => {
-        // Clear the user session from sessionStorage
         sessionStorage.removeItem('userSession');
-
-        // Redirect to the login page
         router.push('/login');
     };
 
