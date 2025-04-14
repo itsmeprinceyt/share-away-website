@@ -1,41 +1,33 @@
 "use client";
 import { useEffect, useState } from 'react';
-
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import getBaseUrl from '../../utils/getBaseUrl';
+import { useCheckSession } from '../../hooks/useCheckSession';
+import Loading from '../(components)/Loading';
 
+/**
+ * @description     - This is the main Admin panel where we can see all the user activity,
+ * recently posted, recently heart givens, and access database tables and edit or delete.
+ */
 export default function Admin() {
-    const router = useRouter();
     const [tables, setTables] = useState<string[]>([]);
-
+    const [loading, setLoading] = useState(false);
+    useCheckSession('ADMIN');
+    
     useEffect(() => {
-        
-        const sessionData = sessionStorage.getItem('userSession');
-
-        if (!sessionData) {
-            router.push('/');
-            return;
-        }
-
-        const parsedSession = JSON.parse(sessionData);
-        const { user, expiry } = parsedSession;
-        const expiryDate = new Date(expiry);
-
-        if (new Date() > expiryDate || user.isAdmin !== 1) {
-            router.push('/');
-            return;
-        }
+        setLoading(true);
 
         const fetchTables = async () => {
             const res = await fetch(`${getBaseUrl()}/tables`);
             const data = await res.json();
             setTables(data.tables);
+            setLoading(false);
         };
-
         fetchTables();
-    }, [router]);
+    }, []);
 
+    if (loading) return <Loading/>;
+    
     return (
         <div className="space-y-2 p-2">
             {tables.map((name, index) => (

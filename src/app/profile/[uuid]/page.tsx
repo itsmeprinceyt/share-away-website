@@ -4,21 +4,20 @@ import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 import getBaseUrl from '../../../utils/getBaseUrl';
 import { updateUserSession } from '../../../utils/updateUserSesssion';
+import { useCheckSession } from '../../../hooks/useCheckSession';
 import User from '../../../types/User';
+import Loading from '../../(components)/Loading';
 
+/**
+ * @description             - This page is used to display the profile of a user.
+ * @param profileDetails  - The detail of the user we are viewing.
+ */
 export default function ProfilePage() {
     const router = useRouter();
     const params = useParams();
     const uuid = params?.uuid as string;
-
-    // State for the logged-in user's session data
-    const [loggedInUserDetails, setLoggedInUserDetails] = useState<User | null>(null);
-
-    // State for the profile details of the user we're viewing
     const [profileDetails, setProfileDetails] = useState<User | null>(null);
 
-    // State for the logged-in user's message and admin status
-    const [message, setMessage] = useState('');
     const [isOwner, setIsOwner] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
@@ -33,68 +32,36 @@ export default function ProfilePage() {
 
     const [passWordEdit, setPasswordEdit] = useState(false);
     const [pfpChange, setPfpChange] = useState(false);
-
+    const [loading, setLoading] = useState(true);
+    const session = useCheckSession();
 
     useEffect(() => {
         if (!uuid) return;
 
-        const sessionData = sessionStorage.getItem('userSession');
+        setIsAdmin(session?.user.isAdmin === 1);
+        setLoading(true);
+        
+        fetch(`${getBaseUrl()}/user/${uuid}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (!data || !data.uuid) throw new Error('Invalid user data');
+                setProfileDetails(data);
+                // Check if we are viewing our own profile or not.
+                if (uuid === session?.user.uuid) {
+                    setIsOwner(true);
+                } else {
+                    setIsOwner(false);
+                }
+            })
+            .catch(() => {
+                router.push('/404');
+            }).finally(() => {
+                setLoading(false);
+            });
 
-        // If no user session, redirect to login
-        if (!sessionData) {
-            router.push('/login');
-            return;
-        }
+        }, [router, uuid, session?.user.isAdmin, session?.user.uuid]);
 
-        const parsedSession = JSON.parse(sessionData);
-        const { user, expiry } = parsedSession;
-        const expiryDate = new Date(expiry);
-
-        // Check if session is expired and redirect to login
-        if (new Date() > expiryDate) {
-            sessionStorage.removeItem('userSession');
-            router.push('/login');
-            return;
-        }
-
-        setMessage(parsedSession.message || '');
-        setIsAdmin(user.isAdmin === 1); // Check if the logged-in user is an admin
-
-        // Set logged-in user details
-        setLoggedInUserDetails(user);
-
-        // If viewing your own profile, use logged-in user details
-        if (uuid === user.uuid) {
-            setProfileDetails(user);
-            setIsOwner(true);
-        } else {
-            // If viewing someone else's profile, fetch from backend
-            fetch(`${getBaseUrl()}/user/${uuid}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data && data.uuid) {
-                        setProfileDetails(data);
-                        
-                        setIsOwner(false); // Not the owner
-                    } else {
-                        router.push('/404'); // If no user found
-                    }
-                })
-                .catch(() => {
-                    router.push('/404'); // Handle error
-                });
-        }
-    }, [router, uuid]);
-    
-
-
-    // If data is still loading or no profile details found, show loading message
-    if (!uuid || (!profileDetails && !loggedInUserDetails)) return <p>Loading...</p>;
-
-    // Use logged-in user details for their own profile, else use fetched profile details
-    const userDetails = profileDetails || loggedInUserDetails;
-    console.log(userDetails!.pfp); // Check if it's a valid base64 string
-
+    if (loading) return <Loading/>;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -106,50 +73,45 @@ export default function ProfilePage() {
         if (!file) return;
         const img = new window.Image();
         const reader = new FileReader();
-    
+
         reader.onload = function (event) {
             if (!event.target?.result) return;
-    
+
             img.onload = () => {
-                console.log(`🖼️ Original dimensions: ${img.width}x${img.height}`);
-    
                 if (img.width !== img.height) {
                     setError("Image must be square (1:1 aspect ratio).");
                     return;
                 }
-    
+
                 const canvas = document.createElement('canvas');
                 const maxSize = 128;
                 canvas.width = maxSize;
                 canvas.height = maxSize;
-    
+
                 const ctx = canvas.getContext('2d');
                 if (!ctx) {
                     return;
                 }
-    
+
                 ctx.drawImage(img, 0, 0, maxSize, maxSize);
                 const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-    
+
                 const base64Length = compressedBase64.length - 'data:image/jpeg;base64,'.length;
-                const estimatedSize = (base64Length * 3) / 4; 
-    
+                const estimatedSize = (base64Length * 3) / 4;
+
                 if (estimatedSize > 150 * 1024) {
                     setError("Compressed image still exceeds 150KB. Please choose a smaller image.");
                     return;
                 }
-    
+
                 setPreview(compressedBase64);
                 setForm(prev => ({ ...prev, pfp: compressedBase64 }));
                 setError('');
             };
-    
             img.src = event.target.result as string;
         };
-    
         reader.readAsDataURL(file);
     };
-    
 
     const handleEditPassword = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -157,9 +119,7 @@ export default function ProfilePage() {
         setSuccess('');
 
         const session = sessionStorage.getItem('userSession');
-        if (!session) return setError("User not logged in");
-
-        const { user } = JSON.parse(session);
+        const { user } = JSON.parse(session!);
 
         try {
             const response = await fetch(`${getBaseUrl()}/edit/edit-password`, {
@@ -169,12 +129,12 @@ export default function ProfilePage() {
                 },
                 body: JSON.stringify({
                     uuid: user.uuid,
-                    currentPassword: form.currentPassword,
-                    confirmPassword: form.confirmPassword,
+                    currentPassword: form.currentPassword, // Current password
+                    confirmPassword: form.confirmPassword, // New Password
                 }),
             });
-
             const data = await response.json();
+
             if (response.ok) setSuccess(data.message);
             else setError(data.message || 'Failed to update password');
         } catch (err: unknown) {
@@ -192,9 +152,7 @@ export default function ProfilePage() {
         setSuccess('');
 
         const session = sessionStorage.getItem('userSession');
-        if (!session) return setError("User not logged in");
-
-        const { user } = JSON.parse(session);
+        const { user } = JSON.parse(session!);
 
         try {
             const response = await fetch(`${getBaseUrl()}/edit/edit-pfp`, {
@@ -204,13 +162,12 @@ export default function ProfilePage() {
                 },
                 body: JSON.stringify({
                     uuid: user.uuid,
-                    pfp: form.pfp, // ✅ this should already be base64
+                    pfp: form.pfp,
                 }),
             });
-
             const data = await response.json();
-            if (response.ok){
-                
+
+            if (response.ok) {
                 setSuccess(data.message)
                 updateUserSession({ pfp: form.pfp });
                 router.refresh();
@@ -223,19 +180,16 @@ export default function ProfilePage() {
                 setError('Something went wrong');
             }
         } finally {
-            router.push('/profile');
+            router.push(`/profile`);
         }
     };
 
-
     const handlePasswordChange = () => {
         setPasswordEdit(!passWordEdit);
-        console.log('Edit Password clicked!');
     }
 
     const handlePfpChange = () => {
         setPfpChange(!pfpChange)
-        console.log('Edit Pfp clicked!');
     }
 
     return (
@@ -294,13 +248,32 @@ export default function ProfilePage() {
                     </form>
                 </div>
             )}
-            <h1>Welcome to {userDetails!.username}&apos;s Profile</h1>
-            <p>Email: {userDetails!.email}</p>
-            <p>Verified: {userDetails!.isVerified ? 'Yes' : 'No'}</p>
-            <p>Registered on: {new Date(userDetails!.registeredDate).toLocaleDateString()}</p>
-            <p>Profile picture: {userDetails!.pfp ? <Image src={userDetails!.pfp} alt="Profile" width={100} height={100} /> : "None"}</p>
+            <h1>Welcome to {profileDetails!.username}&apos;s Profile</h1>
+            <p>Email: {profileDetails!.email}</p>
+            <p>Verified: {profileDetails!.isVerified ? 'Yes' : 'No'}</p>
+            <p>Registered on: {new Date(profileDetails!.registeredDate).toLocaleDateString()}</p>
+            <p>Profile picture: {profileDetails!.pfp ? <Image src={profileDetails!.pfp} alt="Profile" width={100} height={100} /> : "None"}</p>
 
-            {message && isOwner && <p>{message}</p>}
+            <p>Total Posts: {profileDetails!.totalPosts ?? 0}</p>
+            <p>Total Hearts: {profileDetails!.totalHearts ?? 0}</p>
+
+            {profileDetails!.posts && profileDetails!.posts.length > 0 ? (
+                <div className="mt-4">
+                    <h2 className="text-lg font-semibold mb-2">Posts by {profileDetails!.username}</h2>
+                    <ul className="space-y-2">
+                        {/*profileDetails!.posts.map((post) => (
+                            <li key={post.id} className="bg-gray-100 p-4 rounded shadow">
+                                <h3 className="font-bold text-lg">{post.title}</h3>
+                                <p className="text-gray-700">{post.content}</p>
+                                <p className="text-sm text-gray-500">Posted on {new Date(post.createdAt).toLocaleString()}</p>
+                            </li>
+                        ))*/}
+                    </ul>
+                </div>
+            ) : (
+                <p className="text-gray-500 mt-4">No posts available.</p>
+            )}
+            
 
             {/* If the user is the owner or an admin, show edit options */}
             {(isOwner || isAdmin) && (

@@ -1,49 +1,35 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import getBaseUrl from '@/utils/getBaseUrl';
+import { useCheckSession } from '../../../../hooks/useCheckSession';
+import Loading from '../../../(components)/Loading';
 
+/**
+ * @description     - This page is used to display the data of a specific table in the database.
+ */
 export default function TablePage() {
     const { name } = useParams();
-    const router = useRouter();
     const [data, setData] = useState<object[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    useCheckSession('ADMIN');
 
     useEffect(() => {
+        setLoading(true);
         
-        const sessionData = sessionStorage.getItem('userSession');
-
-        if (!sessionData) {
-            router.push('/');
-            return;
-        }
-
-        const parsedSession = JSON.parse(sessionData);
-        const { user, expiry } = parsedSession;
-        const expiryDate = new Date(expiry);
-
-        if (new Date() > expiryDate || user.isAdmin !== 1) {
-            router.push('/');
-            return;
-        }
-
-
-    }, [router]);
-
-    useEffect(() => {
         fetch(`${getBaseUrl()}/tables/${name}`)
             .then(res => res.json())
             .then(json => {
                 setData(json.data);
-                setLoading(false);
             })
             .catch(err => {
                 console.error('Error fetching table data:', err);
+            }).finally(() => {
                 setLoading(false);
             });
     }, [name]);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <Loading/>;
 
     return (
         <div>

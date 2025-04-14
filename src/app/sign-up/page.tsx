@@ -1,9 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
 import Image from "next/image";
 import getBaseUrl from '../../utils/getBaseUrl';
+import useRedirectToProfile from '../../hooks/useRedirectToProfile';
 
+/**
+ * @description    - This page is used to sign up a new user.
+ */
 export default function SignUp() {
     const [form, setForm] = useState<{
         username: string;
@@ -22,51 +25,33 @@ export default function SignUp() {
     const [error, setError] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
 
-    const router = useRouter();
-
-    // Check if the user is already logged in so there is no need to sign up so it redirect to profile page
-    useEffect(() => {
-        const userSession = sessionStorage.getItem('userSession');
-        if (userSession) {
-            const userData = JSON.parse(userSession);
-            if (userData.user.username) {
-                router.push(`/profile/${userData.user.uuid}`);
-            }
-        }
-    }, [router]);
+    useRedirectToProfile();
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-    
-        // 🔒 File size check (150KB max)
         if (file.size > 150 * 1024) {
             setError("Image must be under 150KB.");
             return;
         }
     
-        const reader = new FileReader();
         const img = new window.Image();
-    
+        const reader = new FileReader();
         reader.onload = (event) => {
             const base64 = event.target?.result as string;
     
-            // Guard in case reader fails
             if (!base64) {
                 setError("Failed to read image.");
                 return;
             }
     
             img.src = base64;
-    
             img.onload = () => {
-                // 🧭 Enforce 1:1 aspect ratio
                 if (img.width !== img.height) {
                     setError("Image must be square (1:1 ratio).");
                     return;
                 }
-    
-                // ✅ All good: update state
+
                 setError(null);
                 setPreview(base64);
                 setForm((prev) => ({

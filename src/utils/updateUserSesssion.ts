@@ -1,15 +1,21 @@
-// utils/updateUserSession.ts
-import User from '../types/User'; // Import your User type
+import User from '../types/User';
 
 export const updateUserSession = (updatedData: Partial<User>) => {
   const session = sessionStorage.getItem('userSession');
   if (!session) return;
 
-  const { user }: { user: User } = JSON.parse(session); // Type the parsed session
+  const parsedSession = JSON.parse(session) as { user: User; expiry: string };
 
-  // Merge the updated data with the current user session
-  const updatedUser: User = { ...user, ...updatedData };
+  const updatedUser: User = {
+    ...parsedSession.user,
+    ...updatedData,
+  };
 
-  // Save the updated session back to sessionStorage
-  sessionStorage.setItem('userSession', JSON.stringify({ user: updatedUser }));
+  const updatedSession = {
+    ...parsedSession,
+    user: updatedUser,
+  };
+
+  sessionStorage.setItem('userSession', JSON.stringify(updatedSession));
+  localStorage.setItem('userSession', JSON.stringify(updatedSession));
 };

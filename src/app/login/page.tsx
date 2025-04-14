@@ -1,26 +1,18 @@
 'use client'
-
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import getBaseUrl from '../../utils/getBaseUrl';
+import useRedirectToProfile from '../../hooks/useRedirectToProfile';
 
+/**
+ * @description     - This page is used to login the user.
+ */
 export default function Login() {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const router = useRouter();
-
-    // Check if the user is already logged in and redirect to profile page
-    useEffect(() => {
-        const userSession = sessionStorage.getItem('userSession');
-        if (userSession) {
-            const userData = JSON.parse(userSession);
-            if (userData.user.username) {
-                router.push(`/profile/${userData.user.uuid}`);
-            }
-        }
-    }, [router]);
+    useRedirectToProfile();
 
     const handleLogin = async () => {
         try {
@@ -34,35 +26,28 @@ export default function Login() {
                     password: password,
                 }),
             });
-
             const data = await response.json();
-            console.log(data);
             const { uuid, message, ...userDetails } = data;
             if (response.ok) {
-                // Store the user details and set an expiry time of 30 days
                 const expiryDate = new Date();
-                expiryDate.setDate(expiryDate.getDate() + 30);  // Expiry date set to 30 days from now
+                expiryDate.setDate(expiryDate.getDate() + 30);
 
                 const sessionData = {
                     user: { uuid, ...userDetails },
                     message,
-                    expiry: expiryDate.toISOString(),  // Store expiry as an ISO string
+                    expiry: expiryDate.toISOString(),
                 };
 
                 sessionStorage.setItem('userSession', JSON.stringify(sessionData));
-
-                // Redirect to the profile page
-                router.push(`/profile/${uuid}`);
+                localStorage.setItem('userSession', JSON.stringify(sessionData));
+                router.push(`/home`);
             } else {
-                // Handle login failure
                 console.log("Login failed");
             }
         } catch (err) {
             console.error('Error during login request:', err);
         }
     };
-
-
 
     return (
         <div className="h-screen flex flex-col justify-center items-center">

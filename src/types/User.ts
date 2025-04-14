@@ -1,11 +1,15 @@
-// User Type without password
-export default interface User {
+import Post from './Posts';
+
+export default interface UserProfile {
     id: number;
     uuid: string;
-    pfp: string;
     username: string;
     email: string;
-    isVerified: number;
     isAdmin: number;
+    isVerified: number;
+    pfp: string;
     registeredDate: string;
+    totalPosts: number;
+    totalHearts: number;
+    posts: Post[];
 }
