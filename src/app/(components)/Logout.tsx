@@ -1,6 +1,5 @@
 "use client";
 import { useRouter } from 'next/navigation';
-import { removeSession } from '../../hooks/useRemoveSession';
 
 /**
  * @brief       - Logout component that clears the user session and redirects to the login page.
@@ -9,7 +8,10 @@ export default function Logout() {
     const router = useRouter();
     
     const handleLogout = () => {
-        removeSession();
+        if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('userSession');
+            localStorage.removeItem('userSession');
+        }
         router.push('/');
     };
 

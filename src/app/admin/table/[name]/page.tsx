@@ -28,7 +28,7 @@ export default function TablePage() {
             }).finally(() => {
                 setLoading(false);
             });
-    }, [name]);
+        }, [name]);
 
     if (loading) return <Loading/>;
 

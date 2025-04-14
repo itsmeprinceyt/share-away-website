@@ -16,7 +16,7 @@ export default function Admin() {
     const session = useCheckSession('ADMIN');
     
     useEffect(() => {
-        if (!session) return;
+        if (!session || tables.length > 0) return;
 
         setLoading(true);
 
@@ -27,10 +27,9 @@ export default function Admin() {
             setLoading(false);
         };
         fetchTables();
-    }, [session]);
+    }, [session, tables.length]);
 
     if (loading) return <Loading/>;
-    
     return (
         <div className="space-y-2">
             <Navbar/>

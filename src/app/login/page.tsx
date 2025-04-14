@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import getBaseUrl from '../../utils/getBaseUrl';
 import useRedirectToProfile from '../../hooks/useRedirectToProfile';
+import Navbar from '../(components)/Navbar';
 
 /**
  * @description     - This page is used to login the user.
@@ -50,36 +51,41 @@ export default function Login() {
     };
 
     return (
-        <div className="h-screen flex flex-col justify-center items-center">
-            <div className="bg-blue-500 flex flex-col justify-center items-center p-4 rounded-lg shadow-lg w-1/3">
-                <label>Email</label>
-                <input
-                    type="text"
-                    className="bg-white text-black p-2 rounded-lg mb-4 w-full"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <label>Password</label>
-                <input
-                    type="password"
-                    className="bg-white text-black p-2 rounded-lg mb-4 w-full"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            </div>
-            <button
-                onClick={handleLogin}
-                className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg mt-4 w-[150px]"
-            >
-                Login
-            </button>
+        <div>
+            <Navbar />
 
+            <div className="h-screen flex flex-col justify-center items-center">
 
-            <Link href="/sign-up">
-                <button className="bg-purple-500 text-white p-2 rounded-lg mt-4 w-[150px]">
-                    Sign Up
+                <div className="bg-blue-500 flex flex-col justify-center items-center p-4 rounded-lg shadow-lg w-1/3">
+                    <label>Email</label>
+                    <input
+                        type="text"
+                        className="bg-white text-black p-2 rounded-lg mb-4 w-full"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        className="bg-white text-black p-2 rounded-lg mb-4 w-full"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+                <button
+                    onClick={handleLogin}
+                    className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg mt-4 w-[150px]"
+                >
+                    Login
                 </button>
-            </Link>
+
+
+                <Link href="/sign-up">
+                    <button className="bg-purple-500 text-white p-2 rounded-lg mt-4 w-[150px]">
+                        Sign Up
+                    </button>
+                </Link>
+            </div>
         </div>
     );
 }

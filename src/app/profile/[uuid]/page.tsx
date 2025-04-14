@@ -33,21 +33,23 @@ export default function ProfilePage() {
 
     const [passWordEdit, setPasswordEdit] = useState(false);
     const [pfpChange, setPfpChange] = useState(false);
+    const [confirmDelete, setConfirmDelete] = useState(false);
     const [loading, setLoading] = useState(true);
     const session = useCheckSession();
-
+    
     useEffect(() => {
         if (!uuid) return;
 
         setIsAdmin(session?.user.isAdmin === 1);
         setLoading(true);
-        
+
         fetch(`${getBaseUrl()}/user/${uuid}`)
             .then((res) => res.json())
             .then((data) => {
-                if (!data || !data.uuid) throw new Error('Invalid user data');
+                if (!data || !data.uuid) {
+                    return;
+                }
                 setProfileDetails(data);
-                // Check if we are viewing our own profile or not.
                 if (uuid === session?.user.uuid) {
                     setIsOwner(true);
                 } else {
@@ -60,9 +62,9 @@ export default function ProfilePage() {
                 setLoading(false);
             });
 
-        }, [router, uuid, session?.user.isAdmin, session?.user.uuid]);
+    }, [router, uuid, session?.user.isAdmin, session?.user.uuid]);
 
-    if (loading) return <Loading/>;
+    if (loading) return <Loading />;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -185,6 +187,31 @@ export default function ProfilePage() {
         }
     };
 
+    const handleDeleteAccount = async () => {
+        try {
+            const res = await fetch(`${getBaseUrl()}/user/delete/${uuid}`, {
+                method: 'DELETE',
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                sessionStorage.removeItem('userSession');
+                localStorage.removeItem('userSession');
+            } else {
+                setError(data.message || 'Failed to delete account');
+            }
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message || 'Something went wrong');
+            } else {
+                setError('Something went wrong');
+            }
+        } finally {
+            router.push(`/`);
+        }
+    };
+
+
     const handlePasswordChange = () => {
         setPasswordEdit(!passWordEdit);
     }
@@ -195,7 +222,7 @@ export default function ProfilePage() {
 
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             {(passWordEdit) && (
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
                     <h1 className="text-xl font-semibold mb-2">Edit Profile</h1>
@@ -275,7 +302,7 @@ export default function ProfilePage() {
             ) : (
                 <p className="text-gray-500 mt-4">No posts available.</p>
             )}
-            
+
 
             {/* If the user is the owner or an admin, show edit options */}
             {(isOwner || isAdmin) && (
@@ -286,10 +313,27 @@ export default function ProfilePage() {
                     <button
                         onClick={handlePfpChange}
                         className="bg-purple-400 p-2 px-4 rounded-lg text-white">Edit Profile Pic</button>
-                    {/* More owner/admin-only actions */}
+                    <button
+                        onClick={() => setConfirmDelete(true)}
+                        className="bg-red-600 p-2 px-4 rounded-lg text-white">Delete Account</button>
 
                 </div>
 
+
+            )}
+
+            {confirmDelete && (
+                <div className="mt-4 bg-red-100 p-4 rounded-lg shadow">
+                    <p className="text-red-700 font-semibold mb-2">Are you sure you want to delete this account?</p>
+                    <div className="space-x-2">
+                        <button
+                            onClick={handleDeleteAccount}
+                            className="bg-red-600 text-white py-1 px-4 rounded">Yes, Delete</button>
+                        <button
+                            onClick={() => setConfirmDelete(false)}
+                            className="bg-gray-400 text-white py-1 px-4 rounded">Cancel</button>
+                    </div>
+                </div>
             )}
         </div>
     );

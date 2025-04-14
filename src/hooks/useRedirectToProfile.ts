@@ -8,14 +8,15 @@ import { useCheckSession } from './useCheckSession';;
  * If the user is not logged in or there is no session data, useCheckSession will
  * handle the redirection to the login page.
  */
-const useRedirectToProfile = () => {
+const useRedirectToProfile =  () =>  {
     const router = useRouter();
     const session = useCheckSession();
     
     useEffect(() => {
         if (session) {
-            router.push(`/profile/${session?.user.uuid}`);
+            router.push(`/profile/${session.user.uuid}`);
         }
+        
     }, [router, session, session?.user.uuid]);
 };
 
