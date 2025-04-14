@@ -33,6 +33,7 @@ export default function ProfilePage() {
 
     const [passWordEdit, setPasswordEdit] = useState(false);
     const [pfpChange, setPfpChange] = useState(false);
+    const [isNewImageSelected, setIsNewImageSelected] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [loading, setLoading] = useState(true);
     const session = useCheckSession();
@@ -109,6 +110,7 @@ export default function ProfilePage() {
 
                 setPreview(compressedBase64);
                 setForm(prev => ({ ...prev, pfp: compressedBase64 }));
+                setIsNewImageSelected(true);
                 setError('');
             };
             img.src = event.target.result as string;
@@ -149,7 +151,7 @@ export default function ProfilePage() {
         }
     };
 
-    const handleEditPfp = async (e: React.FormEvent) => {
+    const handleEditPfp = async (e: React.FormEvent, isRemove = false) => {
         e.preventDefault();
         setError('');
         setSuccess('');
@@ -165,14 +167,14 @@ export default function ProfilePage() {
                 },
                 body: JSON.stringify({
                     uuid: user.uuid,
-                    pfp: form.pfp,
+                    pfp: isRemove ? '' : form.pfp,
                 }),
             });
             const data = await response.json();
 
             if (response.ok) {
                 setSuccess(data.message)
-                updateUserSession({ pfp: form.pfp });
+                updateUserSession({ pfp: isRemove ? '' : form.pfp });
                 router.refresh();
             }
             else setError(data.message || 'Failed to update profile picture');
@@ -260,21 +262,41 @@ export default function ProfilePage() {
             {(pfpChange) && (
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
                     <h1 className="text-xl font-semibold mb-2">Edit Profile</h1>
-                    <form onSubmit={handleEditPfp} className="space-y-4">
-                        <div>
-                            <label className="block font-medium mb-1">Upload Profile Picture</label>
-                            <input type="file" accept="image/*" onChange={handleImageChange} />
-                            {preview && <Image src={preview} alt="preview" width={96} height={96} className="mt-2 rounded-full object-cover" />}
-                        </div>
-                        {error && <p className="text-red-500">{error}</p>}
-                        {success && <p className="text-green-600">{success}</p>}
-                        <button
-                            type="submit"
-                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                        >
-                            Save Changes
-                        </button>
-                    </form>
+                    <form onSubmit={(e) => handleEditPfp(e)} className="space-y-4">
+    <div>
+        <label className="block font-medium mb-1">Upload Profile Picture</label>
+        <input type="file" accept="image/*" onChange={handleImageChange} />
+        {preview && (
+            <Image
+                src={preview}
+                alt="preview"
+                width={96}
+                height={96}
+                className="mt-2 rounded-full object-cover"
+            />
+        )}
+    </div>
+    {error && <p className="text-red-500">{error}</p>}
+    {success && <p className="text-green-600">{success}</p>}
+
+    <div className="flex gap-4">
+        <button
+            type="submit"
+            className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            disabled={!isNewImageSelected}
+        >
+            Update PFP
+        </button>
+
+        <button
+            type="button"
+            className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600"
+            onClick={(e) => handleEditPfp(e, true)}
+        >
+            Remove Current PFP
+        </button>
+    </div>
+</form>
                 </div>
             )}
             <h1>Welcome to {profileDetails!.username}&apos;s Profile</h1>
