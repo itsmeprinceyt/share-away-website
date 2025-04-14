@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import getBaseUrl from '../../utils/getBaseUrl';
 import { useCheckSession } from '../../hooks/useCheckSession';
 import Loading from '../(components)/Loading';
@@ -11,12 +12,23 @@ import Navbar from '../(components)/Navbar';
  * recently posted, recently heart givens, and access database tables and edit or delete.
  */
 export default function Admin() {
+    const router = useRouter();
     const [tables, setTables] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
-    const session = useCheckSession('ADMIN');
-    
+    useCheckSession('ADMIN');
     useEffect(() => {
-        if (!session || tables.length > 0) return;
+        let sessionData = sessionStorage.getItem('userSession');
+
+        if (!sessionData) {
+            sessionData = localStorage.getItem('userSession');
+            if (sessionData) {
+                sessionStorage.setItem('userSession', sessionData);
+            }
+        }
+
+        if (!sessionData) {
+            router.push(`/login`);
+        }
 
         setLoading(true);
 
@@ -27,7 +39,7 @@ export default function Admin() {
             setLoading(false);
         };
         fetchTables();
-    }, [session, tables.length]);
+    }, [router, tables.length]);
 
     if (loading) return <Loading/>;
     return (
