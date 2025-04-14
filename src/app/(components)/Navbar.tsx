@@ -14,6 +14,11 @@ export default function Navbar() {
                 <li>
                     <Link href="/" className="text-white hover:text-gray-400">Home</Link>
                 </li>
+                {session && (
+                    <li>
+                        <Link href="/post" className="text-white hover:text-gray-400">Post</Link>
+                    </li>
+                )}
 
                 {/* Show admin panel if user is admin */}
                 {session?.user?.isAdmin === 1 && (

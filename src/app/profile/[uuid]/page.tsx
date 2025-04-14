@@ -8,6 +8,7 @@ import { useCheckSession } from '../../../hooks/useCheckSession';
 import User from '../../../types/User';
 import Loading from '../../(components)/Loading';
 import Navbar from '../../(components)/Navbar';
+import Link from 'next/link';
 
 /**
  * @description             - This page is used to display the profile of a user.
@@ -37,7 +38,7 @@ export default function ProfilePage() {
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [loading, setLoading] = useState(true);
     const session = useCheckSession();
-    
+
     useEffect(() => {
         if (!uuid) return;
 
@@ -263,40 +264,40 @@ export default function ProfilePage() {
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
                     <h1 className="text-xl font-semibold mb-2">Edit Profile</h1>
                     <form onSubmit={(e) => handleEditPfp(e)} className="space-y-4">
-    <div>
-        <label className="block font-medium mb-1">Upload Profile Picture</label>
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-        {preview && (
-            <Image
-                src={preview}
-                alt="preview"
-                width={96}
-                height={96}
-                className="mt-2 rounded-full object-cover"
-            />
-        )}
-    </div>
-    {error && <p className="text-red-500">{error}</p>}
-    {success && <p className="text-green-600">{success}</p>}
+                        <div>
+                            <label className="block font-medium mb-1">Upload Profile Picture</label>
+                            <input type="file" accept="image/*" onChange={handleImageChange} />
+                            {preview && (
+                                <Image
+                                    src={preview}
+                                    alt="preview"
+                                    width={96}
+                                    height={96}
+                                    className="mt-2 rounded-full object-cover"
+                                />
+                            )}
+                        </div>
+                        {error && <p className="text-red-500">{error}</p>}
+                        {success && <p className="text-green-600">{success}</p>}
 
-    <div className="flex gap-4">
-        <button
-            type="submit"
-            className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-            disabled={!isNewImageSelected}
-        >
-            Update PFP
-        </button>
+                        <div className="flex gap-4">
+                            <button
+                                type="submit"
+                                className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                                disabled={!isNewImageSelected}
+                            >
+                                Update PFP
+                            </button>
 
-        <button
-            type="button"
-            className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600"
-            onClick={(e) => handleEditPfp(e, true)}
-        >
-            Remove Current PFP
-        </button>
-    </div>
-</form>
+                            <button
+                                type="button"
+                                className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600"
+                                onClick={(e) => handleEditPfp(e, true)}
+                            >
+                                Remove Current PFP
+                            </button>
+                        </div>
+                    </form>
                 </div>
             )}
             <h1>Welcome to {profileDetails!.username}&apos;s Profile</h1>
@@ -308,17 +309,41 @@ export default function ProfilePage() {
             <p>Total Posts: {profileDetails!.totalPosts ?? 0}</p>
             <p>Total Hearts: {profileDetails!.totalHearts ?? 0}</p>
 
-            {profileDetails!.posts && profileDetails!.posts.length > 0 ? (
+            {profileDetails?.posts?.length ? (
                 <div className="mt-4">
-                    <h2 className="text-lg font-semibold mb-2">Posts by {profileDetails!.username}</h2>
+                    <h2 className="text-lg font-semibold mb-2">Posts by {profileDetails.username}</h2>
                     <ul className="space-y-2">
-                        {/*profileDetails!.posts.map((post) => (
-                            <li key={post.id} className="bg-gray-100 p-4 rounded shadow">
-                                <h3 className="font-bold text-lg">{post.title}</h3>
-                                <p className="text-gray-700">{post.content}</p>
-                                <p className="text-sm text-gray-500">Posted on {new Date(post.createdAt).toLocaleString()}</p>
-                            </li>
-                        ))*/}
+                        {profileDetails.posts.map(({ id, post_uuid, username, heart_count, posted_at, content }) => {
+                            // If content is a string, try to parse it; otherwise, use default values
+                            const { heading = "No heading", body = "No body" } =
+                                typeof content === 'string' ? JSON.parse(content) : content || {};
+
+                            return (
+                                <li key={id} className="bg-gray-100 p-4 rounded shadow">
+                                    <h2 className="font-bold text-lg">{heading}</h2>
+                                    <p className="text-gray-700">{body}</p>
+                                    <p className="text-red-500">Hearts: {heart_count || 0} [ Click ]</p>
+                                    <p className="text-sm text-gray-500">
+                                        Posted on {new Date(posted_at).toLocaleString()} 
+                                    </p>
+                                    <Link 
+                                    href={`/profile/${uuid}`}>
+                                    <p className="text-sm text-green-700">
+                                        @{username}
+                                    </p>
+                                    </Link>
+                                    <Link href={`/post/${post_uuid}`} className="text-blue-500 hover:underline mt-2 inline-block">
+                                        <button>View Post</button>
+                                    </Link>
+                                    <Link href={`/post/edit/${post_uuid}`} className="text-orange-500 hover:underline mt-2 inline-block">
+                                        <button>Edit Post</button>
+                                    </Link>
+                                    <Link href={`/post/delete/${post_uuid}`} className="text-red-800 hover:underline mt-2 inline-block">
+                                        <button>Delete</button>
+                                    </Link>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </div>
             ) : (

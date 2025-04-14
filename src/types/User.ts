@@ -1,4 +1,4 @@
-import Post from './Posts';
+import Post from './PostContent';
 
 export default interface UserProfile {
     id: number;
