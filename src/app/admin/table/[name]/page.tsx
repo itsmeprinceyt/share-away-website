@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import getBaseUrl from '@/utils/getBaseUrl';
 import { useCheckSession } from '../../../../hooks/useCheckSession';
 import Loading from '../../../(components)/Loading';
+import Navbar from '../../../(components)/Navbar';
 
 /**
  * @description     - This page is used to display the data of a specific table in the database.
@@ -33,6 +34,7 @@ export default function TablePage() {
 
     return (
         <div>
+            <Navbar/>
             <h1>Data in table: {name}</h1>
             <pre>{JSON.stringify(data, null, 2)}</pre>
         </div>

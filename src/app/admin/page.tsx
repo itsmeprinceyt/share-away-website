@@ -4,6 +4,7 @@ import Link from 'next/link';
 import getBaseUrl from '../../utils/getBaseUrl';
 import { useCheckSession } from '../../hooks/useCheckSession';
 import Loading from '../(components)/Loading';
+import Navbar from '../(components)/Navbar';
 
 /**
  * @description     - This is the main Admin panel where we can see all the user activity,
@@ -12,9 +13,11 @@ import Loading from '../(components)/Loading';
 export default function Admin() {
     const [tables, setTables] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
-    useCheckSession('ADMIN');
+    const session = useCheckSession('ADMIN');
     
     useEffect(() => {
+        if (!session) return;
+
         setLoading(true);
 
         const fetchTables = async () => {
@@ -24,12 +27,13 @@ export default function Admin() {
             setLoading(false);
         };
         fetchTables();
-    }, []);
+    }, [session]);
 
     if (loading) return <Loading/>;
     
     return (
-        <div className="space-y-2 p-2">
+        <div className="space-y-2">
+            <Navbar/>
             {tables.map((name, index) => (
                 <div key={index}>
                     <Link href={`/admin/table/${name}`}>{name}</Link>

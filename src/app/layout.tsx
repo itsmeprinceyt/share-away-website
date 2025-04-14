@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Suspense } from "react";
 import Loading from './(components)/Loading';
-import Navbar from './(components)/Navbar';
 
 export const metadata: Metadata = {
   title: "ShareAway | ItsMe Prince",
@@ -17,10 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <Suspense fallback={<Loading/>}>
-        <Navbar/>
-          {children}
-        </Suspense>
+          <Suspense fallback={<Loading />}>
+            {children}
+          </Suspense>
       </body>
     </html>
   );

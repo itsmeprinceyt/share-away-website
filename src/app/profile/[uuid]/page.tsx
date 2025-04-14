@@ -7,6 +7,7 @@ import { updateUserSession } from '../../../utils/updateUserSesssion';
 import { useCheckSession } from '../../../hooks/useCheckSession';
 import User from '../../../types/User';
 import Loading from '../../(components)/Loading';
+import Navbar from '../../(components)/Navbar';
 
 /**
  * @description             - This page is used to display the profile of a user.
@@ -194,6 +195,7 @@ export default function ProfilePage() {
 
     return (
         <div>
+            <Navbar/>
             {(passWordEdit) && (
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
                     <h1 className="text-xl font-semibold mb-2">Edit Profile</h1>

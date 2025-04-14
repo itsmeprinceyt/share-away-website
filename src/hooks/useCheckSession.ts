@@ -17,7 +17,7 @@ export const useCheckSession = (requiredRole: Role = 'USER'): UserSession | null
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
-
+        
         let sessionData = sessionStorage.getItem('userSession');
 
         if (!sessionData) {
