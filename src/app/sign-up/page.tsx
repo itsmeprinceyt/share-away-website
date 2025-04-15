@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import getBaseUrl from '../../utils/getBaseUrl';
 import Navbar from "../(components)/Navbar";
+import defaultProfilePic from '../../utils/defaultAvatar';
 /**
  * @description    - This page is used to sign up a new user.
  */
@@ -20,11 +21,11 @@ export default function SignUp() {
         email: "",
         password: "",
         confirmPassword: "",
-        profilePic: "",
+        profilePic: defaultProfilePic,
     });
 
     const [error, setError] = useState<string | null>(null);
-    const [preview, setPreview] = useState<string | null>(null);
+    const [preview, setPreview] = useState<string | null>(defaultProfilePic);
     let sessionData = sessionStorage.getItem('userSession');
     if (!sessionData) {
         sessionData = localStorage.getItem('userSession');

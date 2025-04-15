@@ -8,6 +8,7 @@ import { useCheckSession } from '../../../hooks/useCheckSession';
 import User from '../../../types/User';
 import Loading from '../../(components)/Loading';
 import Navbar from '../../(components)/Navbar';
+import defaultProfilePic from '../../../utils/defaultAvatar';
 import Link from 'next/link';
 
 /**
@@ -26,7 +27,7 @@ export default function ProfilePage() {
     const [form, setForm] = useState({
         currentPassword: '',
         confirmPassword: '',
-        pfp: '',
+        pfp: defaultProfilePic,
     });
     const [preview, setPreview] = useState<string | null>(null);
     const [error, setError] = useState('');
@@ -171,14 +172,14 @@ export default function ProfilePage() {
                 },
                 body: JSON.stringify({
                     uuid: user.uuid,
-                    pfp: isRemove ? '' : form.pfp,
+                    pfp: isRemove ? defaultProfilePic : form.pfp,
                 }),
             });
             const data = await response.json();
 
             if (response.ok) {
                 setSuccess(data.message)
-                updateUserSession({ pfp: isRemove ? '' : form.pfp });
+                updateUserSession({ pfp: isRemove ? defaultProfilePic : form.pfp });
                 router.refresh();
             }
             else setError(data.message || 'Failed to update profile picture');
