@@ -36,6 +36,9 @@ export default function ProfilePage() {
     const [pfpChange, setPfpChange] = useState(false);
     const [isNewImageSelected, setIsNewImageSelected] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [confirmDeletePost, setConfirmDeletePost] = useState(false);
+    const [postToDelete, setPostToDelete] = useState<string | null>(null);
+
     const [loading, setLoading] = useState(true);
     const session = useCheckSession();
 
@@ -237,6 +240,40 @@ export default function ProfilePage() {
         }
     };
 
+    const handlePostDelete = async (post_uuid: string, type: 'CONFIRM' | 'ASK') => {
+        if (type === 'ASK') {
+            setPostToDelete(post_uuid);
+            setConfirmDeletePost(true);
+            return;
+        }
+
+        if (type === 'CONFIRM') {
+            setConfirmDeletePost(false);
+        }
+
+        const session = sessionStorage.getItem('userSession');
+        if (!session) return;
+
+        const { user } = JSON.parse(session);
+
+        const res = await fetch(`${getBaseUrl()}/post/delete/${post_uuid}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                uuid: user.uuid,
+                user_id: user.user_id,
+            }),
+        });
+
+        if (res.ok) {
+            router.refresh();
+        } else {
+            console.error('❌ Failed to delete post');
+        }
+    };
+
 
     const handlePasswordChange = () => {
         setPasswordEdit(!passWordEdit);
@@ -361,9 +398,14 @@ export default function ProfilePage() {
                                     <Link href={`/post/edit/${post_uuid}`} className="text-orange-500 hover:underline mt-2 inline-block">
                                         <button>Edit Post</button>
                                     </Link>
-                                    <Link href={`/post/delete/${post_uuid}`} className="text-red-800 hover:underline mt-2 inline-block">
-                                        <button>Delete</button>
-                                    </Link>
+
+                                    <button
+                                        className="text-purple-500 hover:underline mt-2 inline-block"
+                                        onClick={() => handlePostDelete(post_uuid, 'ASK')}
+                                    >
+                                        Delete
+                                    </button>
+
                                 </li>
                             );
                         })}
@@ -399,6 +441,30 @@ export default function ProfilePage() {
 
                 </div>
             )}
+
+            {confirmDeletePost && postToDelete && (
+                <div className="mt-4 bg-red-100 p-4 rounded-lg shadow">
+                    <p className="text-red-700 font-semibold mb-2">Are you sure you want to delete this post?</p>
+                    <div className="space-x-2">
+                        <button
+                            onClick={() => handlePostDelete(postToDelete, 'CONFIRM')}
+                            className="bg-red-600 text-white py-1 px-4 rounded"
+                        >
+                            Yes, Delete
+                        </button>
+                        <button
+                            onClick={() => {
+                                setConfirmDeletePost(false);
+                                setPostToDelete(null);
+                            }}
+                            className="bg-gray-400 text-white py-1 px-4 rounded"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+
 
             {confirmDelete && (
                 <div className="mt-4 bg-red-100 p-4 rounded-lg shadow">
