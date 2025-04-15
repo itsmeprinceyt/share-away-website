@@ -45,6 +45,12 @@ export default function Admin() {
     return (
         <div className="space-y-2">
             <Navbar/>
+            <Link
+            href="/admin/revoke">
+                <button className ="bg-blue-700 text-white rounded-2xl px-4 p-2">
+                    Revoke ban!
+                </button>
+            </Link>
             {tables.map((name, index) => (
                 <div key={index}>
                     <Link href={`/admin/table/${name}`}>{name}</Link>

@@ -33,7 +33,7 @@ export default function SignUp() {
         }
     }
 
-    if(sessionData){
+    if (sessionData) {
         router.push('/profile');
         return;
     }
@@ -129,6 +129,9 @@ export default function SignUp() {
             });
 
             const data = await response.json();
+            if (response.ok) {
+                router.push('/login')
+            }
             if (!response.ok) {
                 setError(data.message || "Registration failed");
             } else {
@@ -144,8 +147,6 @@ export default function SignUp() {
         } catch (err) {
             setError("An error occurred while registering.");
             console.error("❌ Registration error:", err);
-        } finally {
-            router.push('/login');
         }
     };
 

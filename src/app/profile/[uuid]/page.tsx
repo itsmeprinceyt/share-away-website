@@ -198,8 +198,10 @@ export default function ProfilePage() {
 
             const data = await res.json();
             if (res.ok) {
-                sessionStorage.removeItem('userSession');
-                localStorage.removeItem('userSession');
+                if (isOwner) {
+                    sessionStorage.removeItem('userSession');
+                    localStorage.removeItem('userSession');
+                }
             } else {
                 setError(data.message || 'Failed to delete account');
             }
@@ -211,6 +213,27 @@ export default function ProfilePage() {
             }
         } finally {
             router.push(`/`);
+        }
+    };
+
+    const handleBan = async () => {
+        try {
+            const res = await fetch(`${getBaseUrl()}/user/ban/${uuid}`, {
+                method: 'DELETE',
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                router.push('/profile');
+            } else {
+                setError(data.message || 'Failed to delete account');
+            }
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message || 'Something went wrong');
+            } else {
+                setError('Something went wrong');
+            }
         }
     };
 
@@ -324,13 +347,13 @@ export default function ProfilePage() {
                                     <p className="text-gray-700">{body}</p>
                                     <p className="text-red-500">Hearts: {heart_count || 0} [ Click ]</p>
                                     <p className="text-sm text-gray-500">
-                                        Posted on {new Date(posted_at).toLocaleString()} 
+                                        Posted on {new Date(posted_at).toLocaleString()}
                                     </p>
-                                    <Link 
-                                    href={`/profile/${uuid}`}>
-                                    <p className="text-sm text-green-700">
-                                        @{username}
-                                    </p>
+                                    <Link
+                                        href={`/profile/${uuid}`}>
+                                        <p className="text-sm text-green-700">
+                                            @{username}
+                                        </p>
                                     </Link>
                                     <Link href={`/post/${post_uuid}`} className="text-blue-500 hover:underline mt-2 inline-block">
                                         <button>View Post</button>
@@ -365,8 +388,16 @@ export default function ProfilePage() {
                         className="bg-red-600 p-2 px-4 rounded-lg text-white">Delete Account</button>
 
                 </div>
+            )}
+
+            {/* If the user is the owner or an admin, show edit options */}
+            {(isAdmin) && (
+                <div>
+                    <button onClick={handleBan}
+                        className="bg-orange-400 p-2 px-4 rounded-lg text-white">BAN</button>
 
 
+                </div>
             )}
 
             {confirmDelete && (

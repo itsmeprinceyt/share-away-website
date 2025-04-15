@@ -14,6 +14,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     useRedirectToProfile();
+    const [response, setResponse] = useState(null);
 
     const handleLogin = async () => {
         try {
@@ -28,6 +29,7 @@ export default function Login() {
                 }),
             });
             const data = await response.json();
+            setResponse(data);
             const { uuid, message, ...userDetails } = data;
             if (response.ok) {
                 const expiryDate = new Date();
@@ -39,9 +41,11 @@ export default function Login() {
                     expiry: expiryDate.toISOString(),
                 };
 
-                sessionStorage.setItem('userSession', JSON.stringify(sessionData));
-                localStorage.setItem('userSession', JSON.stringify(sessionData));
-                router.push(`/home`);
+                if (sessionData) {
+                    sessionStorage.setItem('userSession', JSON.stringify(sessionData));
+                    localStorage.setItem('userSession', JSON.stringify(sessionData));
+                    router.push(`/home`);
+                }
             } else {
                 console.log("Login failed");
             }
@@ -72,6 +76,7 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
+                {response}
                 <button
                     onClick={handleLogin}
                     className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg mt-4 w-[150px]"
