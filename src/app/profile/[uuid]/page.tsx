@@ -274,7 +274,43 @@ export default function ProfilePage() {
         }
     };
 
+    const handleToggleHeart = async (post_uuid: string) => {
+        const session = sessionStorage.getItem('userSession');
+        if (!session) return;
 
+        const { user } = JSON.parse(session);
+
+        const res = await fetch(`${getBaseUrl()}/post/heart/${post_uuid}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                uuid: user.uuid
+            }),
+        });
+
+        if (!res.ok) {
+            console.error("❌ Failed to toggle heart");
+            return;
+        }
+        const { status } = await res.json();
+        const isRemoving = status === 'removed';
+        setProfileDetails((prev) => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                posts: prev.posts.map((post) =>
+                    post.post_uuid === post_uuid
+                        ? {
+                            ...post,
+                            heart_count: post.heart_count + (isRemoving ? -1 : 1),
+                        }
+                        : post
+                ),
+            };
+        });
+    };
 
     const handlePasswordChange = () => {
         setPasswordEdit(!passWordEdit);
@@ -383,7 +419,8 @@ export default function ProfilePage() {
                                 <li key={id} className="bg-gray-100 p-4 rounded shadow">
                                     <h2 className="font-bold text-lg">{heading}</h2>
                                     <p className="text-gray-700">{body}</p>
-                                    <p className="text-red-500">Hearts: {heart_count || 0} [ Click ]</p>
+                                    <button
+                                        onClick={() => handleToggleHeart(post_uuid)} className="text-red-500">Hearts: {heart_count || 0} [ Click ] PostUID: {post_uuid}</button>
                                     <p className="text-sm text-gray-500">
                                         Posted on {new Date(posted_at).toLocaleString()}
                                     </p>
@@ -397,9 +434,9 @@ export default function ProfilePage() {
                                         <button>View Post</button>
                                     </Link>
                                     {(isAdmin || isOwner) && (
-                                    <Link href={`/post/edit/${post_uuid}`} className="text-orange-500 hover:underline mt-2 inline-block">
-                                        <button>Edit Post</button>
-                                    </Link>
+                                        <Link href={`/post/edit/${post_uuid}`} className="text-orange-500 hover:underline mt-2 inline-block">
+                                            <button>Edit Post</button>
+                                        </Link>
                                     )}
                                     {(isAdmin || isOwner) && (
                                         <button
