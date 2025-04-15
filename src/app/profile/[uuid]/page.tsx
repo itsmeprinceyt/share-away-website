@@ -249,13 +249,13 @@ export default function ProfilePage() {
 
         if (type === 'CONFIRM') {
             setConfirmDeletePost(false);
+            setPostToDelete(null); // clear it after confirmation
         }
 
         const session = sessionStorage.getItem('userSession');
         if (!session) return;
 
         const { user } = JSON.parse(session);
-
         const res = await fetch(`${getBaseUrl()}/post/delete/${post_uuid}`, {
             method: 'DELETE',
             headers: {
@@ -263,16 +263,17 @@ export default function ProfilePage() {
             },
             body: JSON.stringify({
                 uuid: user.uuid,
-                user_id: user.user_id,
+                isAdmin: user.isAdmin
             }),
         });
 
         if (res.ok) {
-            router.refresh();
+            router.push(`/profile`);
         } else {
             console.error('❌ Failed to delete post');
         }
     };
+
 
 
     const handlePasswordChange = () => {
@@ -395,16 +396,20 @@ export default function ProfilePage() {
                                     <Link href={`/post/${post_uuid}`} className="text-blue-500 hover:underline mt-2 inline-block">
                                         <button>View Post</button>
                                     </Link>
+                                    {(isAdmin || isOwner) && (
                                     <Link href={`/post/edit/${post_uuid}`} className="text-orange-500 hover:underline mt-2 inline-block">
                                         <button>Edit Post</button>
                                     </Link>
+                                    )}
+                                    {(isAdmin || isOwner) && (
+                                        <button
+                                            className="text-purple-500 hover:underline mt-2 inline-block"
+                                            onClick={() => handlePostDelete(post_uuid, 'ASK')}
+                                        >
+                                            Delete
+                                        </button>
+                                    )}
 
-                                    <button
-                                        className="text-purple-500 hover:underline mt-2 inline-block"
-                                        onClick={() => handlePostDelete(post_uuid, 'ASK')}
-                                    >
-                                        Delete
-                                    </button>
 
                                 </li>
                             );
