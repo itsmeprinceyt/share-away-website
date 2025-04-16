@@ -66,7 +66,7 @@ export default function ProfilePage() {
             .finally(() => {
                 setLoading(false);
             });
-    }, [uuid, session, router]);
+    }, [router, session, uuid]);
 
     if (loading) return <Loading />;
 

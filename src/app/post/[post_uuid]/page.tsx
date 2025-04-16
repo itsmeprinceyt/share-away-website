@@ -5,14 +5,14 @@ import { useCheckSession } from '../../../hooks/useCheckSession';
 import Navbar from '../../(components)/Navbar';
 import getBaseUrl from '../../../utils/getBaseUrl';
 import Loading from '../../(components)/Loading';
-import PostContent from '../../../types/PostContent'; // Import your PostContent type
+import PostContent from '../../../types/PostContent';
 
 export default function Post() {
     const router = useRouter();
     const params = useParams();
     const post_uuid = params?.post_uuid as string;
 
-    const [postData, setPostData] = useState<PostContent | null>(null); // Use the PostContent type here
+    const [postData, setPostData] = useState<PostContent | null>(null);
     const [isOwner, setIsOwner] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -30,12 +30,11 @@ export default function Post() {
             if (!res.ok) {
                 throw new Error('Post not found');
             }
-            return res.json(); // Ensure you convert the response to JSON
+            return res.json();
         })
         .then((data) => {
             if (data && data.post) {
-                setPostData(data.post); // TypeScript will infer the structure based on PostContent type
-                console.log(data);
+                setPostData(data.post);
                 if (postData?.uuid === session?.user.uuid) {
                     setIsOwner(true);
                 } else {
@@ -49,7 +48,7 @@ export default function Post() {
         }).finally(() => {
             setLoading(false);
         });
-    }, [router, post_uuid, session?.user.uuid, postData?.uuid, session?.user.isAdmin]);
+    }, [router, post_uuid, postData?.uuid, session]);
 
     if (loading) return <Loading />;
 

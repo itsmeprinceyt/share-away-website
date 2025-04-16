@@ -39,7 +39,7 @@ export default function Admin() {
             setLoading(false);
         };
         fetchTables();
-    }, [router, tables.length]);
+    }, [router]);
 
     if (loading) return <Loading/>;
     return (

@@ -17,7 +17,7 @@ const useRedirectToProfile =  () =>  {
             router.push(`/profile/${session.user.uuid}`);
         }
         
-    }, [router, session, session?.user.uuid]);
+    }, [router, session]);
 };
 
 export default useRedirectToProfile;

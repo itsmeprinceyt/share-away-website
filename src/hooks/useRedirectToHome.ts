@@ -16,7 +16,7 @@ const useRedirectToHome = () => {
         } else {
             router.push('/');
         }
-    }, [router, session, session?.user.uuid]);
+    }, [router, session]);
 };
 
 export default useRedirectToHome;

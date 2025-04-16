@@ -21,7 +21,6 @@ export default function PostEdit() {
     const [loading, setLoading] = useState(true);
     const session = useCheckSession();
 
-    // First: Fetch postData after session is loaded
     useEffect(() => {
         if (!post_uuid || !session) return;
 
@@ -47,7 +46,6 @@ export default function PostEdit() {
         fetchPost();
     }, [router, post_uuid, session]);
 
-    // Second: Redirect if not owner and not admin AFTER data is loaded
     useEffect(() => {
         if (!postData || !session) return;
 
