@@ -10,4 +10,5 @@ export default interface PostContent {
         heading: string;
         body: string;
     };
+    hasHearted: boolean;
 }

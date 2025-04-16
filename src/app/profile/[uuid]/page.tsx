@@ -41,6 +41,7 @@ export default function ProfilePage() {
     const [postToDelete, setPostToDelete] = useState<string | null>(null);
 
     const [loading, setLoading] = useState(true);
+
     const session = useCheckSession();
 
     useEffect(() => {
@@ -49,7 +50,7 @@ export default function ProfilePage() {
         setIsAdmin(session?.user.isAdmin === 1);
         setLoading(true);
 
-        fetch(`${getBaseUrl()}/user/${uuid}`)
+        fetch(`${getBaseUrl()}/user/${uuid}?viewer_uuid=${session?.user.uuid}`)
             .then((res) => res.json())
             .then((data) => {
                 if (!data || !data.uuid) {
@@ -64,10 +65,10 @@ export default function ProfilePage() {
             })
             .catch(() => {
                 router.push('/404');
-            }).finally(() => {
+            })
+            .finally(() => {
                 setLoading(false);
             });
-
     }, [router, uuid, session?.user.isAdmin, session?.user.uuid]);
 
     if (loading) return <Loading />;
@@ -275,43 +276,50 @@ export default function ProfilePage() {
         }
     };
 
-    const handleToggleHeart = async (post_uuid: string) => {
-        const session = sessionStorage.getItem('userSession');
-        if (!session) return;
+    const toggleHeart = async (post_uuid: string, currentHasHearted: boolean)=> {
+        const method = currentHasHearted  ? 'DELETE' : 'POST';
+        const url =
+            method === 'POST'
+                ? `${getBaseUrl()}/heart`
+                : `${getBaseUrl()}/heart?uuid=${session?.user.uuid}&post_uuid=${post_uuid}`;
 
-        const { user } = JSON.parse(session);
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                ...(method === 'POST' && {
+                    body: JSON.stringify({ uuid: session?.user.uuid, post_uuid }),
+                }),
+            });
 
-        const res = await fetch(`${getBaseUrl()}/post/heart/${post_uuid}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                uuid: user.uuid
-            }),
-        });
+            if (res.ok) {
+                setProfileDetails(prev => {
+                    if (!prev) return prev;
+                    const updatedPosts = prev.posts.map(post =>
+                        post.post_uuid === post_uuid
+                            ? {
+                                ...post,
+                                hasHearted: !post.hasHearted,
+                                heart_count: post.hasHearted ? post.heart_count - 1 : post.heart_count + 1
+                            }
+                            : post
+                    );
 
-        if (!res.ok) {
-            console.error("❌ Failed to toggle heart");
-            return;
+                    return {
+                        ...prev,
+                        posts: updatedPosts,
+                        totalPosts: prev.totalPosts,
+                        totalHearts: prev.totalHearts
+                    };
+                });
+            } else {
+                console.error('Failed to update heart status');
+            }
+        } catch (error) {
+            console.error('Error during heart toggle', error);
         }
-        const { status } = await res.json();
-        const isRemoving = status === 'removed';
-        setProfileDetails((prev) => {
-            if (!prev) return prev;
-            return {
-                ...prev,
-                posts: prev.posts.map((post) =>
-                    post.post_uuid === post_uuid
-                        ? {
-                            ...post,
-                            heart_count: post.heart_count + (isRemoving ? -1 : 1),
-                        }
-                        : post
-                ),
-            };
-        });
     };
+
 
     const handlePasswordChange = () => {
         setPasswordEdit(!passWordEdit);
@@ -411,8 +419,7 @@ export default function ProfilePage() {
                 <div className="mt-4">
                     <h2 className="text-lg font-semibold mb-2">Posts by {profileDetails.username}</h2>
                     <ul className="space-y-2">
-                        {profileDetails.posts.map(({ id, post_uuid, username, heart_count, posted_at, content }) => {
-                            // If content is a string, try to parse it; otherwise, use default values
+                        {profileDetails.posts.map(({ id, post_uuid, username, heart_count, posted_at, content, hasHearted }) => {
                             const { heading = "No heading", body = "No body" } =
                                 typeof content === 'string' ? JSON.parse(content) : content || {};
 
@@ -420,8 +427,10 @@ export default function ProfilePage() {
                                 <li key={id} className="bg-gray-100 p-4 rounded shadow">
                                     <h2 className="font-bold text-lg">{heading}</h2>
                                     <p className="text-gray-700">{body}</p>
-                                    <button
-                                        onClick={() => handleToggleHeart(post_uuid)} className="text-red-500">Hearts: {heart_count || 0} [ Click ] PostUID: {post_uuid}</button>
+                                    <p className="text-black">Has hearted or not: {hasHearted ? `yes ${hasHearted}` : `no ${hasHearted}`}</p>
+                                    <button onClick={() => toggleHeart(post_uuid, hasHearted)}>
+                                        {hasHearted ? '💔 Remove Heart' : '❤️ Give Heart'} ({heart_count})
+                                    </button>
                                     <p className="text-sm text-gray-500">
                                         Posted on {new Date(posted_at).toLocaleString()}
                                     </p>
@@ -475,7 +484,7 @@ export default function ProfilePage() {
                 </div>
             )}
 
-            {/* If the user is the owner or an admin, show edit options */}
+            {/* If the user is admin, show edit options */}
             {(isAdmin) && (
                 <div>
                     <button onClick={handleBan}
