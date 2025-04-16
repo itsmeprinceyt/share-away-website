@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+:root {
+    --breakpoint-xs: 350px;
+}
+
+@keyframes slide-left-bounce {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(-10px);
+    }
+}
