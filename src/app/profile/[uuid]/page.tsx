@@ -41,23 +41,20 @@ export default function ProfilePage() {
     const [postToDelete, setPostToDelete] = useState<string | null>(null);
 
     const [loading, setLoading] = useState(true);
-
     const session = useCheckSession();
 
     useEffect(() => {
-        if (!uuid) return;
-
-        setIsAdmin(session?.user.isAdmin === 1);
+        if (!session || !uuid) return;
+    
+        setIsAdmin(session.user.isAdmin === 1);
         setLoading(true);
-
-        fetch(`${getBaseUrl()}/user/${uuid}?viewer_uuid=${session?.user.uuid}`)
+    
+        fetch(`${getBaseUrl()}/user/${uuid}?viewer_uuid=${session.user.uuid}`)
             .then((res) => res.json())
             .then((data) => {
-                if (!data || !data.uuid) {
-                    return;
-                }
+                if (!data || !data.uuid) return;
                 setProfileDetails(data);
-                if (uuid === session?.user.uuid) {
+                if (uuid === session.user.uuid) {
                     setIsOwner(true);
                 } else {
                     setIsOwner(false);
@@ -69,7 +66,7 @@ export default function ProfilePage() {
             .finally(() => {
                 setLoading(false);
             });
-    }, [router, uuid, session?.user.isAdmin, session?.user.uuid]);
+    }, [uuid, session, router]);
 
     if (loading) return <Loading />;
 
