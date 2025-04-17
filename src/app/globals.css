@@ -28,3 +28,10 @@
 .pink-scrollbar::-webkit-scrollbar-track {
     background-color: #fce7f3;
 }
+
+input:-webkit-autofill {
+    background-color: #fff !important;
+    color: #ec4899 !important;
+    -webkit-box-shadow: 0 0 0px 1000px #ffd5ea inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
