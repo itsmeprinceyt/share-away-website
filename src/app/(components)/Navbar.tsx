@@ -82,14 +82,20 @@ export default function Navbar() {
 
                 {/* Notification Window */}
                 {(showBell) && (
-                    <div className="absolute top-20 right-32 bg-white text-pink-600 shadow-xl
-                    shadow-pink-500/20 w-48 overflow-y-auto h-[200px] rounded-lg flex flex-col
-                    justify-center items-center">
+                    <div className="absolute top-20 max-[350px]:right-12 right-32 bg-white text-pink-600 shadow-xl shadow-pink-500/20 w-48 overflow-y-auto h-[200px] rounded-lg flex flex-col items-center
+                    pink-scrollbar">
+                        {/* Notification Image */}
+                        <Image
+                            className="rounded-tl shadow-md shadow-pink-500/20"
+                            src={'/art/banner/banner3.png'}
+                            width={500}
+                            height={500}
+                            alt="Notification Image"
+                        />
                         {/* Notification Mapping */}
                         {notifications.map((notif, index) => (
-                            <div key={`${notif.post_uuid}-${notif.liker_username}-${index}`} className="bg-pink-600/10 m-2 hover:border-l-[20px]  border-l-pink-600
-                            p-1 px-2 rounded transition-all duration-300 hover:shadow-lg
-                            shadow-pink-500/20">
+                            <div key={`${notif.post_uuid}-${notif.liker_username}-${index}`} className="bg-pink-600/10 mr-2 ml-2 mt-2 hover:border-l-[20px]  border-l-pink-600
+                            p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
                                 <Link href={`/post/${notif.post_uuid}`}>
                                     <span>
                                         <strong>@{notif.liker_username}</strong> liked your post.
@@ -100,7 +106,7 @@ export default function Navbar() {
                         {/* Notification - Load more Button */}
                         <button
                             onClick={handleLoadMore}
-                            className="mb-2 px-4 py-2 text-xs shadow-xl shadow-pink-500/20 hover:scale-105 transition-all duration-300 bg-pink-500 text-white rounded-lg"
+                            className="mb-2 mt-2 px-4 py-2 text-xs shadow-xl shadow-pink-500/20 hover:scale-105 transition-all duration-300 bg-pink-500 text-white rounded-lg"
                         >
                             Load More
                         </button>
@@ -189,19 +195,19 @@ export default function Navbar() {
                 {/* Hamburger open */}
                 {(showHamburger) && (
                     
-                    <div className="absolute w-[120px] right-6 flex flex-col justify-start gap-2 text-pink-600 top-20 bg-white rounded-lg shadow-xl shadow-pink-500/20 p-2">
+                    <div className="absolute w-[120px] right-6 flex flex-col justify-start text-pink-600 top-20 bg-white rounded-lg shadow-xl shadow-pink-500/20">
                         {/* Image */}
                         <Image
-                            className="w-[200px] h-[25px] rounded shadow-md shadow-pink-500/20"
+                            className="rounded-tr rounded-tl shadow-md shadow-pink-500/20"
                             src={'/art/banner/banner2.png'}
                             width={500}
                             height={500}
                             alt="Navbar Image"
                         />
                         {/* Button lists */}
-                        <ul className="flex flex-col gap-2">
+                        <ul className="flex flex-col m-2 gap-2">
                             {/* Home */}
-                            <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                            <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
                                 <Link href="/">Home</Link>
                             </li>
                             {/* Admin */}

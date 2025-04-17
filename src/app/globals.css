@@ -5,6 +5,7 @@
 }
 
 @keyframes slide-left-bounce {
+
     0%,
     100% {
         transform: translateX(0);
@@ -13,4 +14,17 @@
     50% {
         transform: translateX(-10px);
     }
+}
+
+.pink-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.pink-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #ec4899;
+    border-radius: 10px;
+}
+
+.pink-scrollbar::-webkit-scrollbar-track {
+    background-color: #fce7f3;
 }
