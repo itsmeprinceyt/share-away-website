@@ -7,6 +7,7 @@ import getBaseUrl from '../../utils/getBaseUrl';
 import useRedirectToProfile from '../../hooks/useRedirectToProfile';
 import Navbar from '../(components)/Navbar';
 import PageWrapper from '../(components)/PageWrapper';
+import Loading from '../(components)/Loading';
 
 /**
  * @description     - This page is used to login the user.
@@ -16,10 +17,12 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     useRedirectToProfile();
 
     const handleLogin = async () => {
         setError('');
+        setLoading(true);
         try {
             const response = await fetch(`${getBaseUrl()}/auth/login`, {
                 method: "POST",
@@ -50,12 +53,16 @@ export default function Login() {
                 }
             } else {
                 setError(data.message || 'Login failed');
+                setLoading(false);
             }
         } catch (err) {
             console.error('Error during login request:', err);
             setError('Something went wrong. Please try again.');
+            setLoading(false);
         }
     };
+
+    if (loading) return <Loading etaSeconds={30} />;
 
     return (
         <PageWrapper>
