@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import useRedirectToHome from '../hooks/useRedirectToHome';
+import Navbar from './(components)/Navbar';
 
 export default function Home() {
   useRedirectToHome();
@@ -9,7 +10,7 @@ export default function Home() {
     <div className="
     min-h-screen bg-gradient-to-b from-pink-50 via-pink-200 to-pink-100
     flex justify-center items-center gap-2">
-
+      <Navbar/>
       <div className="
       flex flex-col min-[800px]:flex-row items-start gap-10 m-10">
 

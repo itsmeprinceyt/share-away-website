@@ -1,15 +1,18 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import Logout from './Logout';
-import { useCheckSession } from '@/hooks/useCheckSession';
+import { useRouter } from 'next/navigation';
+import { useCheckSession } from '../../hooks/useCheckSession';
 import { useState, useEffect } from 'react';
 import getBaseUrl from '../../utils/getBaseUrl';
 import HeartNotification from '../../types/HeartNotification';
 
 export default function Navbar() {
+    const router = useRouter();
     const session = useCheckSession();
     const [notifications, setNotifications] = useState<HeartNotification[]>([]);
+    const [showBell, setShowBell] = useState(false);
+    const [showHamburger, setShowHamburger] = useState(false);
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -25,90 +28,121 @@ export default function Navbar() {
         fetchNotifications();
     }, [session]);
 
+    const handleLogout = () => {
+        if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('userSession');
+            localStorage.removeItem('userSession');
+        }
+        router.push('/');
+    };
+
+    const handleHamburger = () => {
+        if(showBell) setShowBell(!showBell);
+        setShowHamburger(!showHamburger);
+    }
+
+    const handleBell = () => {
+        if(showHamburger) setShowHamburger(!showHamburger);
+        setShowBell(!showBell);
+    }
+
+
+
     return (
-        <nav className="bg-gray-800 p-4 flex justify-between items-center">
-            <div className="text-white text-lg font-bold">ShareAway</div>
-
-            <ul className="flex space-x-4 items-center">
-                <li>
-                    <Link href="/" className="text-white hover:text-gray-400">Home</Link>
-                </li>
-                {session && (
-                    <li>
-                        <Link href="/post" className="text-white hover:text-gray-400">Post</Link>
-                    </li>
-                )}
-
-                {/* Show admin panel if user is admin */}
-                {session?.user?.isAdmin === 1 && (
-                    <li>
-                        <Link href="/admin" className="text-white hover:text-gray-400">Admin</Link>
-                    </li>
-                )}
-
-                {/* Show user profile if logged in */}
-                {session && (
-                    <li>
-                        <Link href="/profile" className="text-white hover:text-gray-400 flex items-center space-x-2">
-                            {session.user.pfp ? (
-                                <Image
-                                    src={session.user.pfp}
-                                    alt="Profile"
-                                    width={32}
-                                    height={32}
-                                    className="rounded-full"
-                                />
-                            ) : (
-                                <span className="text-white">Profile</span>
-                            )}
-                        </Link>
-                    </li>
-                )}
-
-                {/* Show notifications */}
-                {notifications.length > 0 && (
-                    <li>
-                        <div className="relative">
-                            <button className="text-white hover:text-gray-400">
-                                Notifications
-                            </button>
-                            <div className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-2 py-1">
-                                {notifications.length}
-                            </div>
-                            <div className="absolute bg-white text-black shadow-lg w-48 mt-2 rounded-lg p-2">
-                                {notifications.map((notif) => (
-                                    <div key={notif.post_uuid} className="mb-2 p-2 hover:bg-gray-200 rounded-lg">
-                                        <Link href={`/post/${notif.post_uuid}`}>
-                                            <span>
-                                                <strong>@{notif.liker_username}</strong> liked your post.
-                                            </span>
-                                        </Link>
-                                    </div>
-                                ))}
-                            </div>
+        <div className="absolute right-5 top-5 bg-gray-800 p-4 flex justify-between items-center">
+            {(session && notifications.length > 0) && (
+                <div className="relative">
+                    <button onClick={handleBell}>
+                        <div className="absolute top-3 right-2 bg-red-600 text-white text-xs rounded-full w-[20px] h-[20px] flex justify-center items-center">
+                            {notifications.length}
                         </div>
-                    </li>
-                )}
+                        <div className="">🔔</div>
+                    </button>
+                </div>
+            )}
 
-                {/* If not logged in, show Login/Register */}
-                {!session && (
-                    <>
-                        <li>
-                            <Link href="/login" className="text-white hover:text-gray-400">Login</Link>
-                        </li>
-                        <li>
-                            <Link href="/sign-up" className="text-white hover:text-gray-400">Register</Link>
-                        </li>
-                    </>
-                )}
+            {(showBell) && (
+                    <div className="absolute top-24 right-10 bg-white text-black shadow-lg w-48 mt-2 rounded-lg p-2">
+                        {notifications.map((notif) => (
+                            <div key={notif.post_uuid} className="mb-2 p-2 hover:bg-gray-200 rounded-lg">
+                                <Link href={`/post/${notif.post_uuid}`}>
+                                    <span>
+                                        <strong>@{notif.liker_username}</strong> liked your post.
+                                    </span>
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+            )}
 
-                {/* If logged in, show logout */}
-                {session && (
-                    <li>
-                        <Logout />
-                    </li>
-                )}
-            </ul>
-        </nav>
+            {session && (
+                <div>
+                    <Link href="/profile" className="text-white hover:text-gray-400 flex items-center space-x-2">
+                        {session.user.pfp ? (
+                            <Image
+                                src={session.user.pfp}
+                                alt="Profile"
+                                width={32}
+                                height={32}
+                                className="rounded-full"
+                            />
+                        ) : (
+                            <Image
+                                src={'/avatar/DefaultAvatar.png'}
+                                alt="Profile"
+                                width={32}
+                                height={32}
+                                className="rounded-full"
+                            />
+                        )}
+                    </Link>
+                </div>
+            )}
+            <button
+                onClick={handleHamburger}
+            >
+                <Image
+                    src={'/icons/Hamburger.png'}
+                    width={30}
+                    height={30}
+                    alt=""
+                />
+            </button>
+            {(showHamburger) && (
+                <div className="absolute flex flex-col justify-start items-start gap-5 text-black top-20 bg-slate-200 rounded-xl p-5">
+                    <ul>
+                        <li className=" hover:text-gray-400">
+                            <Link href="/">Home</Link>
+                        </li>
+                        {session && (
+                            <li className="hover:text-gray-400">
+                                <Link href="/post">Post</Link>
+                            </li>
+                        )}
+                        {session?.user?.isAdmin === 1 && (
+                            <li className="hover:text-gray-400">
+                                <Link href="/admin">Admin</Link>
+                            </li>
+                        )}
+                        {!session && (
+                            <>
+                                <li className="hover:text-gray-400">
+                                    <Link href="/login" >Login</Link>
+                                </li>
+                                <li className="hover:text-gray-400">
+                                    <Link href="/sign-up" >Register</Link>
+                                </li>
+                            </>
+                        )}
+
+                        {session && (
+                            <li>
+                                <button onClick={handleLogout}>Logout</button>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+            )}
+        </div>
     );
 }
