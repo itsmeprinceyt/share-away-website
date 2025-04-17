@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ShareAway by @ItsMe Prince",
     description: "ShareAway is a safe, open space where anyone can express their thoughts, feelings, and stories without fear of judgment.",
-    url: "https://yourwebsite.com",
+    url: "https://share-away-prince.vercel.app/",
     images: [
       {
         url: "/art/banner/banner1-text.png",
