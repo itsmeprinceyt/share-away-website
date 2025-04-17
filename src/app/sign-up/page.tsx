@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import getBaseUrl from '../../utils/getBaseUrl';
@@ -26,18 +26,22 @@ export default function SignUp() {
 
     const [error, setError] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(defaultProfilePic);
-    let sessionData = sessionStorage.getItem('userSession');
-    if (!sessionData) {
-        sessionData = localStorage.getItem('userSession');
-        if (sessionData) {
-            sessionStorage.setItem('userSession', sessionData);
-        }
-    }
+    
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
 
-    if (sessionData) {
-        router.push('/profile');
-        return;
-    }
+        let sessionData = sessionStorage.getItem('userSession');
+        if (!sessionData) {
+            sessionData = localStorage.getItem('userSession');
+            if (sessionData) {
+                sessionStorage.setItem('userSession', sessionData);
+            }
+        }
+
+        if (sessionData) {
+            router.push('/profile');
+        }
+    }, [router]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
