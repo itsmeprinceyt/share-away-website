@@ -37,34 +37,37 @@ export default function Navbar() {
     };
 
     const handleHamburger = () => {
-        if(showBell) setShowBell(!showBell);
+        if (showBell) setShowBell(!showBell);
         setShowHamburger(!showHamburger);
     }
 
     const handleBell = () => {
-        if(showHamburger) setShowHamburger(!showHamburger);
+        if (showHamburger) setShowHamburger(!showHamburger);
         setShowBell(!showBell);
     }
 
 
 
     return (
-        <div className="absolute right-5 top-5 bg-gray-800 p-4 flex justify-between items-center">
-            {(session && notifications.length > 0) && (
-                <div className="relative">
-                    <button onClick={handleBell}>
-                        <div className="absolute top-3 right-2 bg-red-600 text-white text-xs rounded-full w-[20px] h-[20px] flex justify-center items-center">
-                            {notifications.length}
-                        </div>
-                        <div className="">🔔</div>
-                    </button>
-                </div>
-            )}
+        <div className="absolute top-0 min-w-screen p-5 px-6 flex justify-between items-center gap-5">
 
-            {(showBell) && (
-                    <div className="absolute top-24 right-10 bg-white text-black shadow-lg w-48 mt-2 rounded-lg p-2">
+            <Link href="/home">
+                <Image
+                    className="w-[50px] h-[50px] hover:scale-110 transition-all duration-300"
+                    src={'/logo/ShareAway5-png.png'}
+                    alt="Home"
+                    width={500}
+                    height={500}
+                />
+            </Link>
+
+            <div className="flex justify-between items-center gap-5">
+
+                {(showBell) && (
+                    <div className="absolute top-20 right-32 bg-white text-pink-600 shadow-xl
+                    shadow-pink-500/20 w-48 rounded-lg">
                         {notifications.map((notif) => (
-                            <div key={notif.post_uuid} className="mb-2 p-2 hover:bg-gray-200 rounded-lg">
+                            <div key={notif.post_uuid} className="hover:bg-pink-600/10 m-2 hover:border-l-[20px]  border-l-pink-600 p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
                                 <Link href={`/post/${notif.post_uuid}`}>
                                     <span>
                                         <strong>@{notif.liker_username}</strong> liked your post.
@@ -73,76 +76,132 @@ export default function Navbar() {
                             </div>
                         ))}
                     </div>
-            )}
+                )}
 
-            {session && (
-                <div>
-                    <Link href="/profile" className="text-white hover:text-gray-400 flex items-center space-x-2">
-                        {session.user.pfp ? (
-                            <Image
-                                src={session.user.pfp}
-                                alt="Profile"
-                                width={32}
-                                height={32}
-                                className="rounded-full"
-                            />
-                        ) : (
-                            <Image
-                                src={'/avatar/DefaultAvatar.png'}
-                                alt="Profile"
-                                width={32}
-                                height={32}
-                                className="rounded-full"
-                            />
-                        )}
-                    </Link>
-                </div>
-            )}
-            <button
-                onClick={handleHamburger}
-            >
-                <Image
-                    src={'/icons/Hamburger.png'}
-                    width={30}
-                    height={30}
-                    alt=""
-                />
-            </button>
-            {(showHamburger) && (
-                <div className="absolute flex flex-col justify-start items-start gap-5 text-black top-20 bg-slate-200 rounded-xl p-5">
-                    <ul>
-                        <li className=" hover:text-gray-400">
-                            <Link href="/">Home</Link>
-                        </li>
-                        {session && (
-                            <li className="hover:text-gray-400">
-                                <Link href="/post">Post</Link>
-                            </li>
-                        )}
-                        {session?.user?.isAdmin === 1 && (
-                            <li className="hover:text-gray-400">
-                                <Link href="/admin">Admin</Link>
-                            </li>
-                        )}
-                        {!session && (
-                            <>
-                                <li className="hover:text-gray-400">
-                                    <Link href="/login" >Login</Link>
-                                </li>
-                                <li className="hover:text-gray-400">
-                                    <Link href="/sign-up" >Register</Link>
-                                </li>
-                            </>
+                {session && (
+                    <>
+
+                        <button className="hover:text-gray-400">
+                            <Link href="/post">
+                                <Image
+                                    className="w-[25px] h-[25px] hover:scale-110 transition-all duration-300"
+                                    src={'/icons/post-icon-new.png'}
+                                    alt="Post"
+                                    width={500}
+                                    height={500}
+                                />
+                            </Link>
+                        </button>
+
+                        {(session && notifications.length > 0) && (
+                            <div className="relative mt-2 hover:scale-110
+                            transition-all duration-300">
+                                <button onClick={handleBell}>
+
+                                    <div className="absolute -top-2 -right-2 bg-white text-black text-xs rounded-full w-[20px] h-[20px] flex justify-center items-center hover:scale-125
+                            transition-all duration-300">
+                                        {notifications.length > 9 ? `${notifications.length}+` : `${notifications.length}`}
+                                    </div>
+
+                                    <Image
+                                        className="w-[22px] h-[22px]"
+                                        src={'/icons/bell-pink.png'}
+                                        alt="Bell"
+                                        width={500}
+                                        height={500}
+                                    />
+
+                                </button>
+
+                            </div>
                         )}
 
-                        {session && (
-                            <li>
-                                <button onClick={handleLogout}>Logout</button>
+                        <div>
+                            <Link href="/profile">
+                                {session.user.pfp ? (
+                                    <Image
+                                        src={session.user.pfp}
+                                        alt="Profile"
+                                        width={32}
+                                        height={32}
+                                        className="border-white border-2 rounded-full
+                                        hover:scale-110 transition-all duration-300"
+                                    />
+                                ) : (
+                                    <Image
+                                        src={'/avatar/DefaultAvatar.png'}
+                                        alt="Default Profile"
+                                        width={32}
+                                        height={32}
+                                        className="border-white border-2 rounded-full
+                                        hover:scale-110 transition-all duration-300"
+                                    />
+                                )}
+                            </Link>
+                        </div>
+                    </>
+
+                )}
+
+                <button
+                    onClick={handleHamburger}
+                >
+                    <Image
+                        className={`w-[35px] h-[35px] transform transition-transform duration-300
+                            ${showHamburger ? '-rotate-90' : 'rotate-0'} hover:scale-110 transition-all duration-300`}
+                        src={'/icons/Hamburger-big.png'}
+                        width={500}
+                        height={500}
+                        alt="Hamburger"
+                    />
+                </button>
+
+                {(showHamburger) && (
+
+                    <div className="absolute w-[120px] right-6 flex flex-col justify-start gap-2 text-pink-600 top-20 bg-white rounded-lg shadow-xl shadow-pink-500/20 p-2">
+                        <Image
+                        className="w-[200px] h-[25px] rounded shadow-md shadow-pink-500/20"
+                        src={'/art/banner/banner2.png'}
+                        width={500}
+                        height={500}
+                        alt="Navbar Image"
+                    />
+
+                        <ul className="flex flex-col gap-2">
+                            <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                <Link href="/">Home</Link>
                             </li>
-                        )}
-                    </ul>
-                </div>
-            )}
+
+                            {session?.user?.isAdmin === 1 && (
+                                <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                    <Link href="/admin">Admin</Link>
+                                </li>
+                            )}
+
+                            {!session && (
+                                <>
+                                    <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                        <Link href="/login" >Login</Link>
+                                    </li>
+                                    <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                        <Link href="/sign-up" >Sign up</Link>
+                                    </li>
+                                </>
+                            )}
+
+                            {session && (
+                                <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                    <button onClick={handleLogout}>Logout</button>
+                                </li>
+                            )}
+
+                        </ul>
+
+                    </div>
+
+                )}
+
+            </div>
         </div>
     );
 }
