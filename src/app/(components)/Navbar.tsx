@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCheckSession } from '../../hooks/useCheckSession';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import getBaseUrl from '../../utils/getBaseUrl';
 import HeartNotification from '../../types/HeartNotification';
 
@@ -11,22 +11,38 @@ export default function Navbar() {
     const router = useRouter();
     const session = useCheckSession();
     const [notifications, setNotifications] = useState<HeartNotification[]>([]);
+    const [offset, setOffset] = useState(0);
+    const limit = 5;
     const [showBell, setShowBell] = useState(false);
     const [showHamburger, setShowHamburger] = useState(false);
 
+    const fetchNotifications = useCallback(async (currentOffset: number) => {
+        if (!session?.user?.uuid) return;
+        try {
+            const response = await fetch(
+                `${getBaseUrl()}/notifications/heart?uuid=${session.user.uuid}&offset=${currentOffset}&limit=${limit}`
+            );
+            const data = await response.json();
+            setNotifications(prev => [...prev, ...(data.notifications || [])]);
+        } catch (error) {
+            console.error("Error fetching notifications:", error);
+        }
+    }, [session, limit]);
+
+    const hasFetched = useRef(false);
+
     useEffect(() => {
-        const fetchNotifications = async () => {
-            if (!session?.user?.uuid) return;
-            try {
-                const response = await fetch(`${getBaseUrl()}/notifications/heart?uuid=${session.user.uuid}`);
-                const data = await response.json();
-                setNotifications(data.notifications || []);
-            } catch (error) {
-                console.error("Error fetching notifications:", error);
-            }
-        };
-        fetchNotifications();
-    }, [session]);
+        if (session?.user?.uuid && !hasFetched.current) {
+            fetchNotifications(0);
+            hasFetched.current = true;
+        }
+    }, [fetchNotifications, session?.user?.uuid]);
+
+    const handleLoadMore = () => {
+        const newOffset = offset + limit;
+        setOffset(newOffset);
+        fetchNotifications(newOffset);
+    };
 
     const handleLogout = () => {
         if (typeof window !== 'undefined') {
@@ -50,7 +66,7 @@ export default function Navbar() {
 
     return (
         <div className="absolute top-0 min-w-screen p-5 px-6 flex justify-between items-center gap-5">
-
+            {/* Home Button */}
             <Link href="/home">
                 <Image
                     className="w-[50px] h-[50px] hover:scale-110 transition-all duration-300"
@@ -61,13 +77,19 @@ export default function Navbar() {
                 />
             </Link>
 
+            {/* Right Corner Div */}
             <div className="flex justify-between items-center gap-5">
 
+                {/* Notification Window */}
                 {(showBell) && (
                     <div className="absolute top-20 right-32 bg-white text-pink-600 shadow-xl
-                    shadow-pink-500/20 w-48 rounded-lg">
-                        {notifications.map((notif) => (
-                            <div key={notif.post_uuid} className="hover:bg-pink-600/10 m-2 hover:border-l-[20px]  border-l-pink-600 p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                    shadow-pink-500/20 w-48 overflow-y-auto h-[200px] rounded-lg flex flex-col
+                    justify-center items-center">
+                        {/* Notification Mapping */}
+                        {notifications.map((notif, index) => (
+                            <div key={`${notif.post_uuid}-${notif.liker_username}-${index}`} className="bg-pink-600/10 m-2 hover:border-l-[20px]  border-l-pink-600
+                            p-1 px-2 rounded transition-all duration-300 hover:shadow-lg
+                            shadow-pink-500/20">
                                 <Link href={`/post/${notif.post_uuid}`}>
                                     <span>
                                         <strong>@{notif.liker_username}</strong> liked your post.
@@ -75,12 +97,20 @@ export default function Navbar() {
                                 </Link>
                             </div>
                         ))}
+                        {/* Notification - Load more Button */}
+                        <button
+                            onClick={handleLoadMore}
+                            className="mb-2 px-4 py-2 text-xs shadow-xl shadow-pink-500/20 hover:scale-105 transition-all duration-300 bg-pink-500 text-white rounded-lg"
+                        >
+                            Load More
+                        </button>
                     </div>
                 )}
 
+                {/* If logged in: */}
                 {session && (
                     <>
-
+                        {/* Post Button */}
                         <button className="hover:text-gray-400">
                             <Link href="/post">
                                 <Image
@@ -93,14 +123,15 @@ export default function Navbar() {
                             </Link>
                         </button>
 
+                        {/* Bell Div: if notifications are present */}
                         {(session && notifications.length > 0) && (
+
                             <div className="relative mt-2 hover:scale-110
                             transition-all duration-300">
                                 <button onClick={handleBell}>
 
-                                    <div className="absolute -top-2 -right-2 bg-white text-black text-xs rounded-full w-[20px] h-[20px] flex justify-center items-center hover:scale-125
-                            transition-all duration-300">
-                                        {notifications.length > 9 ? `${notifications.length}+` : `${notifications.length}`}
+                                    <div className="absolute -top-2 -right-2 bg-white text-black text-xs rounded-full w-[20px] h-[20px] flex justify-center items-center hover:scale-125 transition-all duration-300">
+                                        {notifications.length > 9 ? `9+` : `${notifications.length}`}
                                     </div>
 
                                     <Image
@@ -115,7 +146,7 @@ export default function Navbar() {
 
                             </div>
                         )}
-
+                        {/* Profile: User pfp & default pfp */}
                         <div>
                             <Link href="/profile">
                                 {session.user.pfp ? (
@@ -142,7 +173,7 @@ export default function Navbar() {
                     </>
 
                 )}
-
+                {/* Hamburger */}
                 <button
                     onClick={handleHamburger}
                 >
@@ -155,29 +186,31 @@ export default function Navbar() {
                         alt="Hamburger"
                     />
                 </button>
-
+                {/* Hamburger open */}
                 {(showHamburger) && (
-
+                    
                     <div className="absolute w-[120px] right-6 flex flex-col justify-start gap-2 text-pink-600 top-20 bg-white rounded-lg shadow-xl shadow-pink-500/20 p-2">
+                        {/* Image */}
                         <Image
-                        className="w-[200px] h-[25px] rounded shadow-md shadow-pink-500/20"
-                        src={'/art/banner/banner2.png'}
-                        width={500}
-                        height={500}
-                        alt="Navbar Image"
-                    />
-
+                            className="w-[200px] h-[25px] rounded shadow-md shadow-pink-500/20"
+                            src={'/art/banner/banner2.png'}
+                            width={500}
+                            height={500}
+                            alt="Navbar Image"
+                        />
+                        {/* Button lists */}
                         <ul className="flex flex-col gap-2">
+                            {/* Home */}
                             <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
                                 <Link href="/">Home</Link>
                             </li>
-
+                            {/* Admin */}
                             {session?.user?.isAdmin === 1 && (
                                 <li className="hover:bg-orange-600/10 hover:border-l-[20px] border-l-orange-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20">
                                     <Link href="/admin">Admin</Link>
                                 </li>
                             )}
-
+                            {/* Login & Sign up if no session */}
                             {!session && (
                                 <>
                                     <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
@@ -188,7 +221,7 @@ export default function Navbar() {
                                     </li>
                                 </>
                             )}
-
+                            {/* Logout button if session exists */}
                             {session && (
                                 <li className="hover:bg-red-600/10 hover:border-l-[20px] border-l-red-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20">
                                     <button onClick={handleLogout}>Logout</button>
