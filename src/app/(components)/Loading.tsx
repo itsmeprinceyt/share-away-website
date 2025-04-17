@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from 'react';
+import PageWrapper from './PageWrapper';
 
 /**
  * @brief       - Loading page component throughout the application.
@@ -17,9 +18,7 @@ export default function Loading() {
     }, []);
 
     return (
-        <div className="z-50 min-h-screen bg-gradient-to-b
-        from-pink-50 via-pink-200 to-pink-100 flex
-        justify-center items-center">
+        <PageWrapper>
 
             <div className="flex flex-col items-center gap-5">
                 <Image
@@ -44,6 +43,6 @@ export default function Loading() {
                 )}
             </div>
 
-        </div>
+        </PageWrapper>
     );
 }

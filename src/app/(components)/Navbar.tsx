@@ -65,7 +65,7 @@ export default function Navbar() {
 
 
     return (
-        <div className="absolute top-0 min-w-screen p-5 px-6 flex justify-between items-center gap-5">
+        <div className="z-50 absolute top-0 min-w-screen p-5 px-6 flex justify-between items-center gap-5">
             {/* Home Button */}
             <Link href="/home">
                 <Image
