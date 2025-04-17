@@ -173,7 +173,7 @@ export default function Navbar() {
                             </li>
 
                             {session?.user?.isAdmin === 1 && (
-                                <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                <li className="hover:bg-orange-600/10 hover:border-l-[20px] border-l-orange-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20">
                                     <Link href="/admin">Admin</Link>
                                 </li>
                             )}
@@ -190,7 +190,7 @@ export default function Navbar() {
                             )}
 
                             {session && (
-                                <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                <li className="hover:bg-red-600/10 hover:border-l-[20px] border-l-red-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20">
                                     <button onClick={handleLogout}>Logout</button>
                                 </li>
                             )}
