@@ -94,6 +94,8 @@ export default function PostEdit() {
     return (
         <div>
             <Navbar />
+            are you owner: {isOwner ? 'yes' : 'no' }
+            are you admin: {isAdmin ? 'yes': 'no'}
             <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-4">
                 <h2 className="text-xl font-semibold mb-4 text-center">Edit Post</h2>
     
