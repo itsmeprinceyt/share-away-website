@@ -94,7 +94,7 @@ export default function Navbar() {
                         />
                         {/* Notification Mapping */}
                         {notifications.map((notif, index) => (
-                            <div key={`${notif.post_uuid}-${notif.liker_username}-${index}`} className="bg-pink-600/10 mr-2 ml-2 mt-2 hover:border-l-[20px]  border-l-pink-600
+                            <div key={`${notif.post_uuid}-${notif.liker_username}-${index}`} className="hover:bg-pink-600/10 mr-2 ml-2 mt-2 hover:border-l-[20px]  border-l-pink-600
                             p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
                                 <Link href={`/post/${notif.post_uuid}`}>
                                     <span>

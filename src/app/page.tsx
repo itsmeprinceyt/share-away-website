@@ -11,9 +11,10 @@ export default function Home() {
     min-h-screen bg-gradient-to-b from-pink-50 via-pink-200 to-pink-100
     flex justify-center items-center gap-2">
       <Navbar/>
+      {/* Main Container */}
       <div className="
       flex flex-col min-[800px]:flex-row items-start gap-10 m-10">
-
+        {/* Left Image */}
         <div className="
         max-[920px]:w-[350px] max-[350px]:w-[250px]">
           <Image
@@ -28,9 +29,10 @@ export default function Home() {
           />
         </div>
 
-
+        {/* Left Container */}
         <div className="
         flex flex-col justify-center  items-center gap-2 ">
+          {/* Banner */}
           <div className="
           max-[920px]:w-[350px] max-[350px]:w-[250px]">
             <Image
@@ -44,8 +46,8 @@ export default function Home() {
               alt="Logo"
             />
           </div>
-
-          <div
+          {/* Text */}
+          <div  
             className="
           -tracking-tighter max-[920px]:leading-5 max-[800px]:leading-7 leading-7
           max-[350px]:w-[250px] max-[400px]:text-center max-[920px]:w-[350px]
