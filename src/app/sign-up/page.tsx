@@ -163,10 +163,11 @@ export default function SignUp() {
     return (
         <PageWrapperPurple>
             <Navbar />
-
+            {/* Main Container */}
             <div className="flex flex-col justify-start items-center max-[580px]:gap-20 max-[480px]:gap-24 gap-14 z-20 w-[500px] max-[580px]:w-[400px] max-[480px]:w-[300px] pb-8
             bg-white/30 m-10 mt-24 mb-24 rounded-4xl relative border border-purple-300
             shadow-xl shadow-purple-500/20">
+                {/* Banner */}
                 <Image
                     className="rounded-tl-4xl rounded-tr-4xl shadow-xl shadow-purple-500/30"
                     src={'/art/banner/banner2.png'}
@@ -174,9 +175,9 @@ export default function SignUp() {
                     height={500}
                     alt="banner"
                 />
-
+                {/* Form */}
                 <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center gap-5">
-
+                    {/* Profile Picture Container */}
                     <div className="absolute top-10 flex flex-col w-[150px] items-center
                     justify-center gap-2 ">
                         <input
@@ -200,7 +201,7 @@ export default function SignUp() {
                             </button>
                         }
                     </div>
-
+                    {/* Form Inputs */}
                     <div className="flex flex-col justify-center items-center relative">
                         <input
                             type="text"
@@ -231,6 +232,7 @@ export default function SignUp() {
                             onChange={handleChange}
                             required
                         />
+                        {/* Eye */}
                         <button
                             type="button"
                             onClick={() => setShowPassword(prev => !prev)}
@@ -252,6 +254,7 @@ export default function SignUp() {
                             onChange={handleChange}
                             required
                         />
+                        {/* Eye */}
                         <button
                             type="button"
                             onClick={() => setShowConfirmPassword(prev => !prev)}
@@ -265,11 +268,10 @@ export default function SignUp() {
                             />
                         </button>
                     </div>
+                    {/* Button container */}
                     <div className="relative">
-
-
+                        {/* Buttons */}
                         <div className="flex flex-col justify-center items-center gap-5">
-
                             <button
                                 type="submit"
                                 className="bg-gradient-to-r from-purple-500
@@ -286,12 +288,12 @@ export default function SignUp() {
                                 </button>
                             </Link>
                         </div>
-
                     </div>
                     {error && <p className="text-red-500 font-extralight">Oops! {error}</p>}
                 </form>
                 
             </div>
+            {/* Background glow */}
             <div className="absolute right-0 w-[500px] h-[500px] bg-purple-200 blur-3xl"></div>
             
         </PageWrapperPurple>
