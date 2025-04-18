@@ -71,8 +71,8 @@ export default function Login() {
             {/* Main container */}
             <div className="z-20 flex max-[1090px]:flex-col-reverse mt-24 mb-24">
                 {/* Image container */}
-                <div className="max-[550px]:w-[350px]  max-[350px]:w-[300px]">
-                    <Image className="hover:z-20 hover:rounded-4xl hover:border
+                <div className="hover:z-20 max-[550px]:w-[350px] max-[350px]:w-[300px]">
+                    <Image className="hover:rounded-4xl hover:border
                 rounded-tl-4xl rounded-bl-4xl max-[1090px]:rounded-tl-none max-[1090px]:rounded-br-4xl border-l border-t border-b max-[1090px]:border-t-0 max-[1090px]:border-r border-pink-300
                 shadow-pink-500/20 shadow-xl hover:scale-105 hover:shadow-pink-500/40
                 transition-all duration-500"

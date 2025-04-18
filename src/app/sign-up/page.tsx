@@ -1,6 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import getBaseUrl from '../../utils/getBaseUrl';
 import Navbar from "../(components)/Navbar";
@@ -25,7 +26,9 @@ export default function SignUp() {
         confirmPassword: "",
         profilePic: defaultProfilePic,
     });
-
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(defaultProfilePic);
 
@@ -49,7 +52,7 @@ export default function SignUp() {
         const file = e.target.files?.[0];
         if (!file) return;
         if (file.size > 150 * 1024) {
-            setError("Image is too large. Please choose a smaller image.");
+            setError("Please upload an image that is 150KB or smaller");
             return;
         }
 
@@ -66,7 +69,7 @@ export default function SignUp() {
             img.src = base64;
             img.onload = () => {
                 if (img.width !== img.height) {
-                    setError("Image must be square (1:1 aspect ratio).");
+                    setError("Image must be square (1:1 aspect ratio)");
                     return;
                 }
 
@@ -161,74 +164,136 @@ export default function SignUp() {
         <PageWrapperPurple>
             <Navbar />
 
-            <div className="z-20 max-w-md bg-white/30 m-10 mt-24 mb-24 rounded-4xl">
+            <div className="flex flex-col justify-start items-center max-[580px]:gap-20 max-[480px]:gap-24 gap-14 z-20 w-[500px] max-[580px]:w-[400px] max-[480px]:w-[300px] pb-8
+            bg-white/30 m-10 mt-24 mb-24 rounded-4xl relative border border-purple-300
+            shadow-xl shadow-purple-500/20">
                 <Image
-                    className="rounded-tl-4xl rounded-tr-4xl shadow-md shadow-purple-500/20"
+                    className="rounded-tl-4xl rounded-tr-4xl shadow-xl shadow-purple-500/30"
                     src={'/art/banner/banner2.png'}
                     width={500}
                     height={500}
                     alt="banner"
                 />
-                <h2 className="text-xl font-bold">Sign Up</h2>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <input
-                        type="text"
-                        name="username"
-                        placeholder="Username"
-                        className="w-full border p-2 rounded"
-                        value={form.username}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        className="w-full border p-2 rounded"
-                        value={form.email}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        className="w-full border p-2 rounded"
-                        value={form.password}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm Password"
-                        className="w-full border p-2 rounded"
-                        value={form.confirmPassword}
-                        onChange={handleChange}
-                        required
-                    />
+                <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center gap-5">
 
-                    <div>
-                        <label className="block font-medium mb-1">Upload Profile Picture</label>
-                        <input type="file" accept="image/*" onChange={handleImageChange} />
-                        {preview && <Image src={preview} alt="preview" width={100} height={100} className="mt-2 rounded-full object-cover" />}
+                    <div className="absolute top-10 flex flex-col w-[150px] items-center
+                    justify-center gap-2 ">
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            ref={fileInputRef}
+                            style={{ display: "none" }}
+                        />
+                        {preview &&
+                            <button
+                                type="button"
+                                onClick={() => fileInputRef.current?.click()}
+                                className="">
+                                <Image
+                                    src={preview}
+                                    alt="preview"
+                                    width={100}
+                                    height={100}
+                                    className="rounded-full border-2 border-purple-500 shadow-xl shadow-purple-500/30" />
+                            </button>
+                        }
                     </div>
 
+                    <div className="flex flex-col justify-center items-center relative">
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Username"
+                            className="bg-white border border-white focus:border-purple-500 focus:outline-none text-purple-500 p-2 rounded-lg mb-4 max-[350px]:mb-2
+                            w-[280px] max-[550px]:w-[200px] font-extralight"
+                            value={form.username}
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            className="bg-white border border-white focus:border-purple-500 focus:outline-none text-purple-500 p-2 rounded-lg mb-4 max-[350px]:mb-2
+                            w-[280px] max-[550px]:w-[200px] font-extralight"
+                            value={form.email}
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Password"
+                            className="bg-white border border-white focus:border-purple-500 focus:outline-none text-purple-500 p-2 rounded-lg mb-4 w-[280px] max-[550px]:w-[200px] font-extralight pr-10"
+                            value={form.password}
+                            onChange={handleChange}
+                            required
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(prev => !prev)}
+                            className="z-20 absolute right-2 bottom-22"
+                        >
+                            <Image
+                                src={showPassword ? "/icons/eye-close-purple.png" : "/icons/eye-open-purple.png"}
+                                alt="Toggle visibility"
+                                width={15}
+                                height={15}
+                            />
+                        </button>
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            name="confirmPassword"
+                            placeholder="Confirm Password"
+                            className="bg-white border border-white focus:border-purple-500 focus:outline-none text-purple-500 p-2 rounded-lg mb-4 w-[280px] max-[550px]:w-[200px] font-extralight pr-10"
+                            value={form.confirmPassword}
+                            onChange={handleChange}
+                            required
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(prev => !prev)}
+                            className="z-20 absolute right-2 bottom-8"
+                        >
+                            <Image
+                                src={showConfirmPassword ? "/icons/eye-close-purple.png" : "/icons/eye-open-purple.png"}
+                                alt="Toggle visibility"
+                                width={15}
+                                height={15}
+                            />
+                        </button>
+                    </div>
+                    <div className="relative">
 
 
-                    <button
-                        type="submit"
-                        className="bg-gradient-to-r from-purple-500
-                        to-purple-400 text-white rounded-lg w-[150px]
+                        <div className="flex flex-col justify-center items-center gap-5">
+
+                            <button
+                                type="submit"
+                                className="bg-gradient-to-r from-purple-500
+                        to-purple-400 text-white rounded-lg w-[280px]
                         max-[550px]:w-[100px] py-2 border border-purple-500
                         hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 font-extralight">
-                        Sign Up
-                    </button>
-                    {error && <p className="text-red-500">Oops! {error}</p>}
+                                Sign Up
+                            </button>
+                            <Link href="/login">
+                                <button
+                                    className="text-pink-500 hover:scale-105 transition-all
+                                    duration-300 text-xs font-extralight ">
+                                    Already have an account? <span className="font-semibold underline animate-pulse">Click here</span>
+                                </button>
+                            </Link>
+                        </div>
+
+                    </div>
+                    {error && <p className="text-red-500 font-extralight">Oops! {error}</p>}
                 </form>
+                
             </div>
-            <div className="absolute w-[600px] h-[600px] bg-purple-200 blur-3xl"></div>
+            <div className="absolute right-0 w-[500px] h-[500px] bg-purple-200 blur-3xl"></div>
+            
         </PageWrapperPurple>
     );
 }
