@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import getBaseUrl from '../../utils/getBaseUrl';
 import Navbar from "../(components)/Navbar";
 import defaultProfilePic from '../../utils/defaultAvatar';
+import PageWrapperPurple from "../(components)/PageWrapperPurple";
+
 /**
  * @description    - This page is used to sign up a new user.
  */
@@ -26,7 +28,7 @@ export default function SignUp() {
 
     const [error, setError] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(defaultProfilePic);
-    
+
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
@@ -156,10 +158,17 @@ export default function SignUp() {
     };
 
     return (
-        <div>
+        <PageWrapperPurple>
             <Navbar />
 
-            <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-md space-y-4 mt-10">
+            <div className="z-20 max-w-md bg-white/30 m-10 mt-24 mb-24 rounded-4xl">
+                <Image
+                    className="rounded-tl-4xl rounded-tr-4xl shadow-md shadow-purple-500/20"
+                    src={'/art/banner/banner2.png'}
+                    width={500}
+                    height={500}
+                    alt="banner"
+                />
                 <h2 className="text-xl font-bold">Sign Up</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -206,16 +215,20 @@ export default function SignUp() {
                         {preview && <Image src={preview} alt="preview" width={100} height={100} className="mt-2 rounded-full object-cover" />}
                     </div>
 
-                    {error && <p className="text-red-500">{error}</p>}
+
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                    >
+                        className="bg-gradient-to-r from-purple-500
+                        to-purple-400 text-white rounded-lg w-[150px]
+                        max-[550px]:w-[100px] py-2 border border-purple-500
+                        hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 font-extralight">
                         Sign Up
                     </button>
+                    {error && <p className="text-red-500">Oops! {error}</p>}
                 </form>
             </div>
-        </div>
+            <div className="absolute w-[600px] h-[600px] bg-purple-200 blur-3xl"></div>
+        </PageWrapperPurple>
     );
 }

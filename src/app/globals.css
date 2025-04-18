@@ -1,7 +1,6 @@
 @import "tailwindcss";
-
-:root {
-    --breakpoint-xs: 350px;
+* {
+    transition: all ease-in-out 300ms;
 }
 
 @keyframes slide-left-bounce {

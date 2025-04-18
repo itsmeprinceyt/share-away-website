@@ -212,7 +212,7 @@ export default function Navbar() {
                             </li>
                             {/* Admin */}
                             {session?.user?.isAdmin === 1 && (
-                                <li className="hover:bg-orange-600/10 hover:border-l-[20px] border-l-orange-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20">
+                                <li className="hover:bg-orange-600/10 hover:border-l-[20px] text-orange-600 border-l-orange-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20">
                                     <Link href="/admin">Admin</Link>
                                 </li>
                             )}
@@ -222,14 +222,14 @@ export default function Navbar() {
                                     <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
                                         <Link href="/login" >Login</Link>
                                     </li>
-                                    <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                    <li className="hover:bg-purple-600/10 hover:border-l-[20px] text-purple-600 border-l-purple-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20">
                                         <Link href="/sign-up" >Sign up</Link>
                                     </li>
                                 </>
                             )}
                             {/* Logout button if session exists */}
                             {session && (
-                                <li className="hover:bg-red-600/10 hover:border-l-[20px] border-l-red-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20">
+                                <li className="hover:bg-red-600/10 hover:border-l-[20px] text-red-600 border-l-red-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20">
                                     <button onClick={handleLogout}>Logout</button>
                                 </li>
                             )}

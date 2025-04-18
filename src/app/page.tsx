@@ -12,7 +12,7 @@ export default function Home() {
       <Navbar/>
       {/* Main Container */}
       <div className="
-      flex flex-col min-[800px]:flex-row items-start gap-10 m-10">
+      flex flex-col min-[800px]:flex-row items-start gap-10  mt-24 mb-24">
         {/* Left Image */}
         <div className="
         max-[920px]:w-[350px] max-[350px]:w-[250px]">
