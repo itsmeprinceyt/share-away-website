@@ -289,7 +289,7 @@ export default function SignUp() {
                             </Link>
                         </div>
                     </div>
-                    {error && <p className="text-red-500 font-extralight">Oops! {error}</p>}
+                    {error && <p className="text-red-500 font-extralight max-[500px]:text-xs text-center">Oops! {error}</p>}
                 </form>
                 
             </div>
