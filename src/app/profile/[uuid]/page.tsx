@@ -10,6 +10,7 @@ import Loading from '../../(components)/Loading';
 import Navbar from '../../(components)/Navbar';
 import defaultProfilePic from '../../../utils/defaultAvatar';
 import Link from 'next/link';
+import PageWrapper from '../../(components)/PageWrapper';
 
 /**
  * @description             - This page is used to display the profile of a user.
@@ -45,10 +46,10 @@ export default function ProfilePage() {
 
     useEffect(() => {
         if (!session || !uuid) return;
-    
+
         setIsAdmin(session.user.isAdmin === 1);
         setLoading(true);
-    
+
         fetch(`${getBaseUrl()}/user/${uuid}?viewer_uuid=${session.user.uuid}`)
             .then((res) => res.json())
             .then((data) => {
@@ -273,8 +274,8 @@ export default function ProfilePage() {
         }
     };
 
-    const toggleHeart = async (post_uuid: string, currentHasHearted: boolean)=> {
-        const method = currentHasHearted  ? 'DELETE' : 'POST';
+    const toggleHeart = async (post_uuid: string, currentHasHearted: boolean) => {
+        const method = currentHasHearted ? 'DELETE' : 'POST';
         const url =
             method === 'POST'
                 ? `${getBaseUrl()}/heart`
@@ -327,207 +328,209 @@ export default function ProfilePage() {
     }
 
     return (
-        <div>
+        <PageWrapper>
             <Navbar />
-            {(passWordEdit) && (
-                <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
-                    <h1 className="text-xl font-semibold mb-2">Edit Profile</h1>
-                    <form onSubmit={handleEditPassword} className="space-y-4">
-                        <input
-                            type="password"
-                            name="currentPassword"
-                            placeholder="Current Password"
-                            className="w-full border p-2 rounded"
-                            value={form.currentPassword}
-                            onChange={handleChange}
-                            required
-                        />
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            placeholder="Confirm New Password"
-                            className="w-full border p-2 rounded"
-                            value={form.confirmPassword}
-                            onChange={handleChange}
-                            required
-                        />
-                        {error && <p className="text-red-500">{error}</p>}
-                        {success && <p className="text-green-600">{success}</p>}
-                        <button
-                            type="submit"
-                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                        >
-                            Save Changes
-                        </button>
-                    </form>
-                </div>
-            )}
-
-            {(pfpChange) && (
-                <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
-                    <h1 className="text-xl font-semibold mb-2">Edit Profile</h1>
-                    <form onSubmit={(e) => handleEditPfp(e)} className="space-y-4">
-                        <div>
-                            <label className="block font-medium mb-1">Upload Profile Picture</label>
-                            <input type="file" accept="image/*" onChange={handleImageChange} />
-                            {preview && (
-                                <Image
-                                    src={preview}
-                                    alt="preview"
-                                    width={96}
-                                    height={96}
-                                    className="mt-2 rounded-full object-cover"
-                                />
-                            )}
-                        </div>
-                        {error && <p className="text-red-500">{error}</p>}
-                        {success && <p className="text-green-600">{success}</p>}
-
-                        <div className="flex gap-4">
+            <div className="z-20 relative w-[600px] m-10 mt-24 mb-24">
+                {(passWordEdit) && (
+                    <div className="absolute bg-gray-100 p-4 rounded-lg shadow-md mb-4">
+                        <h1 className="text-xl font-semibold mb-2">Edit Profile</h1>
+                        <form onSubmit={handleEditPassword} className="space-y-4">
+                            <input
+                                type="password"
+                                name="currentPassword"
+                                placeholder="Current Password"
+                                className="w-full border p-2 rounded"
+                                value={form.currentPassword}
+                                onChange={handleChange}
+                                required
+                            />
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                placeholder="Confirm New Password"
+                                className="w-full border p-2 rounded"
+                                value={form.confirmPassword}
+                                onChange={handleChange}
+                                required
+                            />
+                            {error && <p className="text-red-500">{error}</p>}
+                            {success && <p className="text-green-600">{success}</p>}
                             <button
                                 type="submit"
-                                className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-                                disabled={!isNewImageSelected}
+                                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
                             >
-                                Update PFP
+                                Save Changes
                             </button>
+                        </form>
+                    </div>
+                )}
 
+                {(pfpChange) && (
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
+                        <h1 className="text-xl font-semibold mb-2">Edit Profile</h1>
+                        <form onSubmit={(e) => handleEditPfp(e)} className="space-y-4">
+                            <div>
+                                <label className="block font-medium mb-1">Upload Profile Picture</label>
+                                <input type="file" accept="image/*" onChange={handleImageChange} />
+                                {preview && (
+                                    <Image
+                                        src={preview}
+                                        alt="preview"
+                                        width={96}
+                                        height={96}
+                                        className="mt-2 rounded-full object-cover"
+                                    />
+                                )}
+                            </div>
+                            {error && <p className="text-red-500">{error}</p>}
+                            {success && <p className="text-green-600">{success}</p>}
+
+                            <div className="flex gap-4">
+                                <button
+                                    type="submit"
+                                    className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                                    disabled={!isNewImageSelected}
+                                >
+                                    Update PFP
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600"
+                                    onClick={(e) => handleEditPfp(e, true)}
+                                >
+                                    Remove Current PFP
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+                <h1>Welcome to {profileDetails!.username}&apos;s Profile</h1>
+                <p>Email: {profileDetails!.email}</p>
+                <p>Verified: {profileDetails!.isVerified ? 'Yes' : 'No'}</p>
+                <p>Registered on: {new Date(profileDetails!.registeredDate).toLocaleDateString()}</p>
+                <p>Profile picture: {profileDetails!.pfp ? <Image src={profileDetails!.pfp} alt="Profile" width={100} height={100} /> : "None"}</p>
+
+                <p>Total Posts: {profileDetails!.totalPosts ?? 0}</p>
+                <p>Total Hearts: {profileDetails!.totalHearts ?? 0}</p>
+
+                {profileDetails?.posts?.length ? (
+                    <div className="mt-4">
+                        <h2 className="text-lg font-semibold mb-2">Posts by {profileDetails.username}</h2>
+                        <ul className="space-y-2">
+                            {profileDetails.posts.map(({ id, post_uuid, username, heart_count, posted_at, content, hasHearted }) => {
+                                const { heading = "No heading", body = "No body" } =
+                                    typeof content === 'string' ? JSON.parse(content) : content || {};
+
+                                return (
+                                    <li key={id} className="bg-gray-100 p-4 rounded shadow">
+                                        <h2 className="font-bold text-lg">{heading}</h2>
+                                        <p className="text-gray-700">{body}</p>
+                                        <p className="text-black">Has hearted or not: {hasHearted ? `yes ${hasHearted}` : `no ${hasHearted}`}</p>
+                                        <button onClick={() => toggleHeart(post_uuid, hasHearted)}>
+                                            {hasHearted ? '💔 Remove Heart' : '❤️ Give Heart'} ({heart_count})
+                                        </button>
+                                        <p className="text-sm text-gray-500">
+                                            Posted on {new Date(posted_at).toLocaleString()}
+                                        </p>
+                                        <Link
+                                            href={`/profile/${uuid}`}>
+                                            <p className="text-sm text-green-700">
+                                                @{username}
+                                            </p>
+                                        </Link>
+                                        <Link href={`/post/${post_uuid}`} className="text-blue-500 hover:underline mt-2 inline-block">
+                                            <button>View Post</button>
+                                        </Link>
+                                        {(isAdmin || isOwner) && (
+                                            <Link href={`/post/edit/${post_uuid}`} className="text-orange-500 hover:underline mt-2 inline-block">
+                                                <button>Edit Post</button>
+                                            </Link>
+                                        )}
+                                        {(isAdmin || isOwner) && (
+                                            <button
+                                                className="text-purple-500 hover:underline mt-2 inline-block"
+                                                onClick={() => handlePostDelete(post_uuid, 'ASK')}
+                                            >
+                                                Delete
+                                            </button>
+                                        )}
+
+
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
+                ) : (
+                    <p className="text-gray-500 mt-4">No posts available.</p>
+                )}
+
+
+                {/* If the user is the owner or an admin, show edit options */}
+                {(isOwner || isAdmin) && (
+                    <div>
+                        <button
+                            onClick={handlePasswordChange}
+                            className="bg-purple-400 p-2 px-4 rounded-lg text-white">Edit Password</button>
+                        <button
+                            onClick={handlePfpChange}
+                            className="bg-purple-400 p-2 px-4 rounded-lg text-white">Edit Profile Pic</button>
+                        <button
+                            onClick={() => setConfirmDelete(true)}
+                            className="bg-red-600 p-2 px-4 rounded-lg text-white">Delete Account</button>
+
+                    </div>
+                )}
+
+                {/* If the user is admin, show edit options */}
+                {(isAdmin) && (
+                    <div>
+                        <button onClick={handleBan}
+                            className="bg-orange-400 p-2 px-4 rounded-lg text-white">BAN</button>
+
+
+                    </div>
+                )}
+
+                {confirmDeletePost && postToDelete && (
+                    <div className="mt-4 bg-red-100 p-4 rounded-lg shadow">
+                        <p className="text-red-700 font-semibold mb-2">Are you sure you want to delete this post?</p>
+                        <div className="space-x-2">
                             <button
-                                type="button"
-                                className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600"
-                                onClick={(e) => handleEditPfp(e, true)}
+                                onClick={() => handlePostDelete(postToDelete, 'CONFIRM')}
+                                className="bg-red-600 text-white py-1 px-4 rounded"
                             >
-                                Remove Current PFP
+                                Yes, Delete
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setConfirmDeletePost(false);
+                                    setPostToDelete(null);
+                                }}
+                                className="bg-gray-400 text-white py-1 px-4 rounded"
+                            >
+                                Cancel
                             </button>
                         </div>
-                    </form>
-                </div>
-            )}
-            <h1>Welcome to {profileDetails!.username}&apos;s Profile</h1>
-            <p>Email: {profileDetails!.email}</p>
-            <p>Verified: {profileDetails!.isVerified ? 'Yes' : 'No'}</p>
-            <p>Registered on: {new Date(profileDetails!.registeredDate).toLocaleDateString()}</p>
-            <p>Profile picture: {profileDetails!.pfp ? <Image src={profileDetails!.pfp} alt="Profile" width={100} height={100} /> : "None"}</p>
-
-            <p>Total Posts: {profileDetails!.totalPosts ?? 0}</p>
-            <p>Total Hearts: {profileDetails!.totalHearts ?? 0}</p>
-
-            {profileDetails?.posts?.length ? (
-                <div className="mt-4">
-                    <h2 className="text-lg font-semibold mb-2">Posts by {profileDetails.username}</h2>
-                    <ul className="space-y-2">
-                        {profileDetails.posts.map(({ id, post_uuid, username, heart_count, posted_at, content, hasHearted }) => {
-                            const { heading = "No heading", body = "No body" } =
-                                typeof content === 'string' ? JSON.parse(content) : content || {};
-
-                            return (
-                                <li key={id} className="bg-gray-100 p-4 rounded shadow">
-                                    <h2 className="font-bold text-lg">{heading}</h2>
-                                    <p className="text-gray-700">{body}</p>
-                                    <p className="text-black">Has hearted or not: {hasHearted ? `yes ${hasHearted}` : `no ${hasHearted}`}</p>
-                                    <button onClick={() => toggleHeart(post_uuid, hasHearted)}>
-                                        {hasHearted ? '💔 Remove Heart' : '❤️ Give Heart'} ({heart_count})
-                                    </button>
-                                    <p className="text-sm text-gray-500">
-                                        Posted on {new Date(posted_at).toLocaleString()}
-                                    </p>
-                                    <Link
-                                        href={`/profile/${uuid}`}>
-                                        <p className="text-sm text-green-700">
-                                            @{username}
-                                        </p>
-                                    </Link>
-                                    <Link href={`/post/${post_uuid}`} className="text-blue-500 hover:underline mt-2 inline-block">
-                                        <button>View Post</button>
-                                    </Link>
-                                    {(isAdmin || isOwner) && (
-                                        <Link href={`/post/edit/${post_uuid}`} className="text-orange-500 hover:underline mt-2 inline-block">
-                                            <button>Edit Post</button>
-                                        </Link>
-                                    )}
-                                    {(isAdmin || isOwner) && (
-                                        <button
-                                            className="text-purple-500 hover:underline mt-2 inline-block"
-                                            onClick={() => handlePostDelete(post_uuid, 'ASK')}
-                                        >
-                                            Delete
-                                        </button>
-                                    )}
-
-
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            ) : (
-                <p className="text-gray-500 mt-4">No posts available.</p>
-            )}
-
-
-            {/* If the user is the owner or an admin, show edit options */}
-            {(isOwner || isAdmin) && (
-                <div>
-                    <button
-                        onClick={handlePasswordChange}
-                        className="bg-purple-400 p-2 px-4 rounded-lg text-white">Edit Password</button>
-                    <button
-                        onClick={handlePfpChange}
-                        className="bg-purple-400 p-2 px-4 rounded-lg text-white">Edit Profile Pic</button>
-                    <button
-                        onClick={() => setConfirmDelete(true)}
-                        className="bg-red-600 p-2 px-4 rounded-lg text-white">Delete Account</button>
-
-                </div>
-            )}
-
-            {/* If the user is admin, show edit options */}
-            {(isAdmin) && (
-                <div>
-                    <button onClick={handleBan}
-                        className="bg-orange-400 p-2 px-4 rounded-lg text-white">BAN</button>
-
-
-                </div>
-            )}
-
-            {confirmDeletePost && postToDelete && (
-                <div className="mt-4 bg-red-100 p-4 rounded-lg shadow">
-                    <p className="text-red-700 font-semibold mb-2">Are you sure you want to delete this post?</p>
-                    <div className="space-x-2">
-                        <button
-                            onClick={() => handlePostDelete(postToDelete, 'CONFIRM')}
-                            className="bg-red-600 text-white py-1 px-4 rounded"
-                        >
-                            Yes, Delete
-                        </button>
-                        <button
-                            onClick={() => {
-                                setConfirmDeletePost(false);
-                                setPostToDelete(null);
-                            }}
-                            className="bg-gray-400 text-white py-1 px-4 rounded"
-                        >
-                            Cancel
-                        </button>
                     </div>
-                </div>
-            )}
+                )}
 
 
-            {confirmDelete && (
-                <div className="mt-4 bg-red-100 p-4 rounded-lg shadow">
-                    <p className="text-red-700 font-semibold mb-2">Are you sure you want to delete this account?</p>
-                    <div className="space-x-2">
-                        <button
-                            onClick={handleDeleteAccount}
-                            className="bg-red-600 text-white py-1 px-4 rounded">Yes, Delete</button>
-                        <button
-                            onClick={() => setConfirmDelete(false)}
-                            className="bg-gray-400 text-white py-1 px-4 rounded">Cancel</button>
+                {confirmDelete && (
+                    <div className="mt-4 bg-red-100 p-4 rounded-lg shadow">
+                        <p className="text-red-700 font-semibold mb-2">Are you sure you want to delete this account?</p>
+                        <div className="space-x-2">
+                            <button
+                                onClick={handleDeleteAccount}
+                                className="bg-red-600 text-white py-1 px-4 rounded">Yes, Delete</button>
+                            <button
+                                onClick={() => setConfirmDelete(false)}
+                                className="bg-gray-400 text-white py-1 px-4 rounded">Cancel</button>
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        </PageWrapper>
     );
 }

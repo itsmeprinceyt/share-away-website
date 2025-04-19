@@ -16,10 +16,10 @@ export default function Loading({ etaSeconds }: LoadingProps) {
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowDelayText(true);
-        }, 6000);
-
+        }, (etaSeconds ?? 6) * 1000);
+    
         return () => clearTimeout(timer);
-    }, []);
+    }, [etaSeconds]);
 
     return (
         <PageWrapper>

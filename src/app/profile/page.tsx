@@ -30,5 +30,5 @@ export default function ProfilePage() {
         setIsRedirecting(false);
     }, [router]);
 
-    return isRedirecting ? <Loading /> : null;
+    return isRedirecting ? <Loading etaSeconds={10} /> : null;
 }

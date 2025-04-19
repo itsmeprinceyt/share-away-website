@@ -69,7 +69,7 @@ export default function Login() {
             <Navbar />
 
             {/* Main container */}
-            <div className="z-20 flex max-[1090px]:flex-col-reverse mt-24 mb-24">
+            <div className="z-20 flex max-[1090px]:flex-col-reverse m-10 mt-24 mb-24">
                 {/* Image container */}
                 <div className="hover:z-20 max-[550px]:w-[350px] max-[350px]:w-[300px]">
                     <Image className="hover:rounded-4xl hover:border
