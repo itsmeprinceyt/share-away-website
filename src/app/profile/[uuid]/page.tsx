@@ -9,8 +9,8 @@ import User from '../../../types/User';
 import Loading from '../../(components)/Loading';
 import Navbar from '../../(components)/Navbar';
 import defaultProfilePic from '../../../utils/defaultAvatar';
-import Link from 'next/link';
 import PageWrapper from '../../(components)/PageWrapper';
+import PostCard from '../../(components)/PostCard';
 
 /**
  * @description             - This page is used to display the profile of a user.
@@ -330,9 +330,9 @@ export default function ProfilePage() {
     return (
         <PageWrapper>
             <Navbar />
-            <div className="z-20 relative w-[600px] m-10 mt-24 mb-24">
+            <div className="z-20 w-[600px] m-10 mt-24 mb-24">
                 {(passWordEdit) && (
-                    <div className="absolute bg-gray-100 p-4 rounded-lg shadow-md mb-4">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-4 rounded-lg shadow-md mb-4">
                         <h1 className="text-xl font-semibold mb-2">Edit Profile</h1>
                         <form onSubmit={handleEditPassword} className="space-y-4">
                             <input
@@ -418,46 +418,38 @@ export default function ProfilePage() {
                     <div className="mt-4">
                         <h2 className="text-lg font-semibold mb-2">Posts by {profileDetails.username}</h2>
                         <ul className="space-y-2">
-                            {profileDetails.posts.map(({ id, post_uuid, username, heart_count, posted_at, content, hasHearted }) => {
+                            {profileDetails.posts.map(post => {
+                                const {
+                                    id,
+                                    post_uuid,
+                                    username,
+                                    uuid,
+                                    heart_count,
+                                    posted_at,
+                                    hasHearted,
+                                    content
+                                } = post;
+
                                 const { heading = "No heading", body = "No body" } =
                                     typeof content === 'string' ? JSON.parse(content) : content || {};
 
                                 return (
-                                    <li key={id} className="bg-gray-100 p-4 rounded shadow">
-                                        <h2 className="font-bold text-lg">{heading}</h2>
-                                        <p className="text-gray-700">{body}</p>
-                                        <p className="text-black">Has hearted or not: {hasHearted ? `yes ${hasHearted}` : `no ${hasHearted}`}</p>
-                                        <button onClick={() => toggleHeart(post_uuid, hasHearted)}>
-                                            {hasHearted ? '💔 Remove Heart' : '❤️ Give Heart'} ({heart_count})
-                                        </button>
-                                        <p className="text-sm text-gray-500">
-                                            Posted on {new Date(posted_at).toLocaleString()}
-                                        </p>
-                                        <Link
-                                            href={`/profile/${uuid}`}>
-                                            <p className="text-sm text-green-700">
-                                                @{username}
-                                            </p>
-                                        </Link>
-                                        <Link href={`/post/${post_uuid}`} className="text-blue-500 hover:underline mt-2 inline-block">
-                                            <button>View Post</button>
-                                        </Link>
-                                        {(isAdmin || isOwner) && (
-                                            <Link href={`/post/edit/${post_uuid}`} className="text-orange-500 hover:underline mt-2 inline-block">
-                                                <button>Edit Post</button>
-                                            </Link>
-                                        )}
-                                        {(isAdmin || isOwner) && (
-                                            <button
-                                                className="text-purple-500 hover:underline mt-2 inline-block"
-                                                onClick={() => handlePostDelete(post_uuid, 'ASK')}
-                                            >
-                                                Delete
-                                            </button>
-                                        )}
-
-
-                                    </li>
+                                    <PostCard
+                                        key={id}
+                                        id={id}
+                                        post_uuid={post_uuid}
+                                        uuid={uuid}
+                                        username={username}
+                                        heading={heading}
+                                        body={body}
+                                        heart_count={heart_count}
+                                        hasHearted={hasHearted}
+                                        posted_at={posted_at}
+                                        isAdmin={isAdmin}
+                                        isOwner={isOwner}
+                                        onToggleHeart={toggleHeart}
+                                        onDelete={handlePostDelete}
+                                    />
                                 );
                             })}
                         </ul>
@@ -531,6 +523,7 @@ export default function ProfilePage() {
                     </div>
                 )}
             </div>
+
         </PageWrapper>
     );
 }
