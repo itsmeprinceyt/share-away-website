@@ -3,12 +3,12 @@ work in progress
 added all possible to do-s for now
 
 todo
-- [ x ] make login page responsive
-- make ui in sign up
-- change response message on error on sign up [username already take,
+- [✅] make login page responsive
+- [✅] make ui in sign up
+- [✅] change response message on error on sign up [username already take,
 email wrong,password weak, password description]
-- add sign up email/password authentication on server-side backend
-- make sign up page responsive
+- [✅] add sign up email/password authentication on server-side backend
+- [✅] make sign up page responsive
 - work on profile
 - edit profile page ?
 - make post pagination

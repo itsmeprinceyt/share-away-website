@@ -7,6 +7,7 @@ import getBaseUrl from '../../utils/getBaseUrl';
 import Navbar from "../(components)/Navbar";
 import defaultProfilePic from '../../utils/defaultAvatar';
 import PageWrapperPurple from "../(components)/PageWrapperPurple";
+import Loading from '../(components)/Loading';
 
 /**
  * @description    - This page is used to sign up a new user.
@@ -31,6 +32,7 @@ export default function SignUp() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(defaultProfilePic);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
@@ -118,9 +120,10 @@ export default function SignUp() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-
+        setLoading(true);
         if (form.password !== form.confirmPassword) {
             setError("Passwords do not match");
+            setLoading(false);
             return;
         }
 
@@ -141,9 +144,11 @@ export default function SignUp() {
             const data = await response.json();
             if (response.ok) {
                 router.push('/login')
+                setLoading(false);
             }
             if (!response.ok) {
                 setError(data.message || "Registration failed");
+                setLoading(false);
             } else {
                 setForm({
                     username: "",
@@ -153,12 +158,16 @@ export default function SignUp() {
                     profilePic: "",
                 });
                 setPreview(null);
+                setLoading(false);
             }
         } catch (err) {
             setError("An error occurred while registering.");
             console.error("❌ Registration error:", err);
+            setLoading(false);
         }
     };
+
+    if (loading) return <Loading etaSeconds={30} />;
 
     return (
         <PageWrapperPurple>
@@ -289,7 +298,7 @@ export default function SignUp() {
                             </Link>
                         </div>
                     </div>
-                    {error && <p className="text-red-500 font-extralight max-[500px]:text-xs text-center">Oops! {error}</p>}
+                    {error && <p className="text-red-500 font-extralight max-[500px]:text-xs text-center w-[400px] max-[550px]:w-[250px]">Oops! {error}</p>}
                 </form>
                 
             </div>

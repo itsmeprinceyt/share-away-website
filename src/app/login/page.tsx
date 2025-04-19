@@ -135,7 +135,7 @@ export default function Login() {
                     </div>
                     {/* Error container */}
                     {error && (
-                        <div className="text-red-500 text-clip font-extralight p-2 rounded text-center max-[550px]:text-xs">
+                        <div className="text-red-500 text-clip font-extralight p-2 rounded text-center max-[550px]:text-xs w-[400px] max-[550px]:w-[250px]">
                             Oops! {error}
                         </div>
                     )}
