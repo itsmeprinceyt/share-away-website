@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCheckSession } from '../../hooks/useCheckSession';
 import Navbar from '../(components)/Navbar';
-import PageWrapper2 from '../(components)/PageWrapper2';
+import PageWrapper from '../(components)/PageWrapper';
 
 /**
  * @description     - Home page which will show all the posts of every users and we can,
@@ -29,12 +29,16 @@ export default function Home() {
     }, [router]);
 
     return (
-        <PageWrapper2>
+        <PageWrapper
+            fromColor="pink-50"
+            viaColor="pink-100"
+            toColor="pink-50"
+            alignItems="start">
             <Navbar />
             <div className="flex flex-col justify-center items-center gap-2 h-screen">
                 <p className="text-lg font-semibold animate-pulse bg-black text-white p-2 px-4 rounded-lg ">
                     Welcome to the Home Page. How are you {session?.user.username}</p>
             </div>
-        </PageWrapper2>
+        </PageWrapper>
     );
 }

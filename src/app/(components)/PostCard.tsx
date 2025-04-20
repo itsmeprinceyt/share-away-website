@@ -35,7 +35,7 @@ const PostCard = ({
 
     return (
         <div key={id} className="bg-pink-50 border border-pink-200 p-4 rounded-xl
-        flex flex-col justify-center gap-5 relative" ref={menuRef}>
+        flex flex-col justify-center gap-5 relative shadow-xl shadow-pink-500/20" ref={menuRef}>
 
             {menuOpen && (
                 <div className="z-10 absolute top-12 right-6 mt-2 w-[120px]

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import getBaseUrl from '../../utils/getBaseUrl';
 import Navbar from "../(components)/Navbar";
 import defaultProfilePic from '../../utils/defaultAvatar';
-import PageWrapperPurple from "../(components)/PageWrapperPurple";
+import PageWrapper from "../(components)/PageWrapper";
 import Loading from '../(components)/Loading';
 
 /**
@@ -170,7 +170,11 @@ export default function SignUp() {
     if (loading) return <Loading etaSeconds={30} />;
 
     return (
-        <PageWrapperPurple>
+        <PageWrapper
+            fromColor="purple-50"
+            viaColor="purple-100"
+            toColor="purple-50"
+        >
             <Navbar />
             {/* Main Container */}
             <div className="flex flex-col justify-start items-center max-[580px]:gap-20 max-[480px]:gap-24 gap-14 z-20 w-[500px] max-[580px]:w-[400px] max-[480px]:w-[300px] pb-8
@@ -300,11 +304,11 @@ export default function SignUp() {
                     </div>
                     {error && <p className="text-red-500 font-extralight max-[500px]:text-xs text-center w-[400px] max-[550px]:w-[250px]">Oops! {error}</p>}
                 </form>
-                
+
             </div>
             {/* Background glow */}
             <div className="absolute right-0 w-[500px] h-[500px] bg-purple-200 blur-3xl"></div>
-            
-        </PageWrapperPurple>
+
+        </PageWrapper>
     );
 }

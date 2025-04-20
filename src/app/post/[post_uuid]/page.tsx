@@ -5,6 +5,7 @@ import { useCheckSession } from '../../../hooks/useCheckSession';
 import Navbar from '../../(components)/Navbar';
 import getBaseUrl from '../../../utils/getBaseUrl';
 import Loading from '../../(components)/Loading';
+import NotFound from '../../not-found';
 import PostContent from '../../../types/PostContent';
 
 export default function Post() {
@@ -16,6 +17,7 @@ export default function Post() {
     const [isOwner, setIsOwner] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [is404, setIs404] = useState(false);
 
     const session = useCheckSession();
 
@@ -29,6 +31,7 @@ export default function Post() {
         .then((res) => {
             if (!res.ok) {
                 throw new Error('Post not found');
+                setIs404(true);
             }
             return res.json();
         })
@@ -51,6 +54,7 @@ export default function Post() {
     }, [router, post_uuid, postData?.uuid, session]);
 
     if (loading) return <Loading />;
+    if (is404) return <NotFound />;
 
     return (
         <div>

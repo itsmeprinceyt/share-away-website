@@ -2,11 +2,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import getBaseUrl from '../../../utils/getBaseUrl';
 import { updateUserSession } from '../../../utils/updateUserSesssion';
 import { useCheckSession } from '../../../hooks/useCheckSession';
 import User from '../../../types/User';
 import Loading from '../../(components)/Loading';
+import NotFound from '../../not-found';
 import Navbar from '../../(components)/Navbar';
 import defaultProfilePic from '../../../utils/defaultAvatar';
 import PageWrapper from '../../(components)/PageWrapper';
@@ -42,6 +44,7 @@ export default function ProfilePage() {
     const [postToDelete, setPostToDelete] = useState<string | null>(null);
 
     const [loading, setLoading] = useState(true);
+    const [is404, setIs404] = useState(false);
     const session = useCheckSession();
 
     useEffect(() => {
@@ -53,7 +56,10 @@ export default function ProfilePage() {
         fetch(`${getBaseUrl()}/user/${uuid}?viewer_uuid=${session.user.uuid}`)
             .then((res) => res.json())
             .then((data) => {
-                if (!data || !data.uuid) return;
+                if (!data || !data.uuid) {
+                    setIs404(true);
+                    return;
+                }
                 setProfileDetails(data);
                 if (uuid === session.user.uuid) {
                     setIsOwner(true);
@@ -70,6 +76,7 @@ export default function ProfilePage() {
     }, [router, session, uuid]);
 
     if (loading) return <Loading />;
+    if (is404) return <NotFound />;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -328,7 +335,8 @@ export default function ProfilePage() {
     }
 
     return (
-        <PageWrapper>
+        <PageWrapper
+        alignItems="start">
             <Navbar />
             <div className="z-20 w-[600px] m-10 mt-24 mb-24">
                 {(passWordEdit) && (
@@ -405,19 +413,62 @@ export default function ProfilePage() {
                         </form>
                     </div>
                 )}
-                <h1>Welcome to {profileDetails!.username}&apos;s Profile</h1>
-                <p>Email: {profileDetails!.email}</p>
-                <p>Verified: {profileDetails!.isVerified ? 'Yes' : 'No'}</p>
-                <p>Registered on: {new Date(profileDetails!.registeredDate).toLocaleDateString()}</p>
-                <p>Profile picture: {profileDetails!.pfp ? <Image src={profileDetails!.pfp} alt="Profile" width={100} height={100} /> : "None"}</p>
+                {/* Profile container */}
+                <div className="bg-red-200 flex justify-between">
 
-                <p>Total Posts: {profileDetails!.totalPosts ?? 0}</p>
-                <p>Total Hearts: {profileDetails!.totalHearts ?? 0}</p>
+                    <div className="flex">
 
+                        <Image
+                            className="rounded-full"
+                            src={profileDetails!.pfp || defaultProfilePic}
+                            alt="Profile"
+                            width={100}
+                            height={100}
+                        />
+
+                        <div className="flex flex-col">
+
+                            <div className="flex justify-center items-center gap-2 text-2xl font-semibold">
+                                <Link href={`/profile/${uuid}`}>
+                                    @{profileDetails!.username}
+                                </Link>
+                                <div className="flex justify-center items-center bg-white
+                                rounded-full h-[20px] w-[20px] text-xs hover:scale-150 transition-all duration-300">
+                                    {profileDetails!.isVerified ?
+                                        <span className="pb-1 pointer-events-none text-shadow-purple-500 text-shadow-md/30">
+                                            ✔️
+                                        </span>
+                                        :
+                                        <span className="pointer-events-none text-shadow-red-500 text-shadow-md/30 text-[10px]">
+                                            ❌
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div className="text-xs text-gray-500">
+                                Registered on: {new Date(profileDetails!.registeredDate).toLocaleDateString()}
+                            </div>
+
+                            <div>Total Posts: {profileDetails!.totalPosts ?? 0}</div>
+
+                            <div>Total Hearts: {profileDetails!.totalHearts ?? 0}</div>
+                        </div>
+
+                    </div>
+
+                    {/* Setting button */}
+                    <div>
+                        🤡
+                    </div>
+
+                    <p>Email: {profileDetails!.email}</p>
+                </div>
+                {/* Posts */}
                 {profileDetails?.posts?.length ? (
                     <div className="mt-4">
                         <h2 className="text-lg font-semibold mb-2">Posts by {profileDetails.username}</h2>
-                        <ul className="space-y-2">
+                        <ul className="flex flex-col gap-10">
                             {profileDetails.posts.map(post => {
                                 const {
                                     id,

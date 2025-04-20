@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import PageWrapper from "./(components)/PageWrapper";
 
 export default function NotFound() {
     return (
-        <div className="min-h-screen flex flex-col justify-center items-center bg-pink-50 text-pink-600">
+        <PageWrapper>
+            <div className="flex flex-col justify-center items-center">
             <h1 className="text-4xl font-extralight mb-4">404 - Page Not Found</h1>
             <p className="mb-6 font-extralight">Sorry, we couldn’t find the page you’re looking for.</p>
             <Link href="/home">
@@ -10,6 +12,7 @@ export default function NotFound() {
                     Home
                 </button>
             </Link>
-        </div>
+            </div>
+        </PageWrapper>
     );
 }
