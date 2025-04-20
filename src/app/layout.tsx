@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="pink-scrollbar">
+      <body>
         <Suspense fallback={<Loading />}>
           <AudioPlayer />
           {children}

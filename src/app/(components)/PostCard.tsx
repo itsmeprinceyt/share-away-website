@@ -88,7 +88,7 @@ const PostCard = ({
                 </button>
             </div>
 
-            <p className="whitespace-pre-line font-extralight overflow-y-auto max-h-[500px] pink-scrollbar">{body}</p>
+            <p className="whitespace-pre-line font-extralight overflow-y-auto max-h-[500px]">{body}</p>
 
 
             <div className="flex items-start justify-start gap-5">

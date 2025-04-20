@@ -110,8 +110,7 @@ export default function Navbar() {
 
                 {/* Notification Window */}
                 {(showBell) && (
-                    <div className="absolute top-20 max-[350px]:right-12 right-32 bg-white text-pink-600 shadow-xl shadow-pink-500/20 w-48 overflow-y-auto h-[200px] rounded-lg flex flex-col items-center
-                    pink-scrollbar" ref={menuRef2}>
+                    <div className="absolute top-20 max-[350px]:right-12 right-32 bg-white text-pink-600 shadow-xl shadow-pink-500/20 w-48 overflow-y-auto h-[200px] rounded-lg flex flex-col items-center" ref={menuRef2}>
                         {/* Notification Image */}
                         <Image
                             className="rounded-tl shadow-md shadow-pink-500/20"
