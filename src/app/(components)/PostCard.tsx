@@ -79,7 +79,7 @@ const PostCard = ({
                             {new Date(posted_at).toLocaleString()}
                         </p>
                         <Link href={`/profile/${uuid}`}>
-                            <p className="text-sm text-pink-500">@{username}</p>
+                            <p className="text-sm text-pink-500 font-normal hover:underline transition-all duration-300">@{username}</p>
                         </Link>
                     </div>
                 </div>
@@ -101,8 +101,9 @@ const PostCard = ({
                     <span className="bg-gradient-to-r
                         from-red-200 to-red-300 flex items-center
                         justify-center gap-2 rounded-md border border-red-400/50 w-[120px] h-[40px]
-                        shadow-xl shadow-red-500/30 hover:scale-105 transition-all
-                        duration-300">{hasHearted ? '❤️ ' : '🤍 '}<span className="text-red-500 text-shadow-md/30 text-shadow-red-500">
+                        shadow-xl shadow-red-500/10 hover:scale-105 transition-all
+                        duration-300">{hasHearted ? '❤️ ' : '🤍 '}<span className="text-red-500 text-shadow-md/30
+                        text-shadow-red-500">
                             {formatHeartCount(heart_count)}
                         </span>
                     </span>
