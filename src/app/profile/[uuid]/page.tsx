@@ -565,21 +565,26 @@ export default function ProfilePage() {
                                 </div>
                             </div>
                         )}
-
-
+                        <div>
+                            <Image
+                                className="rounded-lg shadow-xl shadow-purple-500/20"
+                                src={'/art/banner/banner4.png'}
+                                height={500}
+                                width={800}
+                                alt="Setting dialogue banner"
+                            />
+                        </div>
 
                     </div>
 
                 </div>
             )}
 
-
-
             {/* Profile Settings */}
             {settingToggle && (
                 <div className="z-50 fixed top-0 left-0 right-0 bottom-0 bg-black/80 flex justify-center items-center">
                     <div className="bg-white relative rounded-lg shadow-xl shadow-pink-500/30 border
-                    border-pink-300 flex flex-col gap-7 p-7 w-[300px]">
+                    border-pink-300 flex items-center justify-center">
 
                         <button onClick={handleSettings}
                             className="absolute top-2 right-2 w-[12px]
@@ -593,44 +598,57 @@ export default function ProfilePage() {
                             />
                         </button>
 
-                        {(isOwner || isAdmin) && (
-                            <>
-                                <button
-                                    onClick={handlePasswordChange}
-                                    className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500">
-                                    Edit Password
-                                </button>
-                                <button
-                                    onClick={handlePfpChange}
-                                    className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500">
-                                    Edit Profile Picture
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setConfirmDelete(true);
-                                        setSettingToggleDialogue(!settingToggleDialogue);
-                                        setSettingToggle(!settingToggle);
-                                    }}
-                                    className="hover:bg-red-600/10 hover:border-l-[20px] border-l-red-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20 hover:text-red-500">
-                                    Delete Account
-                                </button>
+                        <div className="p-2 w-[180px]">
+                            <Image
+                                className="rounded-lg"
+                                src={'/art/art3.jpg'}
+                                width={500}
+                                height={500}
+                                alt="Setting Image"
+                            />
+                        </div>
 
-                            </>
-                        )}
+                        <div className="flex flex-col items-start justify-between gap-7 p-7 w-[240px]">
+                            {(isOwner || isAdmin) && (
+                                <>
+                                    <button
+                                        onClick={handlePasswordChange}
+                                        className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500">
+                                        Edit Password
+                                    </button>
+                                    <button
+                                        onClick={handlePfpChange}
+                                        className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500">
+                                        Edit Profile Picture
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setConfirmDelete(true);
+                                            setSettingToggleDialogue(!settingToggleDialogue);
+                                            setSettingToggle(!settingToggle);
+                                        }}
+                                        className="hover:bg-red-600/10 hover:border-l-[20px] border-l-red-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20 hover:text-red-500">
+                                        Delete Account
+                                    </button>
 
-                        {(isAdmin) && (
-                            <>
-                                <button
-                                    onClick={() => {
-                                        setConfirmBan(true);
-                                        setSettingToggleDialogue(!settingToggleDialogue);
-                                        setSettingToggle(!settingToggle);
-                                    }}
-                                    className="hover:bg-orange-600/10 hover:border-l-[20px] border-l-orange-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20 hover:text-orange-500">
-                                    Ban User
-                                </button>
-                            </>
-                        )}
+                                </>
+                            )}
+
+                            {(isAdmin) && (
+                                <>
+                                    <button
+                                        onClick={() => {
+                                            setConfirmBan(true);
+                                            setSettingToggleDialogue(!settingToggleDialogue);
+                                            setSettingToggle(!settingToggle);
+                                        }}
+                                        className="hover:bg-orange-600/10 hover:border-l-[20px] border-l-orange-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20 hover:text-orange-500">
+                                        Ban User
+                                    </button>
+                                </>
+                            )}
+
+                        </div>
 
                     </div>
 
@@ -734,7 +752,7 @@ export default function ProfilePage() {
                 {profileDetails?.posts?.length ? (
                     <div>
                         <h2 className="mb-8 text-shadow-black/20 text-shadow-md text-xm font-extralight">
-                        {profileDetails.username} has posted . . .</h2>
+                            {profileDetails.username} has posted . . .</h2>
                         <ul className="flex flex-col gap-10">
                             {profileDetails.posts.map(post => {
                                 const {
