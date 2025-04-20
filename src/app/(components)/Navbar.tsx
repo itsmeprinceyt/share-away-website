@@ -15,6 +15,8 @@ export default function Navbar() {
     const limit = 5;
     const [showBell, setShowBell] = useState(false);
     const [showHamburger, setShowHamburger] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+    const menuRef2 = useRef<HTMLDivElement>(null);
 
     const fetchNotifications = useCallback(async (currentOffset: number) => {
         if (!session?.user?.uuid) return;
@@ -37,6 +39,30 @@ export default function Navbar() {
             hasFetched.current = true;
         }
     }, [fetchNotifications, session?.user?.uuid]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setShowHamburger(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+    
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef2.current && !menuRef2.current.contains(event.target as Node)) {
+                setShowBell(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const handleLoadMore = () => {
         const newOffset = offset + limit;
@@ -65,9 +91,11 @@ export default function Navbar() {
 
 
     return (
-        <div className="z-50 absolute top-0 min-w-screen p-5 px-6 flex justify-between items-center gap-5">
+        <div className="z-50 absolute top-0 min-w-screen" ref={menuRef}>
             {/* Home Button */}
-            <Link href="/home">
+            <Link 
+            className="absolute top-5 left-5"
+            href="/home" >
                 <Image
                     className="w-[50px] h-[50px] hover:scale-110 transition-all duration-300"
                     src={'/logo/ShareAway5-png.png'}
@@ -78,12 +106,12 @@ export default function Navbar() {
             </Link>
 
             {/* Right Corner Div */}
-            <div className="flex justify-between items-center gap-5">
+            <div className="absolute top-5 right-5 flex justify-between items-center gap-5">
 
                 {/* Notification Window */}
                 {(showBell) && (
                     <div className="absolute top-20 max-[350px]:right-12 right-32 bg-white text-pink-600 shadow-xl shadow-pink-500/20 w-48 overflow-y-auto h-[200px] rounded-lg flex flex-col items-center
-                    pink-scrollbar">
+                    pink-scrollbar" ref={menuRef2}>
                         {/* Notification Image */}
                         <Image
                             className="rounded-tl shadow-md shadow-pink-500/20"
