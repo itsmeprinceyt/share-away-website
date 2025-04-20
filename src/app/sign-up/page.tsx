@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import getBaseUrl from '../../utils/getBaseUrl';
 import Navbar from "../(components)/Navbar";
 import defaultProfilePic from '../../utils/defaultAvatar';
-import PageWrapper from "../(components)/PageWrapper";
+import PageWrapperNormalPurple from "../(components)/PageWrapperNormalPurple";
 import Loading from '../(components)/Loading';
 
 /**
@@ -170,10 +170,7 @@ export default function SignUp() {
     if (loading) return <Loading etaSeconds={30} />;
 
     return (
-        <PageWrapper
-            fromColor="purple-50"
-            viaColor="purple-100"
-            toColor="purple-50"
+        <PageWrapperNormalPurple
         >
             <Navbar />
             {/* Main Container */}
@@ -309,6 +306,6 @@ export default function SignUp() {
             {/* Background glow */}
             <div className="absolute right-0 w-[500px] h-[500px] bg-purple-200 blur-3xl"></div>
 
-        </PageWrapper>
+        </PageWrapperNormalPurple>
     );
 }

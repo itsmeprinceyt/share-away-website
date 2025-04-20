@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import getBaseUrl from '../../utils/getBaseUrl';
 import useRedirectToProfile from '../../hooks/useRedirectToProfile';
 import Navbar from '../(components)/Navbar';
-import PageWrapper from '../(components)/PageWrapper';
+import PageWrapperNormal from '../(components)/PageWrapperNormal';
 import Loading from '../(components)/Loading';
 
 /**
@@ -65,7 +65,7 @@ export default function Login() {
     if (loading) return <Loading etaSeconds={30} />;
 
     return (
-        <PageWrapper>
+        <PageWrapperNormal>
             <Navbar />
 
             {/* Main container */}
@@ -145,6 +145,6 @@ export default function Login() {
             {/* Background glow */}
             <div className="absolute right-0 w-[500px] h-[500px] bg-pink-100 blur-3xl"></div>
 
-        </PageWrapper>
+        </PageWrapperNormal>
     );
 }

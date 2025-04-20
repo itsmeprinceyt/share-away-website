@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from 'react';
-import PageWrapper from './PageWrapper';
+import PageWrapperNormal from './PageWrapperNormal';
 
 interface LoadingProps {
     etaSeconds?: number;
@@ -22,7 +22,7 @@ export default function Loading({ etaSeconds }: LoadingProps) {
     }, [etaSeconds]);
 
     return (
-        <PageWrapper>
+        <PageWrapperNormal>
 
             <div className="flex flex-col items-center gap-5">
                 <Image
@@ -54,6 +54,6 @@ export default function Loading({ etaSeconds }: LoadingProps) {
 
             </div>
 
-        </PageWrapper>
+        </PageWrapperNormal>
     );
 }

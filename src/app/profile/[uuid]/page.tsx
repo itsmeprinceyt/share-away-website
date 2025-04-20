@@ -11,8 +11,8 @@ import Loading from '../../(components)/Loading';
 import NotFound from '../../not-found';
 import Navbar from '../../(components)/Navbar';
 import defaultProfilePic from '../../../utils/defaultAvatar';
-import PageWrapper from '../../(components)/PageWrapper';
 import PostCard from '../../(components)/PostCard';
+import PageWrapperNormalTop from '../../(components)/PageWrapperNormalTop';
 
 /**
  * @description             - This page is used to display the profile of a user.
@@ -335,8 +335,7 @@ export default function ProfilePage() {
     }
 
     return (
-        <PageWrapper
-        alignItems="start">
+        <PageWrapperNormalTop>
             <Navbar />
             <div className="z-20 w-[600px] m-10 mt-24 mb-24">
                 {(passWordEdit) && (
@@ -575,6 +574,6 @@ export default function ProfilePage() {
                 )}
             </div>
 
-        </PageWrapper>
+        </PageWrapperNormalTop>
     );
 }

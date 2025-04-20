@@ -3,12 +3,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useRedirectToHome from '../hooks/useRedirectToHome';
 import Navbar from './(components)/Navbar';
-import PageWrapper from "./(components)/PageWrapper";
+import PageWrapperNormal from "./(components)/PageWrapperNormal";
 
 export default function Home() {
   useRedirectToHome();
   return (
-    <PageWrapper>
+    <PageWrapperNormal>
       <Navbar/>
       {/* Main Container */}
       <div className="
@@ -82,6 +82,6 @@ export default function Home() {
 
       </div>
 
-    </PageWrapper>
+    </PageWrapperNormal>
   );
 }
