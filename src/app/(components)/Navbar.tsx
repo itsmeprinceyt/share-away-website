@@ -91,7 +91,7 @@ export default function Navbar() {
 
 
     return (
-        <div className="z-50 absolute top-0 min-w-screen" ref={menuRef}>
+        <div className="z-50 absolute top-0 min-w-full" ref={menuRef}>
             {/* Home Button */}
             <Link 
             className="absolute top-5 left-5"

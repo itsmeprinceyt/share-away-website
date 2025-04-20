@@ -4,11 +4,13 @@ import { useRouter } from 'next/navigation';
 import Navbar from '../(components)/Navbar';
 import { useCheckSession } from '../../hooks/useCheckSession';
 import getBaseUrl from '../../utils/getBaseUrl';
+import Loading from '../(components)/Loading';
 
 export default function PostCreate() {
     const router = useRouter();
     const [heading, setHeading] = useState('');
     const [body, setBody] = useState('');
+    const [loading, setLoading] = useState(true);
     const session = useCheckSession();
 
     useEffect(() => {
@@ -24,10 +26,11 @@ export default function PostCreate() {
     }, [router]);
 
     const handleSubmit = async (e: React.FormEvent) => {
-        const generated_post_uuid = crypto.randomUUID().slice(0, 16)
         e.preventDefault();
         if (!session) return;
 
+        setLoading(true);
+        const generated_post_uuid = crypto.randomUUID().slice(0, 16);
         const content = {
             heading,
             body
@@ -48,10 +51,14 @@ export default function PostCreate() {
 
         if (res.ok) {
             router.push(`/post/${generated_post_uuid}`);
+            setLoading(false);
         } else {
+            setLoading(false);
             console.error('Failed to create post');
         }
     };
+
+    if(loading) return <Loading/>;
 
     return (
         <div>
@@ -76,7 +83,7 @@ export default function PostCreate() {
                     className="w-full mb-2 p-2 border rounded"
                 />
 
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+                <button disabled={!loading} type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
                     Post
                 </button>
             </form>

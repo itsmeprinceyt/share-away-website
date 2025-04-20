@@ -1,6 +1,7 @@
 @import "tailwindcss";
 * {
     transition: all ease-in-out 300ms;
+    /*outline: 1px solid red;*/ /* FOR DEBUGGING CSS */
 }
 
 @keyframes slide-left-bounce {

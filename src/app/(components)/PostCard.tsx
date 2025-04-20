@@ -64,9 +64,6 @@ const PostCard = ({
                                 </li>
                             </>
                         )}
-                        {!(isAdmin || isOwner) && (
-                            <li className="px-4 py-2 text-gray-400 italic">No options</li>
-                        )}
                     </ul>
                 </div>
             )}
