@@ -234,8 +234,7 @@ export default function Home() {
             <div className="z-20 max-[680px]:w-full w-[600px] max-[680px]:ml-2 max-[680px]:mr-2 m-10
             mt-24 mb-24 flex flex-col gap-12 text-center">
                 {/* Message */}
-                <div className="backdrop-blur-xl bg-white/10 border border-pink-300/20 py-10 shadow-xl shadow-pink-500/10
-                rounded-lg -tracking-tighter text-center text-md font-semibold p-2 text-pink-950 ">
+                <div className="backdrop-blur-xl py-10 rounded-lg -tracking-tighter text-center text-md font-semibold p-2 text-pink-950 ">
                     Welcome back @{session?.user.username}<br />
                     Do you have anything in your mind?&nbsp;<br /><br />
                     <Link
