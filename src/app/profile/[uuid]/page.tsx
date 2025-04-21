@@ -770,11 +770,11 @@ export default function ProfilePage() {
                 {profileDetails?.posts?.length ? (
                     <div>
                         {isOwner ? (
-                            <h2 className="mb-8 text-shadow-red-950/20 text-red-950 text-shadow-md text-xm font-extralight -tracking-tighter leading-7">
+                            <h2 className="mb-2 text-center text-shadow-red-950/20 text-red-950 text-shadow-md text-xm font-extralight -tracking-tighter leading-7">
                                 @{profileDetails.username}, here are your posts . . .
                             </h2>
                         ) : (
-                            <h2 className="mb-8 text-shadow-red-950/20 text-red-950 text-shadow-md text-xm font-extralight -tracking-tighter leading-7">
+                            <h2 className="mb-2 text-center text-shadow-red-950/20 text-red-950 text-shadow-md text-xm font-extralight -tracking-tighter leading-7">
                                 Here are @{profileDetails.username}
                                 {profileDetails.username.endsWith("s") ? "'" : "'s"} posts . . .
                             </h2>
@@ -818,7 +818,7 @@ export default function ProfilePage() {
                         </ul>
                     </div>
                 ) : (
-                    <p className="text-gray-500 text-xs font-extralight">
+                    <p className="text-gray-500 text-center text-xs font-extralight">
                         {isOwner
                             ? "You haven't posted anything . . ."
                             : `@${profileDetails?.username}${profileDetails?.username.endsWith("s") ? "'" : ""} hasn't posted anything . . .`}
