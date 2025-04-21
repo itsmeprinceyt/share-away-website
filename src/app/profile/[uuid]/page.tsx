@@ -260,6 +260,7 @@ export default function ProfilePage() {
 
     const handlePostDelete = async (post_uuid: string, type: 'CONFIRM' | 'ASK') => {
         if (type === 'ASK') {
+            setSettingToggleDialogue(true);
             setPostToDelete(post_uuid);
             setConfirmDeletePost(true);
             return;
@@ -267,6 +268,8 @@ export default function ProfilePage() {
 
         if (type === 'CONFIRM') {
             setConfirmDeletePost(false);
+            setSettingToggleDialogue(false);
+            setSettingToggle(false);
             setPostToDelete(null);
         }
 
@@ -369,6 +372,8 @@ export default function ProfilePage() {
         setPasswordEdit(false);
         setPfpChange(false);
         setConfirmDelete(false);
+        setConfirmDeletePost(false);
+        setPostToDelete(null);
         setConfirmBan(false);
         setSettingToggleDialogue(false);
         setSettingToggle(true);
@@ -392,10 +397,11 @@ export default function ProfilePage() {
             {/* Setting Dialogue Open */}
             {settingToggleDialogue && (
                 <div className="z-50 fixed top-0 left-0 right-0 bottom-0 bg-black/80 flex justify-center items-center">
-
+                    {/* Setting Dialogue Open Container*/}
                     <div className="bg-white relative rounded-lg shadow-xl shadow-pink-500/30 border
                     border-pink-300 flex flex-col gap-7 p-7 w-[300px]">
 
+                        {/* Go back to setting */}
                         <button onClick={handleResetPrompts}
                             className="absolute top-2 left-2 w-[15px] hover:scale-110 transition-all duration-300">
                             <Image
@@ -406,7 +412,7 @@ export default function ProfilePage() {
                                 alt="Settings"
                             />
                         </button>
-
+                        {/* Setting Dialogue close */}
                         <button onClick={handleSettingDialogue}
                             className="absolute top-2 right-2 w-[12px] hover:scale-110 transition-all duration-300">
                             <Image
@@ -418,6 +424,7 @@ export default function ProfilePage() {
                             />
                         </button>
 
+                        {/* Password edit */}
                         {(passWordEdit) && (
                             <div className="text-center text-purple-500 font-extralight text-shadow-md text-shadow-pink-500/20 flex flex-col gap-4">
                                 <h1 className="text-xl ">Edit Profile</h1>
@@ -455,7 +462,7 @@ export default function ProfilePage() {
                                 </form>
                             </div>
                         )}
-
+                        {/* Profile picture change */}
                         {pfpChange && (
                             <div className="flex flex-col gap-5 text-center">
                                 <div className="text-center text-purple-500 font-extralight text-shadow-md text-shadow-purple-500/20">Edit Profile Picture</div>
@@ -515,7 +522,7 @@ export default function ProfilePage() {
                                 </form>
                             </div>
                         )}
-
+                        {/* Confirm delete account */}
                         {confirmDelete && (
                             <div className="text-center flex flex-col gap-5">
                                 <p className="text-red-500 font-extralight text-shadow-md text-shadow-red-500/20">
@@ -540,7 +547,7 @@ export default function ProfilePage() {
                             </div>
                         )}
 
-
+                        {/* Confirm ban user */}
                         {confirmBan && (
                             <div className="text-center flex flex-col gap-5">
                                 <p className="text-orange-500 font-extralight text-shadow-md text-shadow-orange-500/20">
@@ -565,6 +572,34 @@ export default function ProfilePage() {
                                 </div>
                             </div>
                         )}
+                        
+                        {/* Confirm Post Delete */}
+                        {confirmDeletePost && postToDelete && (
+                            <div className="mt-5 text-center flex flex-col gap-5">
+                                <p className="text-red-500 font-extralight text-shadow-md text-shadow-red-500/20">
+                                Are you sure you want to delete this post?</p>
+                                <div className="flex gap-5 items-center justify-center">
+                                    <button
+                                        onClick={() => handlePostDelete(postToDelete, 'CONFIRM')}
+                                        className="bg-gradient-to-r from-red-500 to-red-400
+                                            text-white rounded-lg w-[150px] max-[550px]:w-[100px]
+                                            py-2 border border-red-500 hover:scale-105 transition-all duration-300 shadow-xl shadow-red-500/30 hover:shadow-red-500/50 font-extralight">
+                                        Yes, Delete
+                                    </button>
+                                    <button
+                                        onClick={()=>{
+                                            handleResetPrompts();
+                                            setSettingToggle(false);
+                                        }}
+                                        className="bg-gradient-to-r from-gray-500 to-gray-400
+                                            text-white rounded-lg w-[150px] max-[550px]:w-[100px]
+                                            py-2 border border-gray-500 hover:scale-105 transition-all duration-300 shadow-xl shadow-gray-500/30 hover:shadow-gray-500/50 font-extralight">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        {/* Setting Dialogue Banner */}
                         <div>
                             <Image
                                 className="rounded-lg shadow-xl shadow-purple-500/20"
@@ -585,7 +620,7 @@ export default function ProfilePage() {
                 <div className="z-50 fixed top-0 left-0 right-0 bottom-0 bg-black/80 flex justify-center items-center">
                     <div className="bg-white relative rounded-lg shadow-xl shadow-pink-500/30 border
                     border-pink-300 flex items-center justify-center">
-
+                        {/* Setting close */}
                         <button onClick={handleSettings}
                             className="absolute top-2 right-2 w-[12px]
                             hover:scale-110 transition-all duration-300">
@@ -597,7 +632,7 @@ export default function ProfilePage() {
                                 alt="Settings"
                             />
                         </button>
-
+                        {/* Setting side image */}
                         <div className="p-2 max-[510px]:w-[200px] max-[480px]:w-[150px] w-[180px]">
                             <Image
                                 className="rounded-lg"
@@ -607,7 +642,7 @@ export default function ProfilePage() {
                                 alt="Setting Image"
                             />
                         </div>
-
+                        {/* Setting buttons */}
                         <div className="flex flex-col items-start justify-between max-[480px]:gap-2
                         max-[480px]:p-2 gap-7 p-7 max-[510px]:w-[200px]
                         max-[480px]:w-[160px] w-[240px] ">
@@ -635,7 +670,7 @@ export default function ProfilePage() {
 
                                 </>
                             )}
-
+                            {/* Show BAN only if user=admin */}
                             {(isAdmin) && (
                                 <>
                                     <button
@@ -656,37 +691,16 @@ export default function ProfilePage() {
 
                 </div>
             )}
-
+            {/* ======================================================== */}
+            {/* MAIN PAGE CONTAINER */}
+            {/* ======================================================== */}
             <div className="z-20 max-[680px]:w-[400px] max-[480px]:w-[300px] w-[600px] m-10 mt-24 mb-24 flex flex-col gap-6">
-
-                {confirmDeletePost && postToDelete && (
-                    <div className="mt-4 bg-red-100 p-4 rounded-lg shadow">
-                        <p className="text-red-700 font-semibold mb-2">Are you sure you want to delete this post?</p>
-                        <div className="space-x-2">
-                            <button
-                                onClick={() => handlePostDelete(postToDelete, 'CONFIRM')}
-                                className="bg-red-600 text-white py-1 px-4 rounded"
-                            >
-                                Yes, Delete
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setConfirmDeletePost(false);
-                                    setPostToDelete(null);
-                                }}
-                                className="bg-gray-400 text-white py-1 px-4 rounded"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                )}
 
                 {/* Profile container */}
                 <div className=" flex justify-between p-2">
 
                     <div className="flex justify-center items-start gap-5">
-
+                        {/* Profile Picture */}
                         <Image
                             className="border-2 border-white rounded-full shadow-xl shadow-pink-500/30"
                             src={profileDetails!.pfp || defaultProfilePic}
@@ -694,13 +708,15 @@ export default function ProfilePage() {
                             width={100}
                             height={100}
                         />
-
+                        {/* Profile Meta Data */}
                         <div className="flex flex-col gap-1">
-
+                            {/* Name & Verification Status */}
                             <div className="flex justify-center items-center gap-2 text-shadow-black/20 text-shadow-md text-2xl font-semibold">
+                                {/* Username */}
                                 <Link href={`/profile/${uuid}`}>
                                     @{profileDetails!.username}
                                 </Link>
+                                {/* Verification badge status */}
                                 <div className="flex justify-center items-center bg-white
                                 rounded-full h-[20px] w-[20px] text-xs shadow-black/20
                                 shadow-xl hover:scale-150 transition-all duration-300">
@@ -715,13 +731,13 @@ export default function ProfilePage() {
                                     }
                                 </div>
                             </div>
-
+                            {/* Registered on: */}
                             <div className="text-[10px] text-gray-500 text-shadow-gray-500 text-shadow-md/20">
                                 Registered on: {new Date(profileDetails!.registeredDate).toLocaleDateString()}
                             </div>
-
+                            {/* Total Posts */}
                             <div className="text-xs text-purple-500 text-shadow-purple-500 text-shadow-md/20">Total Posts: {profileDetails!.totalPosts ?? 0}</div>
-
+                            {/* Total Hearts */}
                             <div className="text-xs text-red-500 text-shadow-red-500 text-shadow-md/20">❤️ {profileDetails!.totalHearts ?? 0}</div>
                         </div>
 
