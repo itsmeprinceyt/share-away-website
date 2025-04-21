@@ -598,7 +598,7 @@ export default function ProfilePage() {
                             />
                         </button>
 
-                        <div className="p-2 w-[180px]">
+                        <div className="p-2 max-[510px]:w-[200px] max-[480px]:w-[150px] w-[180px]">
                             <Image
                                 className="rounded-lg"
                                 src={'/art/art3.jpg'}
@@ -608,17 +608,19 @@ export default function ProfilePage() {
                             />
                         </div>
 
-                        <div className="flex flex-col items-start justify-between gap-7 p-7 w-[240px]">
+                        <div className="flex flex-col items-start justify-between max-[480px]:gap-2
+                        max-[480px]:p-2 gap-7 p-7 max-[510px]:w-[200px]
+                        max-[480px]:w-[160px] w-[240px] ">
                             {(isOwner || isAdmin) && (
                                 <>
                                     <button
                                         onClick={handlePasswordChange}
-                                        className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500">
+                                        className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500 text-start">
                                         Edit Password
                                     </button>
                                     <button
                                         onClick={handlePfpChange}
-                                        className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500">
+                                        className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500 text-start">
                                         Edit Profile Picture
                                     </button>
                                     <button
@@ -627,7 +629,7 @@ export default function ProfilePage() {
                                             setSettingToggleDialogue(!settingToggleDialogue);
                                             setSettingToggle(!settingToggle);
                                         }}
-                                        className="hover:bg-red-600/10 hover:border-l-[20px] border-l-red-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20 hover:text-red-500">
+                                        className="hover:bg-red-600/10 hover:border-l-[20px] border-l-red-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20 hover:text-red-500 text-start">
                                         Delete Account
                                     </button>
 
@@ -642,7 +644,7 @@ export default function ProfilePage() {
                                             setSettingToggleDialogue(!settingToggleDialogue);
                                             setSettingToggle(!settingToggle);
                                         }}
-                                        className="hover:bg-orange-600/10 hover:border-l-[20px] border-l-orange-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20 hover:text-orange-500">
+                                        className="hover:bg-orange-600/10 hover:border-l-[20px] border-l-orange-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20 hover:text-orange-500 text-start">
                                         Ban User
                                     </button>
                                 </>
@@ -655,7 +657,7 @@ export default function ProfilePage() {
                 </div>
             )}
 
-            <div className="z-20 w-[600px] m-10 mt-24 mb-24 flex flex-col gap-6">
+            <div className="z-20 max-[680px]:w-[400px] max-[480px]:w-[300px] w-[600px] m-10 mt-24 mb-24 flex flex-col gap-6">
 
                 {confirmDeletePost && postToDelete && (
                     <div className="mt-4 bg-red-100 p-4 rounded-lg shadow">
@@ -727,7 +729,7 @@ export default function ProfilePage() {
 
                     {/* Setting Menu */}
                     {(isOwner || isAdmin) && (
-                        <div className="w-[18px] relative group">
+                        <div className="w-[18px] relative group max-[480px]:hidden">
                             <div className="z-5 absolute top-5 right-0 bg-white px-2 py-1
                             rounded-md shadow-xl text-xs text-nowrap shadow-pink-500/20
                             border border-pink-300
@@ -795,6 +797,27 @@ export default function ProfilePage() {
                 )}
 
             </div>
+
+            {/* Setting Menu - Below 480px */}
+            {(isOwner || isAdmin) && (
+                <div className="w-[18px] z-50 group fixed bottom-15 right-13 min-[480px]:hidden">
+                    <div className="z-50 absolute top-5 right-0 bg-white px-2 py-1
+                            rounded-md shadow-xl text-xs text-nowrap shadow-pink-500/20
+                            border border-pink-300
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        Edit Profile
+                    </div>
+                    <button onClick={handleSettings}>
+                        <Image
+                            className="z-2 drop-shadow-[0_4px_6px_rgba(236,72,153,0.5)]"
+                            src={'/icons/setting.png'}
+                            width={50}
+                            height={50}
+                            alt="Settings"
+                        />
+                    </button>
+                </div>
+            )}
 
         </PageWrapperNormalTop>
     );
