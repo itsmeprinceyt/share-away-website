@@ -51,7 +51,7 @@ export default function Navbar() {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-    
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef2.current && !menuRef2.current.contains(event.target as Node)) {
@@ -93,9 +93,9 @@ export default function Navbar() {
     return (
         <div className="z-50 absolute top-0 min-w-full" ref={menuRef}>
             {/* Home Button */}
-            <Link 
-            className="absolute top-5 left-5"
-            href="/home" >
+            <Link
+                className="absolute top-5 left-5"
+                href="/home" >
                 <Image
                     className="w-[50px] h-[50px] hover:scale-110 transition-all duration-300"
                     src={'/logo/ShareAway5-png.png'}
@@ -121,14 +121,15 @@ export default function Navbar() {
                         />
                         {/* Notification Mapping */}
                         {notifications.map((notif, index) => (
-                            <div key={`${notif.post_uuid}-${notif.liker_username}-${index}`} className="hover:bg-pink-600/10 mr-2 ml-2 mt-2 hover:border-l-[20px]  border-l-pink-600
-                            p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                            <>
                                 <Link href={`/post/${notif.post_uuid}`}>
-                                    <span>
-                                        <strong>@{notif.liker_username}</strong> liked your post.
-                                    </span>
-                                </Link>
-                            </div>
+                                    <div key={`${notif.post_uuid}-${notif.liker_username}-${index}`} className="hover:bg-pink-600/10 mr-2 ml-2 mt-2 hover:border-l-[20px]  border-l-pink-600 p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                        <span>
+                                            <strong>@{notif.liker_username}</strong> liked your post.
+                                        </span>
+                                    </div></Link>
+                            </>
+
                         ))}
                         {/* Notification - Load more Button */}
                         <button
@@ -144,8 +145,8 @@ export default function Navbar() {
                 {session && (
                     <>
                         {/* Post Button */}
-                        <button className="hover:text-gray-400">
-                            <Link href="/post">
+                        <Link href="/post">
+                            <button className="hover:text-gray-400">
                                 <Image
                                     className="w-[25px] h-[25px] hover:scale-110 transition-all duration-300"
                                     src={'/icons/post-icon-new.png'}
@@ -153,8 +154,8 @@ export default function Navbar() {
                                     width={500}
                                     height={500}
                                 />
-                            </Link>
-                        </button>
+                            </button>
+                        </Link>
 
                         {/* Bell Div: if notifications are present */}
                         {(session && notifications.length > 0) && (
@@ -221,7 +222,7 @@ export default function Navbar() {
                 </button>
                 {/* Hamburger open */}
                 {(showHamburger) && (
-                    
+
                     <div className="absolute w-[120px] right-6 flex flex-col justify-start text-pink-600 top-20 bg-white rounded-lg shadow-xl shadow-pink-500/20">
                         {/* Image */}
                         <Image
@@ -234,30 +235,41 @@ export default function Navbar() {
                         {/* Button lists */}
                         <ul className="flex flex-col m-2 gap-2">
                             {/* Home */}
-                            <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
-                                <Link href="/">Home</Link>
-                            </li>
+                            <Link href="/">
+                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                    Home
+                                </li>
+                            </Link>
                             {/* Admin */}
                             {session?.user?.isAdmin === 1 && (
-                                <li className="hover:bg-orange-600/10 hover:border-l-[20px] text-orange-600 border-l-orange-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20">
-                                    <Link href="/admin">Admin</Link>
-                                </li>
+                                <Link href="/admin">
+                                    <li className="hover:bg-orange-600/10 hover:border-l-[20px] text-orange-600 border-l-orange-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20">
+                                        Admin
+                                    </li>
+                                </Link>
                             )}
                             {/* Login & Sign up if no session */}
                             {!session && (
                                 <>
-                                    <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
-                                        <Link href="/login" >Login</Link>
-                                    </li>
-                                    <li className="hover:bg-purple-600/10 hover:border-l-[20px] text-purple-600 border-l-purple-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20">
-                                        <Link href="/sign-up" >Sign up</Link>
-                                    </li>
+                                    <Link href="/login">
+                                        <li className="hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                            Login
+                                        </li>
+                                    </Link>
+                                    <Link href="/sign-up">
+                                        <li className="hover:bg-purple-600/10 hover:border-l-[20px] text-purple-600 border-l-purple-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20">
+                                            Sign up
+                                        </li>
+                                    </Link>
                                 </>
                             )}
                             {/* Logout button if session exists */}
                             {session && (
-                                <li className="hover:bg-red-600/10 hover:border-l-[20px] text-red-600 border-l-red-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20">
-                                    <button onClick={handleLogout}>Logout</button>
+                                <li
+                                    onClick={handleLogout}
+                                    className="cursor-pointer hover:bg-red-600/10 hover:border-l-[20px] text-red-600 border-l-red-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20"
+                                >
+                                    Logout
                                 </li>
                             )}
 
