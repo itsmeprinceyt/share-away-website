@@ -121,14 +121,14 @@ export default function Navbar() {
                         />
                         {/* Notification Mapping */}
                         {notifications.map((notif, index) => (
-                            <>
+                            <div key={index}>
                                 <Link href={`/post/${notif.post_uuid}`}>
                                     <div key={`${notif.post_uuid}-${notif.liker_username}-${index}`} className="hover:bg-pink-600/10 mr-2 ml-2 mt-2 hover:border-l-[20px]  border-l-pink-600 p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
                                         <span>
                                             <strong>@{notif.liker_username}</strong> liked your post.
                                         </span>
                                     </div></Link>
-                            </>
+                            </div>
 
                         ))}
                         {/* Notification - Load more Button */}

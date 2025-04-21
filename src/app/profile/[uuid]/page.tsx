@@ -711,7 +711,7 @@ export default function ProfilePage() {
                         {/* Profile Meta Data */}
                         <div className="flex flex-col gap-1">
                             {/* Name & Verification Status */}
-                            <div className="flex justify-center items-center gap-2 text-shadow-black/20 text-shadow-md text-2xl font-semibold">
+                            <div className="flex justify-start items-center gap-2 text-shadow-black/20 text-shadow-md text-2xl font-semibold">
                                 {/* Username */}
                                 <Link href={`/profile/${uuid}`}>
                                     @{profileDetails!.username}
