@@ -3,6 +3,7 @@ export type DeleteMode = "ASK" | "CONFIRM";
 export default interface PostContentHome {
     post_uuid: string;
     user_uuid: string;
+    uuid: string;
     username: string;
     pfp: string;
     content: { heading: string; body: string };

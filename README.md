@@ -14,10 +14,11 @@ email wrong,password weak, password description]
 - [❌] make post pagination
 - [✅] make it responsive
 - [✅] copy the posting card logic
-- make home ui
-- make home pagination
+- [✅] make home ui
+- [❌] make home pagination
 - make admin ui
 - make posting page ui
+- [✅] make single post page
 - make edit post ui
 - add ban / revoke both button and make their ui
 - make admin table ui 
@@ -26,6 +27,7 @@ email wrong,password weak, password description]
 - make terms and condition page
 - make contact me page
 - make credits
+- make search bar to search post/user (by uuid or username )
 
 utils
 - contact

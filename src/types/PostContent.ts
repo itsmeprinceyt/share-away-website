@@ -6,6 +6,7 @@ export default interface PostContent {
     heart_count: number;
     user_id: number;
     posted_at: string;
+    pfp: string;
     content: { 
         heading: string;
         body: string;
