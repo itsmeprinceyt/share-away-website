@@ -148,7 +148,7 @@ export default function Navbar() {
                         <Link href="/post">
                             <button className="hover:text-gray-400">
                                 <Image
-                                    className="w-[25px] h-[25px] hover:scale-110 transition-all duration-300"
+                                    className="w-[25px] h-[25px] mt-2 hover:scale-110 transition-all duration-300"
                                     src={'/icons/post-icon-new.png'}
                                     alt="Post"
                                     width={500}

@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import getBaseUrl from '../../../utils/getBaseUrl';
 import { useCheckSession } from '../../../hooks/useCheckSession';
 import Navbar from '../../(components)/Navbar';
+import PageWrapperWhiteTop from '../../(components)/PageWrapperWhiteTop';
+import Link from 'next/link';
 
 /**
  * @description - Admin panel: revoke ban section.
@@ -52,34 +54,44 @@ export default function Admin() {
     };
 
     return (
-        <div className="">
+        <PageWrapperWhiteTop>
             <Navbar />
+            <div className="z-20 max-[680px]:w-full w-[600px] max-[680px]:ml-2 max-[680px]:mr-2 mt-24 mb-24 flex flex-col justify-between items-center gap-6">
 
-            <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 space-y-4">
-                <h2 className="text-xl font-semibold text-gray-800">Revoke Ban (Unban User)</h2>
-
-                <input
-                    type="email"
-                    placeholder="Enter user's email"
-                    value={revokeEmail}
-                    onChange={(e) => setRevokeEmail(e.target.value)}
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-
-                <button
-                    onClick={handleUnban}
-                    disabled={isLoading}
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-                >
-                    {isLoading ? 'Processing...' : 'Unban User'}
-                </button>
-
-                {responseMessage && (
-                    <div className="text-sm text-center text-gray-700 mt-2">
-                        {responseMessage}
+                <Link href="/admin">
+                    <div className="text-green-500 text-shadow-md text-shadow-green-500/20 hover:underline">
+                        Panel
                     </div>
-                )}
+                </Link>
+
+                <div className="w-[300px] mx-auto 
+                border border-green-300/30 bg-white rounded-lg shadow-xl
+                shadow-green-500/30 flex flex-col gap-5 p-5">
+
+                    <input
+                        type="email"
+                        placeholder="Enter user's email"
+                        value={revokeEmail}
+                        onChange={(e) => setRevokeEmail(e.target.value)}
+                        className="bg-white border border-green-300/20 focus:orange-green-500 focus:outline-none text-green-500 p-2 rounded-lg w-full font-extralight"
+                    />
+
+                    <button
+                        onClick={handleUnban}
+                        disabled={isLoading}
+                        className="bg-gradient-to-r from-green-500 to-green-400
+                    text-white rounded-lg w-full py-2 border border-green-500 hover:scale-105 transition-all duration-300 shadow-xl shadow-green-500/30 hover:shadow-green-500/50 font-extralight disabled:opacity-50"
+                    >
+                        {isLoading ? 'Processing...' : 'Unban User'}
+                    </button>
+
+                    {responseMessage && (
+                        <div className="text-sm text-center text-gray-700 mt-2">
+                            {responseMessage}
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </PageWrapperWhiteTop>
     );
 }
