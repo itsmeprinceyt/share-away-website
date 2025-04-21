@@ -10,7 +10,7 @@ export default function PostCreate() {
     const router = useRouter();
     const [heading, setHeading] = useState('');
     const [body, setBody] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const session = useCheckSession();
 
     useEffect(() => {
