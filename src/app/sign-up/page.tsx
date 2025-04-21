@@ -14,6 +14,7 @@ import Loading from '../(components)/Loading';
  */
 export default function SignUp() {
     const router = useRouter();
+    const [isChecked, setIsChecked] = useState(false);
     const [form, setForm] = useState<{
         username: string;
         email: string;
@@ -169,6 +170,10 @@ export default function SignUp() {
 
     if (loading) return <Loading etaSeconds={30} />;
 
+    const handleCheckboxChange = () => {
+        setIsChecked(prevState => !prevState);
+    };
+
     return (
         <PageWrapperNormalPurple
         >
@@ -278,16 +283,31 @@ export default function SignUp() {
                             />
                         </button>
                     </div>
+
+                    {/* Agree to Terms and condition container */}
+                    <div className="flex">
+                        <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={handleCheckboxChange}
+                            className="mr-2"
+                        />
+                        <label htmlFor="terms" className="text-sm max-[550px]:text-[12px]">
+                            I agree to the <Link href="/terms-and-conditions" target="_blank" className="text-purple-500 underline">Terms and Conditions</Link>
+                        </label>
+                    </div>
+
                     {/* Button container */}
                     <div className="relative">
                         {/* Buttons */}
                         <div className="flex flex-col justify-center items-center gap-5">
                             <button
                                 type="submit"
+                                disabled={!isChecked}
                                 className="bg-gradient-to-r from-purple-500
                         to-purple-400 text-white rounded-lg w-[280px]
                         max-[550px]:w-[100px] py-2 border border-purple-500
-                        hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 font-extralight">
+                        hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 font-extralight disabled:opacity-50">
                                 Sign Up
                             </button>
                             <Link href="/login">

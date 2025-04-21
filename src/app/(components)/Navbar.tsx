@@ -273,6 +273,30 @@ export default function Navbar() {
                                 </li>
                             )}
 
+                            <Link href="/terms-and-conditions">
+                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                T&C
+                                </li>
+                            </Link>
+
+                            <Link href="/contact">
+                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                Contact
+                                </li>
+                            </Link>
+
+                            <Link href="/credits">
+                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                Credits
+                                </li>
+                            </Link>
+
+                            <Link href="https://share-away-showcase.vercel.app/">
+                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                GitHub
+                                </li>
+                            </Link>
+
                         </ul>
 
                     </div>
