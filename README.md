@@ -15,14 +15,14 @@ todo
 - [✅] copy the posting card logic
 - [✅] make home ui
 - [❌] make home pagination
-- make admin ui
+- [✅] make admin ui
 - [✅] make posting page ui
 - [✅] make single post page
 - [✅] edit post ui
-- add ban / revoke both button and make their ui
+- [✅] add ban / revoke both button and make their ui
 - make admin table ui 
 - add ui buttons and map table data so we can use buttons
-- make activity_logs ui
+- make activity_logs ui based on different actions
 - make terms and condition page
 - make contact me page
 - make credits

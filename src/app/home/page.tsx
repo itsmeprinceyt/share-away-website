@@ -234,14 +234,14 @@ export default function Home() {
             <div className="z-20 max-[680px]:w-full w-[600px] max-[680px]:ml-2 max-[680px]:mr-2 m-10
             mt-24 mb-24 flex flex-col gap-12 text-center">
                 {/* Message */}
-                <div className="border border-pink-300/20 py-10 shadow-xl shadow-pink-500/10
+                <div className="backdrop-blur-xl bg-white/10 border border-pink-300/20 py-10 shadow-xl shadow-pink-500/10
                 rounded-lg -tracking-tighter text-center text-md font-semibold p-2 text-pink-950 ">
                     Welcome back @{session?.user.username}<br />
-                    Do you have anything in your mind?&nbsp;
+                    Do you have anything in your mind?&nbsp;<br /><br />
                     <Link
                         href="/post"
                         className="inline-block bg-pink-600/20
-                        rounded-md px-2 text-pink-600 border border-pink-300
+                        rounded-md px-4 py-2 text-pink-600 border border-pink-300
                         hover:border-pink-400 shadow-xl shadow-pink-500/20
                         hover:scale-105 hover:shadow-pink-500/40 transition-all
                         duration-500 animate-pulse hover:animate-none">
