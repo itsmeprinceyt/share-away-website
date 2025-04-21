@@ -257,6 +257,7 @@ export default function Home() {
                                 <PostCardHome
                                     post_uuid={post.post_uuid}
                                     user_uuid={post.user_uuid}
+                                    uuid={post.user_uuid}
                                     username={post.username}
                                     pfp={post.pfp}
                                     content={parsedContent}

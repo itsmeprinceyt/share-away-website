@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Navbar from '../../../(components)/Navbar';
 import { useCheckSession } from '../../../../hooks/useCheckSession';
 import getBaseUrl from '../../../../utils/getBaseUrl';
 import Loading from '../../../(components)/Loading';
 import PostContent from '../../../../types/PostContent';
+import PageWrapperNormal_Top from '../../../(components)/PageWrapperNormalTop';
 
 export default function PostEdit() {
     const router = useRouter();
@@ -14,12 +15,12 @@ export default function PostEdit() {
 
     const [heading, setHeading] = useState('');
     const [body, setBody] = useState('');
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-    const [postData, setPostData] = useState<PostContent | null>(null); // Use the PostContent type here
-    const [isOwner, setIsOwner] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [postData, setPostData] = useState<PostContent | null>(null);
     const [loading, setLoading] = useState(true);
     const session = useCheckSession();
+
 
     useEffect(() => {
         if (!post_uuid || !session) return;
@@ -52,14 +53,17 @@ export default function PostEdit() {
         const owner = postData.uuid === session.user.uuid;
         const admin = session.user.isAdmin === 1;
 
-        setIsOwner(owner);
-        setIsAdmin(admin);
-
         if (!owner && !admin) {
             router.replace(`/post/${post_uuid}`);
         }
     }, [router, postData, session, post_uuid]);
 
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+    }, [body]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -92,43 +96,53 @@ export default function PostEdit() {
 
     if (loading) return <Loading />
     return (
-        <div>
+        <PageWrapperNormal_Top>
             <Navbar />
-            are you owner: {isOwner ? 'yes' : 'no' }
-            are you admin: {isAdmin ? 'yes': 'no'}
-            <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-4">
-                <h2 className="text-xl font-semibold mb-4 text-center">Edit Post</h2>
-    
-                {/* Heading input (like a tweet title) */}
-                <input
-                    type="text"
-                    placeholder="What's the heading?"
-                    value={heading}
-                    onChange={(e) => setHeading(e.target.value)}
-                    required
-                    className="w-full mb-4 text-lg bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 p-2 placeholder-gray-500"
-                />
-    
-                {/* Body input (like tweet body / textarea) */}
-                <textarea
-                    placeholder="What's on your mind?"
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
-                    required
-                    rows={6}
-                    className="w-full text-base bg-transparent border border-gray-300 rounded-xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-500"
-                />
-    
-                <div className="text-right mt-4">
+            <div className="z-20 max-[680px]:w-full w-[600px] max-[680px]:ml-2 max-[680px]:mr-2 m-10
+            mt-24 mb-24 flex flex-col gap-12 text-center">
+                <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center gap-5">
+                    <div className="text-center max-[550px]:text-3xl
+                    max-[350px]:text-xl text-4xl font-extralight antialiased text-pink-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-pink-500">Edit Post</div>
+
+                    {/* Heading input (like a tweet title) */}
+                    <input
+                        type="text"
+                        value={heading}
+                        onChange={(e) => setHeading(e.target.value)}
+                        required
+                        className="bg-white border border-white font-semibold
+                        focus:border-pink-500 focus:outline-none text-pink-500 p-2
+                        rounded-lg mb-4 max-[350px]:mb-2 w-[400px] max-[550px]:w-full"
+                    />
+
+                    {/* Body input (like tweet body / textarea) */}
+                    <textarea
+                        ref={textareaRef}
+                        placeholder="Write something..."
+                        value={body}
+                        onChange={(e) => setBody(e.target.value)}
+                        required
+                        className="bg-white border border-white border-r-0 focus:border-pink-500 focus:outline-none
+                        text-pink-500 p-2 rounded-lg mb-4 max-[350px]:mb-2 w-[400px] max-[550px]:w-full
+                        font-extralight resize-none overflow-y-auto"
+                        style={{
+                            minHeight: '50px',
+                            maxHeight: '50vh',
+                            overflowY: 'auto',
+                        }}
+                    />
+
                     <button
+                        disabled={loading}
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-600 transition text-white px-6 py-2 rounded-full font-semibold shadow"
-                    >
-                        Save Changes
+                        className="bg-gradient-to-r from-pink-500 to-pink-400 text-white rounded-lg
+                        w-[150px] max-[550px]:w-[200px] py-2 border border-pink-500 hover:scale-105
+                        transition-all duration-300 shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 font-extralight">
+                        Edit
                     </button>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
+        </PageWrapperNormal_Top>
     );
-    
+
 }

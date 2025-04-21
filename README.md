@@ -5,8 +5,7 @@ added all possible to do-s for now
 todo
 - [✅] make login page responsive
 - [✅] make ui in sign up
-- [✅] change response message on error on sign up [username already take,
-email wrong,password weak, password description]
+- [✅] change response message on error on sign up [username already take, email wrong,password weak, password description]
 - [✅] add sign up email/password authentication on server-side backend
 - [✅] make sign up page responsive
 - [✅] work on profile
@@ -17,9 +16,9 @@ email wrong,password weak, password description]
 - [✅] make home ui
 - [❌] make home pagination
 - make admin ui
-- make posting page ui
+- [✅] make posting page ui
 - [✅] make single post page
-- make edit post ui
+- [✅] edit post ui
 - add ban / revoke both button and make their ui
 - make admin table ui 
 - add ui buttons and map table data so we can use buttons

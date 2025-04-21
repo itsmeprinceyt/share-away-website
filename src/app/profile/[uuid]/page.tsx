@@ -602,7 +602,7 @@ export default function ProfilePage() {
                         {/* Setting Dialogue Banner */}
                         <div>
                             <Image
-                                className="rounded-lg shadow-xl shadow-purple-500/20"
+                                className="rounded-lg shadow-xl shadow-pink-500/20"
                                 src={'/art/banner/banner4.png'}
                                 height={500}
                                 width={800}
@@ -635,7 +635,7 @@ export default function ProfilePage() {
                         {/* Setting side image */}
                         <div className="p-2 max-[510px]:w-[200px] max-[480px]:w-[150px] w-[180px]">
                             <Image
-                                className="rounded-lg"
+                                className="rounded-lg shadow-xl shadow-pink-500/20"
                                 src={'/art/art3.jpg'}
                                 width={500}
                                 height={500}
