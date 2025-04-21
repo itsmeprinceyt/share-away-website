@@ -1,16 +1,16 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
-import PostCardProps from '../../types/PostCardProps';
+import PostContentHome from '../../types/PostContentHome';
 import formatHeartCount from '../../utils/formatHeartCount';
 import { useState, useEffect, useRef } from 'react';
 
-const PostCard = ({
-    id,
+const PostCardHome = ({
     post_uuid,
-    uuid,
+    user_uuid,
     username,
-    heading,
-    body,
+    pfp,
+    content,
     heart_count,
     hasHearted,
     posted_at,
@@ -18,7 +18,7 @@ const PostCard = ({
     isOwner,
     onToggleHeart,
     onDelete
-}: PostCardProps) => {
+}: PostContentHome) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -34,7 +34,7 @@ const PostCard = ({
     }, []);
 
     return (
-        <div key={id} className="bg-pink-50 border border-pink-200 p-4 rounded-xl
+        <div className="bg-pink-50 border border-pink-200 p-4 rounded-xl
         flex flex-col justify-center gap-5 relative shadow-xl shadow-pink-500/20" ref={menuRef}>
 
             {menuOpen && (
@@ -49,21 +49,18 @@ const PostCard = ({
                         </Link>
                         {(isAdmin || isOwner) && (
                             <>
-
                                 <Link href={`/post/edit/${post_uuid}`}>
                                     <li className=" hover:bg-orange-600/10 hover:border-l-[20px]
                                 border-l-orange-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-orange-500/20 text-orange-500">
                                         Edit
                                     </li>
                                 </Link>
-
                                 <div onClick={() => onDelete(post_uuid, 'ASK')}>
                                     <li className=" hover:bg-red-600/10 hover:border-l-[20px]
                                 border-l-red-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-red-500/20 text-red-500">
                                         Delete
                                     </li>
                                 </div>
-                                
                             </>
                         )}
                     </ul>
@@ -71,17 +68,32 @@ const PostCard = ({
             )}
 
             <div className="flex justify-between items-start">
-                <div className=" font-bold text-xl flex flex-col gap-2">
-                    {heading}
-                    <div className="flex items-center gap-2">
-                        <p className="text-xs text-gray-500 font-extralight">
-                            {new Date(posted_at).toLocaleString()}
-                        </p>
-                        <Link href={`/profile/${uuid}`}>
-                            <p className="text-sm text-pink-500 font-normal hover:underline transition-all duration-300">@{username}</p>
-                        </Link>
+
+                <div className="font-bold flex justify-center items-start gap-2 text-xl">
+
+                    <Image
+                        className="rounded-full m-2"
+                        src={pfp}
+                        width={35}
+                        height={35}
+                        alt="Post owner pfp"
+                    />
+                    <div>
+                        <div>{content.heading}</div>
+
+                        <div className="flex items-center gap-2">
+                            <p className="text-xs text-gray-500 font-extralight">
+                                {new Date(posted_at).toLocaleString()}
+                            </p>
+                            <Link href={`/profile/${user_uuid}`}>
+                                <p className="text-sm text-pink-500 font-normal hover:underline transition-all duration-300">@{username}</p>
+                            </Link>
+                        </div>
+
                     </div>
+
                 </div>
+
                 <button
                     onClick={() => setMenuOpen(prev => !prev)}
                     className="hover:scale-105 transition-all duration-300 p-2 font-bold"
@@ -91,13 +103,12 @@ const PostCard = ({
             </div>
 
             <p className="whitespace-pre-line font-extralight
-            overflow-y-auto max-h-[500px] px-2 py-1 border border-r-0 border-pink-100
-            rounded-tl-lg rounded-bl-lg rounded-tr-md rounded-br-md">{body}</p>
+            overflow-y-auto max-h-[500px] px-2 py-1  border border-r-0 border-pink-100
+            rounded-tl-lg rounded-bl-lg rounded-tr-md rounded-br-md">{content.body}</p>
 
 
             <div className="flex items-start justify-start gap-5">
-                <button
-                    onClick={() => onToggleHeart(post_uuid, hasHearted)}
+                <button onClick={() => onToggleHeart(post_uuid, hasHearted)}
                 >
                     <span className="bg-gradient-to-r
                         from-red-200 to-red-300 flex items-center
@@ -118,4 +129,4 @@ const PostCard = ({
     );
 };
 
-export default PostCard;
+export default PostCardHome;

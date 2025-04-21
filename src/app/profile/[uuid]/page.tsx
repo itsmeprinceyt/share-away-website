@@ -694,7 +694,7 @@ export default function ProfilePage() {
             {/* ======================================================== */}
             {/* MAIN PAGE CONTAINER */}
             {/* ======================================================== */}
-            <div className="z-20 max-[680px]:w-[400px] max-[480px]:w-[300px] w-[600px] m-10 mt-24 mb-24 flex flex-col gap-6">
+            <div className="z-20 max-[680px]:w-full w-[600px] max-[680px]:ml-2 max-[680px]:mr-2 mt-24 mb-24 flex flex-col gap-6">
 
                 {/* Profile container */}
                 <div className=" flex justify-between p-2">

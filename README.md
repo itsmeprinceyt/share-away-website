@@ -9,11 +9,11 @@ todo
 email wrong,password weak, password description]
 - [✅] add sign up email/password authentication on server-side backend
 - [✅] make sign up page responsive
-- work on profile
-- edit profile page ?
-- make post pagination
-- make it responsive
-- copy the posting card logic
+- [✅] work on profile
+- [✅] edit profile page ?
+- [❌] make post pagination
+- [✅] make it responsive
+- [✅] copy the posting card logic
 - make home ui
 - make home pagination
 - make admin ui

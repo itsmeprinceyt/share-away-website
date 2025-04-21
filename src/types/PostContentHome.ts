@@ -1,17 +1,16 @@
 export type DeleteMode = "ASK" | "CONFIRM";
 
-export default interface PostCardProps {
-    id: number;
+export default interface PostContentHome {
     post_uuid: string;
-    uuid: string;
+    user_uuid: string;
     username: string;
-    heading: string;
-    body: string;
+    pfp: string;
+    content: { heading: string; body: string };
     heart_count: number;
-    hasHearted: boolean;
     posted_at: string;
-    isAdmin: boolean;
-    isOwner: boolean;
+    isAdmin: number | string | null | boolean;
+    isOwner: number | string | null | boolean;
+    hasHearted: boolean;
     onToggleHeart: (post_uuid: string, hasHearted: boolean) => void;
     onDelete: (post_uuid: string, type: DeleteMode) => Promise<void>;
 }
