@@ -24,7 +24,7 @@ export default function PostEdit() {
 
     useEffect(() => {
         if (!post_uuid || !session) return;
-
+        setLoading(true);
         const fetchPost = async () => {
             try {
                 const res = await fetch(`${getBaseUrl()}/post/${post_uuid}`);
@@ -68,7 +68,7 @@ export default function PostEdit() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!session) return;
-
+        setLoading(true);
         const content = {
             heading,
             body
@@ -91,6 +91,7 @@ export default function PostEdit() {
             router.push(`/post/${post_uuid}`);
         } else {
             console.error('Failed to edit post');
+            setLoading(false);
         }
     };
 
