@@ -21,8 +21,16 @@ export default function Navbar() {
     const fetchNotifications = useCallback(async (currentOffset: number) => {
         if (!session?.user?.uuid) return;
         try {
+            const userSessionToken = sessionStorage.getItem('userSession');
+            const { token } = JSON.parse(userSessionToken!);
             const response = await fetch(
-                `${getBaseUrl()}/notifications/heart?uuid=${session.user.uuid}&offset=${currentOffset}&limit=${limit}`
+                `${getBaseUrl()}/notifications/heart?uuid=${session.user.uuid}&offset=${currentOffset}&limit=${limit}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
             );
             const data = await response.json();
             setNotifications(prev => [...prev, ...(data.notifications || [])]);
@@ -247,12 +255,23 @@ export default function Navbar() {
                         />
                         {/* Button lists */}
                         <ul className="flex flex-col m-2 gap-2">
-                            {/* Home */}
-                            <Link href="/">
-                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
-                                    Home
-                                </li>
-                            </Link>
+                            {/* Home for Unlogged in users*/}
+                            {!session && (
+                                <Link href="/">
+                                    <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                        Home
+                                    </li>
+                                </Link>
+                            )}
+                            {/* Home: For Logged in users */}
+                            {session && (
+                                <Link href="/home">
+                                    <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                        Home
+                                    </li>
+                                </Link>
+                            )}
+
                             {/* Admin */}
                             {session?.user?.isAdmin === 1 && (
                                 <Link href="/admin">

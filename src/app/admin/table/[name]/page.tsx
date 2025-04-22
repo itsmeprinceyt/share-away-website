@@ -40,7 +40,14 @@ export default function TablePage() {
 
         const fetchTableData = async () => {
             try {
-                const res = await fetch(`${getBaseUrl()}/tables/${name}`);
+                const userSessionToken = sessionStorage.getItem('userSession');
+                const { token } = JSON.parse(userSessionToken!);
+                const res = await fetch(`${getBaseUrl()}/tables/${name}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
                 if (!res.ok) {
                     setIs404(true);
                 }
@@ -82,7 +89,7 @@ export default function TablePage() {
                 <div className="text-center max-[350px]:text-xl text-2xl
             font-extralight antialiased text-blue-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-blue-500">Data in table: {name}</div>
 
-{data.length > 0 ? (
+                {data.length > 0 ? (
                     <div className="w-full space-y-6">
                         {data.map((entry, entryIndex) => (
                             <ul
@@ -98,7 +105,7 @@ export default function TablePage() {
                                         <li key={i} className="mb-2">
                                             <div className="text-sm text-gray-800 break-words">
                                                 <strong className="text-blue-600">{key}:</strong>{' '}
-                                                
+
                                                 {/* Handle Show Full / Hide for long text like body */}
                                                 {key === 'body' ? (
                                                     <>

@@ -49,7 +49,14 @@ export default function PostCreate() {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch(`${getBaseUrl()}/user/search-users?method=${searchMethod}&query=${searchContent}`);
+            const userSessionToken = sessionStorage.getItem('userSession');
+            const { token } = JSON.parse(userSessionToken!);
+            const res = await fetch(`${getBaseUrl()}/user/search-users?method=${searchMethod}&query=${searchContent}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
             const data = await res.json();
             setResults(data);
             setHasSearched(true);

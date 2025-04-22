@@ -52,8 +52,14 @@ export default function Home() {
                 if (parsed?.user?.isAdmin === 1) {
                     setIsAdmin(true);
                 }
-
-                const res = await fetch(`${getBaseUrl()}/post/get-posts?viewer_uuid=${viewer_uuid}`);
+                const userSessionToken = sessionStorage.getItem('userSession');
+                const { token } = JSON.parse(userSessionToken!);
+                const res = await fetch(`${getBaseUrl()}/post/get-posts?viewer_uuid=${viewer_uuid}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
                 if (!res.ok) {
                     throw new Error(`Failed to fetch posts, status: ${res.status}`);
                 }
@@ -91,10 +97,11 @@ export default function Home() {
         const session = sessionStorage.getItem('userSession');
         if (!session) return;
 
-        const { user } = JSON.parse(session);
+        const { token, user } = JSON.parse(session);
         const res = await fetch(`${getBaseUrl()}/post/delete/${post_uuid}`, {
             method: 'DELETE',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -116,6 +123,8 @@ export default function Home() {
             return;
         }
         const method = currentHasHearted ? 'DELETE' : 'POST';
+        const userSessionToken = sessionStorage.getItem('userSession');
+        const { token } = JSON.parse(userSessionToken!);
         const url =
             method === 'POST'
                 ? `${getBaseUrl()}/heart`
@@ -124,7 +133,10 @@ export default function Home() {
         try {
             const res = await fetch(url, {
                 method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
                 ...(method === 'POST' && {
                     body: JSON.stringify({ uuid: session.user.uuid, post_uuid }),
                 }),

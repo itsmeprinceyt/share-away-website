@@ -146,13 +146,14 @@ export default function ProfilePage() {
         }
 
         const session = sessionStorage.getItem('userSession');
-        const { user } = JSON.parse(session!);
+        const { token, user } = JSON.parse(session!);
 
         try {
             const response = await fetch(`${getBaseUrl()}/edit/edit-password`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`,
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     uuid: user.uuid,
@@ -179,13 +180,14 @@ export default function ProfilePage() {
         setSuccess('');
 
         const session = sessionStorage.getItem('userSession');
-        const { user } = JSON.parse(session!);
+        const { token, user } = JSON.parse(session!);
 
         try {
             const response = await fetch(`${getBaseUrl()}/edit/edit-pfp`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`,
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     uuid: user.uuid,
@@ -213,8 +215,14 @@ export default function ProfilePage() {
 
     const handleDeleteAccount = async () => {
         try {
+            const userSessionToken = sessionStorage.getItem('userSession');
+            const { token } = JSON.parse(userSessionToken!);
             const res = await fetch(`${getBaseUrl()}/user/delete/${uuid}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
             });
 
             const data = await res.json();
@@ -239,8 +247,14 @@ export default function ProfilePage() {
 
     const handleBan = async () => {
         try {
+            const userSessionToken = sessionStorage.getItem('userSession');
+            const { token } = JSON.parse(userSessionToken!);
             const res = await fetch(`${getBaseUrl()}/user/ban/${uuid}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
             });
 
             const data = await res.json();
@@ -276,10 +290,11 @@ export default function ProfilePage() {
         const session = sessionStorage.getItem('userSession');
         if (!session) return;
 
-        const { user } = JSON.parse(session);
+        const { token,user } = JSON.parse(session);
         const res = await fetch(`${getBaseUrl()}/post/delete/${post_uuid}`, {
             method: 'DELETE',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -306,10 +321,15 @@ export default function ProfilePage() {
                 ? `${getBaseUrl()}/heart`
                 : `${getBaseUrl()}/heart?uuid=${session?.user.uuid}&post_uuid=${post_uuid}`;
 
+        const userSessionToken = sessionStorage.getItem('userSession');
+        const { token } = JSON.parse(userSessionToken!);
         try {
             const res = await fetch(url, {
                 method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
                 ...(method === 'POST' && {
                     body: JSON.stringify({ uuid: session?.user.uuid, post_uuid }),
                 }),
@@ -572,12 +592,12 @@ export default function ProfilePage() {
                                 </div>
                             </div>
                         )}
-                        
+
                         {/* Confirm Post Delete */}
                         {confirmDeletePost && postToDelete && (
                             <div className="mt-5 text-center flex flex-col gap-5">
                                 <p className="text-red-500 font-extralight text-shadow-md text-shadow-red-500/20">
-                                Are you sure you want to delete this post?</p>
+                                    Are you sure you want to delete this post?</p>
                                 <div className="flex gap-5 items-center justify-center">
                                     <button
                                         onClick={() => handlePostDelete(postToDelete, 'CONFIRM')}
@@ -587,7 +607,7 @@ export default function ProfilePage() {
                                         Yes, Delete
                                     </button>
                                     <button
-                                        onClick={()=>{
+                                        onClick={() => {
                                             handleResetPrompts();
                                             setSettingToggle(false);
                                         }}

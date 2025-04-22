@@ -39,8 +39,14 @@ export default function Admin() {
 
         setIsLoading(true);
         try {
+            const userSessionToken = sessionStorage.getItem('userSession');
+            const { token } = JSON.parse(userSessionToken!);
             const res = await fetch(`${getBaseUrl()}/user/revoke/${revokeEmail}`, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
             });
 
             const data = await res.json();

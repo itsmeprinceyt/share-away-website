@@ -38,7 +38,14 @@ export default function Admin() {
 
         const fetchTables = async () => {
             try {
-                const res = await fetch(`${getBaseUrl()}/tables`);
+                const userSessionToken = sessionStorage.getItem('userSession');
+                const { token } = JSON.parse(userSessionToken!);
+                const res = await fetch(`${getBaseUrl()}/tables`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
                 if (!res.ok) {
                     setIs404(true);
                 }

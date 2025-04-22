@@ -30,27 +30,28 @@ export default function Login() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    email: email,
-                    password: password,
+                    email,
+                    password,
                 }),
             });
+
             const data = await response.json();
-            const { uuid, message, ...userDetails } = data;
+
             if (response.ok) {
+                const { token, user } = data;
+
                 const expiryDate = new Date();
                 expiryDate.setDate(expiryDate.getDate() + 30);
 
                 const sessionData = {
-                    user: { uuid, ...userDetails },
-                    message,
+                    token,
+                    user,
                     expiry: expiryDate.toISOString(),
                 };
 
-                if (sessionData) {
-                    sessionStorage.setItem('userSession', JSON.stringify(sessionData));
-                    localStorage.setItem('userSession', JSON.stringify(sessionData));
-                    router.push(`/home`);
-                }
+                sessionStorage.setItem('userSession', JSON.stringify(sessionData));
+                localStorage.setItem('userSession', JSON.stringify(sessionData));
+                router.push(`/home`);
             } else {
                 setError(data.message || 'Login failed');
                 setLoading(false);

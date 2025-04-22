@@ -45,9 +45,12 @@ export default function PostCreate() {
             heading,
             body
         };
+        const userSessionToken = sessionStorage.getItem('userSession');
+        const { token } = JSON.parse(userSessionToken!);
         const res = await fetch(`${getBaseUrl()}/post/create`, {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({

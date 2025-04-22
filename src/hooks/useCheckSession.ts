@@ -52,8 +52,25 @@ export const useCheckSession = (requiredRole: Role = 'USER'): UserSession | null
                 return;
             }
 
+            const sessionDataToken = localStorage.getItem('userSession');
+
+            if (!sessionDataToken) {
+                if (!hasRedirected.current) {
+                    hasRedirected.current = true;
+                    router.push('/login');
+                }
+                return;
+            }
+            const parsed2 = JSON.parse(sessionDataToken);
+            const token = parsed2.token;
+
             try {
-                const res = await fetch(`${getBaseUrl()}/user/check/${user.uuid}`);
+                const res = await fetch(`${getBaseUrl()}/user/check/${user.uuid}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
                 if (!res.ok) {
                     sessionStorage.removeItem('userSession');
                     localStorage.removeItem('userSession');
