@@ -61,7 +61,6 @@ export default function PostCreate() {
 
         if (res.ok) {
             router.push(`/post/${generated_post_uuid}`);
-            setLoading(false);
         } else {
             setLoading(false);
             console.error('Failed to create post');
@@ -110,7 +109,7 @@ export default function PostCreate() {
                         type="submit"
                         className="bg-gradient-to-r from-pink-500 to-pink-400 text-white rounded-lg
                         w-[150px] max-[550px]:w-[200px] py-2 border border-pink-500 hover:scale-105
-                        transition-all duration-300 shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 font-extralight">
+                        transition-all duration-300 shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 font-extralight disabled:opacity-50">
                         Post
                     </button>
                 </form>
