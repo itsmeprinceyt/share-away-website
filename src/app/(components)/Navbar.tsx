@@ -145,8 +145,21 @@ export default function Navbar() {
                 {session && (
                     <>
                         {/* Post Button */}
+                        <Link href="/search">
+                            <button>
+                                <Image
+                                    className="w-[25px] h-[25px] mt-2 hover:scale-110 transition-all duration-300"
+                                    src={'/icons/search.png'}
+                                    alt="Post"
+                                    width={500}
+                                    height={500}
+                                />
+                            </button>
+                        </Link>
+
+                        {/* Post Button */}
                         <Link href="/post">
-                            <button className="hover:text-gray-400">
+                            <button>
                                 <Image
                                     className="w-[25px] h-[25px] mt-2 hover:scale-110 transition-all duration-300"
                                     src={'/icons/post-icon-new.png'}
@@ -263,6 +276,30 @@ export default function Navbar() {
                                     </Link>
                                 </>
                             )}
+                            {/* Terms & Conditions */}
+                            <Link href="/terms-and-conditions">
+                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                    T&C
+                                </li>
+                            </Link>
+                            {/* Contact Me Page */}
+                            <Link href="/contact">
+                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                    Contact
+                                </li>
+                            </Link>
+                            {/* Art Credits */}
+                            <Link href="/credits">
+                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                    Credits
+                                </li>
+                            </Link>
+                            {/* Redirects to Showcase */}
+                            <Link href="https://share-away-showcase.vercel.app/">
+                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
+                                    GitHub
+                                </li>
+                            </Link>
                             {/* Logout button if session exists */}
                             {session && (
                                 <li
@@ -272,30 +309,6 @@ export default function Navbar() {
                                     Logout
                                 </li>
                             )}
-
-                            <Link href="/terms-and-conditions">
-                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
-                                T&C
-                                </li>
-                            </Link>
-
-                            <Link href="/contact">
-                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
-                                Contact
-                                </li>
-                            </Link>
-
-                            <Link href="/credits">
-                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
-                                Credits
-                                </li>
-                            </Link>
-
-                            <Link href="https://share-away-showcase.vercel.app/">
-                                <li className=" hover:bg-pink-600/10 hover:border-l-[20px] border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all duration-300 hover:shadow-lg shadow-pink-500/20">
-                                GitHub
-                                </li>
-                            </Link>
 
                         </ul>
 

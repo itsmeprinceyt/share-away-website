@@ -283,17 +283,26 @@ export default function SignUp() {
                             />
                         </button>
                     </div>
-
-                    {/* Agree to Terms and condition container */}
-                    <div className="flex">
+                    
+                    {/* Agree to T&C Part */}
+                    <div className="flex items-center gap-2">
                         <input
+                            id="terms"
                             type="checkbox"
                             checked={isChecked}
                             onChange={handleCheckboxChange}
-                            className="mr-2"
+                            className="w-4 h-4 accent-purple-500 
+                            rounded transition"
                         />
                         <label htmlFor="terms" className="text-sm max-[550px]:text-[12px]">
-                            I agree to the <Link href="/terms-and-conditions" target="_blank" className="text-purple-500 underline">Terms and Conditions</Link>
+                            I agree to the{' '}
+                            <Link
+                                href="/terms-and-conditions"
+                                target="_blank"
+                                className="text-purple-500 underline"
+                            >
+                                Terms and Conditions
+                            </Link>
                         </label>
                     </div>
 
