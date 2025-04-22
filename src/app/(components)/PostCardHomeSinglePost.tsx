@@ -4,6 +4,7 @@ import Link from 'next/link';
 import PostContentHome from '../../types/PostContentHome';
 import formatHeartCount from '../../utils/formatHeartCount';
 import { useState, useEffect, useRef } from 'react';
+import { useCheckSession } from '../../hooks/useCheckSession';
 
 const PostCardHomeSinglePost = ({
     post_uuid,
@@ -21,6 +22,7 @@ const PostCardHomeSinglePost = ({
 }: PostContentHome) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const session = useCheckSession();
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -47,7 +49,7 @@ const PostCardHomeSinglePost = ({
                                 View
                             </li>
                         </Link>
-                        {(isAdmin || isOwner) && (
+                        {(isAdmin || isOwner) && session && (
                             <>
                                 <Link href={`/post/edit/${post_uuid}`}>
                                     <li className=" hover:bg-orange-600/10 hover:border-l-[20px]

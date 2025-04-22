@@ -427,7 +427,7 @@ export default function ProfilePage() {
                         {/* Password edit */}
                         {(passWordEdit) && (
                             <div className="text-center text-purple-500 font-extralight text-shadow-md text-shadow-pink-500/20 flex flex-col gap-4">
-                                <h1 className="text-xl ">Edit Profile</h1>
+                                <h1 className="text-xl ">Edit Password</h1>
                                 <form onSubmit={handleEditPassword} className="space-y-4">
                                     <input
                                         type="password"

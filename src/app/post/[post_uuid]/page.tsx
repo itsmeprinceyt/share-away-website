@@ -122,7 +122,7 @@ export default function Post() {
 
             if (res.ok) {
                 setPostData(prev => {
-                    if (!prev) return prev; // If there's no previous data, just return null (or previous state)
+                    if (!prev) return prev;
                 
                     if (prev.post_uuid === post_uuid) {
                         return {
@@ -134,7 +134,7 @@ export default function Post() {
                         };
                     }
                 
-                    return prev; // Return the unchanged post if it's not the one you're updating
+                    return prev;
                 });
                 
             } else {
