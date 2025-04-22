@@ -111,7 +111,7 @@ export default function Home() {
         });
 
         if (res.ok) {
-            router.push(`/profile`);
+            window.location.replace('/home');
         } else {
             console.error('❌ Failed to delete post');
         }

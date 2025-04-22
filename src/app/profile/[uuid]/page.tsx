@@ -209,7 +209,7 @@ export default function ProfilePage() {
                 setError('Something went wrong');
             }
         } finally {
-            router.push(`/profile`);
+            window.location.replace(`/profile/${uuid}`);
         }
     };
 
@@ -269,6 +269,8 @@ export default function ProfilePage() {
             } else {
                 setError('Something went wrong');
             }
+        } finally {
+            router.push('/');
         }
     };
 
@@ -304,7 +306,7 @@ export default function ProfilePage() {
         });
 
         if (res.ok) {
-            router.push(`/profile`);
+            window.location.replace(`/profile/${uuid}`);
         } else {
             console.error('❌ Failed to delete post');
         }

@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import Navbar from '../(components)/Navbar';
 import { useCheckSession } from '../../hooks/useCheckSession';
 import getBaseUrl from '../../utils/getBaseUrl';
-import Loading from '../(components)/Loading';
 import PageWrapperNormal_Top from '../(components)/PageWrapperNormalTop';
 import { SearchUser } from '../../types/SearchUser';
 import Link from 'next/link';
@@ -67,8 +66,6 @@ export default function PostCreate() {
         }
     };
 
-    if (loading) return <Loading />;
-
     return (
         <PageWrapperNormal_Top>
             <Navbar />
@@ -121,7 +118,7 @@ export default function PostCreate() {
                         type="submit"
                         className="bg-gradient-to-r from-pink-500 to-pink-400 text-white rounded-lg
                         w-[150px] max-[550px]:w-[200px] py-2 border border-pink-500 hover:scale-105
-                        transition-all duration-300 shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 font-extralight">
+                        transition-all duration-300 shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 font-extralight disabled:opacity-50">
                         Search
                     </button>
                 </form>
