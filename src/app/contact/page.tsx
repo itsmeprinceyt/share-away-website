@@ -4,7 +4,7 @@ import Navbar from '../(components)/Navbar';
 import PageWrapperNormal from '../(components)/PageWrapperNormal';
 import Link from 'next/link';
 
-const TermsAndConditions = () => {
+const ContactMe = () => {
     return (
         <PageWrapperNormal>
             <Navbar />
@@ -95,4 +95,4 @@ const TermsAndConditions = () => {
     );
 };
 
-export default TermsAndConditions;
+export default ContactMe;

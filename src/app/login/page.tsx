@@ -117,22 +117,27 @@ export default function Login() {
                         />
                     </div>
                     {/* Button container */}
-                    <div className="flex justify-center items-center gap-5 max-[550px]:gap-2">
-                        <button
-                            onClick={handleLogin}
-                            className="bg-gradient-to-r from-pink-500 to-pink-400 text-white rounded-lg w-[150px] max-[550px]:w-[100px]
-                        py-2 border border-pink-500 hover:scale-105 transition-all duration-300 shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 font-extralight">
-                            Login
-                        </button>
-
-                        <Link href="/sign-up">
+                    <div className="flex flex-col justify-center items-center gap-5 max-[550px]:gap-2">
+                        <div className="flex justify-center items-center gap-5 max-[550px]:gap-2">
                             <button
-                                className="bg-gradient-to-r from-purple-500
+                                onClick={handleLogin}
+                                className="bg-gradient-to-r from-pink-500 to-pink-400 text-white rounded-lg w-[150px] max-[550px]:w-[100px]
+                        py-2 border border-pink-500 hover:scale-105 transition-all duration-300 shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 font-extralight">
+                                Login
+                            </button>
+
+                            <Link href="/sign-up">
+                                <button
+                                    className="bg-gradient-to-r from-purple-500
                         to-purple-400 text-white rounded-lg w-[150px]
                         max-[550px]:w-[100px] py-2 border border-purple-500
                         hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 font-extralight">
-                                Sign Up
-                            </button>
+                                    Sign Up
+                                </button>
+                            </Link>
+                        </div>
+                        <Link href="/forgot-password" className="text-red-500 text-clip font-extralight p-2 rounded text-center max-[550px]:text-xs w-[400px] max-[550px]:w-[250px] hover:underline hover:scale-105 transition-all duration-300">
+                            Forgot Password?
                         </Link>
                     </div>
                     {/* Error container */}
@@ -142,6 +147,7 @@ export default function Login() {
                         </div>
                     )}
                 </div>
+
 
             </div>
             {/* Background glow */}
