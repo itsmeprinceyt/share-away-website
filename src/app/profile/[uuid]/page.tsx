@@ -160,13 +160,9 @@ export default function ProfilePage() {
         e.preventDefault();
         setError('');
         setSuccess('');
-        if (form.currentPassword != form.confirmPassword) {
-            setError('Password do not match');
-            return;
-        }
 
         const session = sessionStorage.getItem('userSession');
-        const { token, user } = JSON.parse(session!);
+        const { token } = JSON.parse(session!);
 
         try {
             const response = await fetch(`${getBaseUrl()}/edit/edit-password`, {
@@ -176,15 +172,19 @@ export default function ProfilePage() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    uuid: user.uuid,
+                    uuid: uuid,
                     currentPassword: form.currentPassword, // Current password
                     confirmPassword: form.confirmPassword, // New Password
                 }),
             });
             const data = await response.json();
 
-            if (response.ok) setSuccess(data.message);
-            else setError(data.message || 'Failed to update password');
+            if (response.ok) {
+                setSuccess(data.message);
+                router.push('/profile');
+            } else {
+                setError(data.message || 'Failed to update password');
+            }
         } catch (err: unknown) {
             if (err instanceof Error) {
                 setError(err.message || 'Something went wrong');
@@ -210,7 +210,7 @@ export default function ProfilePage() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    uuid: user.uuid,
+                    uuid: uuid,
                     pfp: isRemove ? defaultProfilePic : form.pfp,
                 }),
             });
@@ -218,7 +218,9 @@ export default function ProfilePage() {
 
             if (response.ok) {
                 setSuccess(data.message)
-                updateUserSession({ pfp: isRemove ? defaultProfilePic : form.pfp });
+                if (uuid === user.uuid) {
+                    updateUserSession({ pfp: isRemove ? defaultProfilePic : form.pfp });
+                }
                 router.refresh();
             }
             else setError(data.message || 'Failed to update profile picture');
@@ -229,7 +231,7 @@ export default function ProfilePage() {
                 setError('Something went wrong');
             }
         } finally {
-            window.location.replace(`/profile/${uuid}`);
+            router.push(`/profile`);
         }
     };
 
@@ -326,7 +328,7 @@ export default function ProfilePage() {
         });
 
         if (res.ok) {
-            window.location.replace(`/profile/${uuid}`);
+            router.push(`/profile`);
         } else {
             console.error('❌ Failed to delete post');
         }
