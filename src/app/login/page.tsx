@@ -24,13 +24,14 @@ export default function Login() {
         setError('');
         setLoading(true);
         try {
+            const loginCredential = email;
             const response = await fetch(`${getBaseUrl()}/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    email,
+                    loginCredential,
                     password,
                 }),
             });
@@ -98,7 +99,7 @@ export default function Login() {
                     <div className="flex flex-col justify-center items-center">
                         <input
                             type="email"
-                            placeholder="Enter your email"
+                            placeholder="Enter Username or Email"
                             className="bg-white border border-white focus:border-pink-500 focus:outline-none text-pink-500 p-2 rounded-lg mb-4 max-[350px]:mb-2
                             w-[400px] max-[550px]:w-[250px] font-extralight"
                             value={email}

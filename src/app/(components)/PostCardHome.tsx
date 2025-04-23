@@ -4,6 +4,10 @@ import Link from 'next/link';
 import PostContentHome from '../../types/PostContentHome';
 import formatHeartCount from '../../utils/formatHeartCount';
 import { useState, useEffect, useRef } from 'react';
+import LinkifyText from '../../utils/linkifyText';
+import copyToClipboard from '../../utils/copyToClipboard';
+import { useToast } from '../../hooks/useToast';
+import { CopyType } from '../../types/CopyType';
 
 const PostCardHome = ({
     post_uuid,
@@ -21,6 +25,8 @@ const PostCardHome = ({
 }: PostContentHome) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const { showToast, Toast } = useToast();
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -33,10 +39,19 @@ const PostCardHome = ({
         };
     }, []);
 
+    const handleCopy = async (type: CopyType, uuid: string) => {
+        const success = await copyToClipboard({ type, uuid });
+        if (success) {
+            showToast("Copied to clipboard", 2000);
+        } else {
+            showToast('Failed to copy URL!', 2000);
+        }
+    };
+
     return (
         <div className="bg-pink-50 border border-pink-200 p-4 rounded-xl
         flex flex-col justify-center gap-5 relative shadow-xl shadow-pink-500/20" ref={menuRef}>
-
+            <Toast />
             {menuOpen && (
                 <div className="z-10 absolute top-12 right-6 mt-2 w-[120px]
                 bg-white border border-pink-200 rounded-lg shadow-xl">
@@ -47,6 +62,17 @@ const PostCardHome = ({
                                 View
                             </li>
                         </Link>
+                        <li
+                            onClick={() => {
+                                handleCopy('post', post_uuid);
+                                setMenuOpen(false);
+                            }}
+                            className="cursor-pointer hover:bg-pink-600/10 hover:border-l-[20px]
+                            border-l-pink-600 hover:font-semibold p-1 px-2 rounded transition-all
+                            duration-300 hover:shadow-lg shadow-pink-500/20 text-pink-500"
+                        >
+                            Share
+                        </li>
                         {(isAdmin || isOwner) && (
                             <>
                                 <Link href={`/post/edit/${post_uuid}`}>
@@ -79,8 +105,7 @@ const PostCardHome = ({
                         alt="Post owner pfp"
                     />
                     <div>
-                        <div>{content.heading}</div>
-
+                        <LinkifyText text={content.heading} />
                         <div className="flex items-center gap-2">
                             <p className="text-xs text-gray-500 font-extralight">
                                 {new Date(posted_at).toLocaleString()}
@@ -104,7 +129,7 @@ const PostCardHome = ({
 
             <p className="whitespace-pre-line font-extralight
             overflow-y-auto max-h-[500px] px-2 py-1  border border-r-0 border-pink-100
-            rounded-tl-lg rounded-bl-lg rounded-tr-md rounded-br-md">{content.body}</p>
+            rounded-tl-lg rounded-bl-lg rounded-tr-md rounded-br-md"><LinkifyText text={content.body} /></p>
 
 
             <div className="flex items-start justify-start gap-5">
