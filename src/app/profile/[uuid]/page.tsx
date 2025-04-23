@@ -486,7 +486,7 @@ export default function ProfilePage() {
                                     <input
                                         type="password"
                                         name="confirmPassword"
-                                        placeholder="Confirm New Password"
+                                        placeholder="New Password"
                                         className="w-full border p-2 rounded"
                                         value={form.confirmPassword}
                                         onChange={handleChange}
@@ -502,7 +502,7 @@ export default function ProfilePage() {
                                         text-white rounded-lg w-full py-2 border border-purple-500
                                         hover:scale-105 transition-all duration-300 shadow-xl
                                         shadow-purple-500/30 hover:shadow-purple-500/50 font-extralight">
-                                        Save Changes
+                                        Change Password
                                     </button>
                                 </form>
                             </div>
