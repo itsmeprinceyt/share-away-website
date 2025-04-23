@@ -33,7 +33,7 @@ const TermsAndConditions = () => {
 
                     <h3 className="font-semibold text-lg">1. Acceptance of Terms</h3>
                     <p>
-                        By using shareAway, you agree to these Terms and Conditions. If you do not agree with any part of the terms, please do not use the platform.
+                        By using Share Away, you agree to these Terms and Conditions. If you do not agree with any part of the terms, please do not use the platform.
                     </p>
 
                     <h3 className="font-semibold text-lg">2. User Responsibilities</h3>
@@ -70,7 +70,7 @@ const TermsAndConditions = () => {
 
                     <h3 className="font-semibold text-lg">7. Intellectual Property</h3>
                     <p>
-                        All content on shareAway, including but not limited to text, images, logos, and design, is the property of shareAway or its content creators and is protected by copyright laws. You may not use or reproduce any content without proper permission.
+                        All content on Share Away, is the property of Share Away or its content creators and is protected by copyright laws. You may not use or reproduce any content without proper permission.
                     </p>
 
                     <h3 className="font-semibold text-lg">8. Changes to Terms</h3>
@@ -80,7 +80,7 @@ const TermsAndConditions = () => {
 
                     <h3 className="font-semibold text-lg">9. Limitation of Liability</h3>
                     <p>
-                        shareAway is not responsible for any content posted by users or for any direct or indirect damages resulting from the use of the platform. Use of the platform is at your own risk.
+                        Share Away is not responsible for any content posted by users or for any direct or indirect damages resulting from the use of the platform. Use of the platform is at your own risk.
                     </p>
 
                     <h3 className="font-semibold text-lg">10. Contact Us</h3>
