@@ -33,7 +33,7 @@ export default function Admin() {
 
     const handlePasswordReset = async () => {
         if (!username) {
-            setResponseMessage("Please enter a username.");
+            setResponseMessage("Please enter an username.");
             return;
         }
 

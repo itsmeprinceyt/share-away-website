@@ -87,7 +87,7 @@ export default function TablePage() {
                 </Link>
 
                 <div className="text-center max-[350px]:text-xl text-2xl
-            font-extralight antialiased text-blue-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-blue-500">Data in table: {name}</div>
+            font-extralight antialiased text-blue-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-blue-500">Data: <span className="text-white bg-purple-500 rounded-md px-3">{data.length}</span> in table: <span className="text-white bg-purple-500 rounded-md px-3">{name}</span></div>
 
                 {data.length > 0 ? (
                     <div className="w-full space-y-6">
