@@ -3,6 +3,7 @@ import "./globals.css";
 import { Suspense } from "react";
 import Loading from './(components)/Loading';
 import AudioPlayer from './(components)/AudioPlayer';
+import Footer from './(components)/Footer';
 
 export const metadata: Metadata = {
   title: "ShareAway by ItsMe Prince",
@@ -36,6 +37,7 @@ export default function RootLayout({
         <Suspense fallback={<Loading />}>
           <AudioPlayer />
           {children}
+          <Footer/>
         </Suspense>
       </body>
     </html>
