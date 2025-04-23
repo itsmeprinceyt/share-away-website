@@ -88,6 +88,14 @@ export default function Admin() {
                             Revoke ban!
                         </button>
                     </Link>
+                    <Link
+                        href="/admin/reset">
+                        <button
+                            className="bg-gradient-to-r from-red-500 to-red-400
+                    text-white rounded-2xl w-[150px] h-[60px] py-2 border border-red-500 hover:scale-105 transition-all duration-300 shadow-xl shadow-red-500/30 hover:shadow-red-500/50 font-extralight">
+                            Reset Password
+                        </button>
+                    </Link>
                 </div>
                 <div className="text-center max-[350px]:text-xl text-2xl
             font-extralight antialiased text-blue-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-blue-500">Database Tables: {tables.length}</div>
