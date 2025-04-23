@@ -51,66 +51,54 @@ export default function SignUp() {
         }
     }, [router]);
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        if (file.size > 150 * 1024) {
-            setError("Please upload an image that is 150KB or smaller");
-            return;
-        }
-
+    
         const img = new window.Image();
         const reader = new FileReader();
-        reader.onload = (event) => {
-            const base64 = event.target?.result as string;
-
-            if (!base64) {
-                setError("Failed to read image.");
-                return;
-            }
-
-            img.src = base64;
+    
+        reader.onload = function (event) {
+            if (!event.target?.result) return;
+    
             img.onload = () => {
-                if (img.width !== img.height) {
-                    setError("Image must be square (1:1 aspect ratio)");
-                    return;
-                }
-
                 const maxSize = 128;
-                const scale = Math.min(maxSize / img.width, maxSize / img.height);
-                const canvasWidth = img.width * scale;
-                const canvasHeight = img.height * scale;
-
                 const canvas = document.createElement('canvas');
-                canvas.width = canvasWidth;
-                canvas.height = canvasHeight;
-
+                canvas.width = maxSize;
+                canvas.height = maxSize;
+    
                 const ctx = canvas.getContext('2d');
-                if (!ctx) {
-                    return;
+                if (!ctx) return;
+    
+                let sx = 0, sy = 0, sWidth = img.width, sHeight = img.height;
+    
+                if (img.width > img.height) {
+                    sx = (img.width - img.height) / 2;
+                    sWidth = img.height;
+                } else if (img.height > img.width) {
+                    sy = (img.height - img.width) / 2;
+                    sHeight = img.width;
                 }
-
-                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                
+                ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, maxSize, maxSize);
+    
                 const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-
                 const base64Length = compressedBase64.length - 'data:image/jpeg;base64,'.length;
                 const estimatedSize = (base64Length * 3) / 4;
-
+    
                 if (estimatedSize > 150 * 1024) {
                     setError("Compressed image still exceeds 150KB. Please choose a smaller image.");
                     return;
                 }
-
+    
                 setPreview(compressedBase64);
-                setForm(prev => ({ ...prev, profilePic: compressedBase64 }));
+                setForm(prev => ({ ...prev, pfp: compressedBase64 }));
                 setError('');
             };
+    
+            img.src = event.target.result as string;
         };
-
-        reader.onerror = () => {
-            setError("Failed to read the file.");
-        };
-
+    
         reader.readAsDataURL(file);
     };
 

@@ -108,33 +108,39 @@ export default function PostEdit() {
                     <div className="text-center max-[550px]:text-3xl
                     max-[350px]:text-xl text-4xl font-extralight antialiased text-pink-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-pink-500">Edit Post</div>
 
-                    {/* Heading input (like a tweet title) */}
-                    <input
-                        type="text"
-                        value={heading}
-                        onChange={(e) => setHeading(e.target.value)}
-                        required
-                        className="bg-white border border-white font-semibold
+                    {/* Title input */}
+                    <div className="relative">
+                        <input
+                            type="text"
+                            value={heading}
+                            onChange={(e) => setHeading(e.target.value)}
+                            required
+                            className="bg-white border border-white font-semibold
                         focus:border-pink-500 focus:outline-none text-pink-500 p-2
                         rounded-lg mb-4 max-[350px]:mb-2 w-[400px] max-[550px]:w-full"
-                    />
+                        />
+                        <p className="absolute bottom-0 left-2 text-[8px] text-gray-500 text-right pointer-events-none">{heading.length} / 100</p>
+                    </div>
 
-                    {/* Body input (like tweet body / textarea) */}
-                    <textarea
-                        ref={textareaRef}
-                        placeholder="Write something..."
-                        value={body}
-                        onChange={(e) => setBody(e.target.value)}
-                        required
-                        className="bg-white border border-white border-r-0 focus:border-pink-500 focus:outline-none
+                    {/* Body input */}
+                    <div className="relative">
+                        <textarea
+                            ref={textareaRef}
+                            placeholder="Write something..."
+                            value={body}
+                            onChange={(e) => setBody(e.target.value)}
+                            required
+                            className="bg-white border border-white border-r-0 focus:border-pink-500 focus:outline-none
                         text-pink-500 p-2 rounded-lg mb-4 max-[350px]:mb-2 w-[400px] max-[550px]:w-full
                         font-extralight resize-none overflow-y-auto"
-                        style={{
-                            minHeight: '50px',
-                            maxHeight: '50vh',
-                            overflowY: 'auto',
-                        }}
-                    />
+                            style={{
+                                minHeight: '50px',
+                                maxHeight: '50vh',
+                                overflowY: 'auto',
+                            }}
+                        />
+                        <p className="absolute bottom-2 left-2 text-[8px] text-gray-500 text-right pointer-events-none">{body.length} / 5000</p>
+                    </div>
 
                     <button
                         disabled={loading}

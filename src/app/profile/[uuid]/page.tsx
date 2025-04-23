@@ -13,6 +13,9 @@ import Navbar from '../../(components)/Navbar';
 import defaultProfilePic from '../../../utils/defaultAvatar';
 import PostCard from '../../(components)/PostCard';
 import PageWrapperNormalTop from '../../(components)/PageWrapperNormalTop';
+import copyToClipboard from '../../../utils/copyToClipboard';
+import { useToast } from '../../../hooks/useToast';
+import { CopyType } from '../../../types/CopyType';
 
 /**
  * @description             - This page is used to display the profile of a user.
@@ -56,6 +59,7 @@ export default function ProfilePage() {
     {/* Loaders and 404 Pages */ }
     const [loading, setLoading] = useState(true);
     const [is404, setIs404] = useState(false);
+    const { showToast, Toast } = useToast();
 
     const session = useCheckSession();
 
@@ -90,9 +94,19 @@ export default function ProfilePage() {
     if (loading) return <Loading />;
     if (is404) return <NotFound />;
 
+    const handleCopy = async (type: CopyType, uuid: string) => {
+        const success = await copyToClipboard({ type, uuid });
+        if (success) {
+            showToast("Copied to clipboard", 2000);
+        } else {
+            showToast('Failed to copy URL!', 2000);
+        }
+    };
+
     const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
+
         const img = new window.Image();
         const reader = new FileReader();
 
@@ -100,24 +114,27 @@ export default function ProfilePage() {
             if (!event.target?.result) return;
 
             img.onload = () => {
-                if (img.width !== img.height) {
-                    setError("Image must be square (1:1 aspect ratio).");
-                    return;
-                }
-
-                const canvas = document.createElement('canvas');
                 const maxSize = 128;
+                const canvas = document.createElement('canvas');
                 canvas.width = maxSize;
                 canvas.height = maxSize;
 
                 const ctx = canvas.getContext('2d');
-                if (!ctx) {
-                    return;
+                if (!ctx) return;
+
+                let sx = 0, sy = 0, sWidth = img.width, sHeight = img.height;
+
+                if (img.width > img.height) {
+                    sx = (img.width - img.height) / 2;
+                    sWidth = img.height;
+                } else if (img.height > img.width) {
+                    sy = (img.height - img.width) / 2;
+                    sHeight = img.width;
                 }
 
-                ctx.drawImage(img, 0, 0, maxSize, maxSize);
-                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, maxSize, maxSize);
 
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
                 const base64Length = compressedBase64.length - 'data:image/jpeg;base64,'.length;
                 const estimatedSize = (base64Length * 3) / 4;
 
@@ -131,10 +148,13 @@ export default function ProfilePage() {
                 setIsNewImageSelected(true);
                 setError('');
             };
+
             img.src = event.target.result as string;
         };
+
         reader.readAsDataURL(file);
     };
+
 
     const handleEditPassword = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -292,7 +312,7 @@ export default function ProfilePage() {
         const session = sessionStorage.getItem('userSession');
         if (!session) return;
 
-        const { token,user } = JSON.parse(session);
+        const { token, user } = JSON.parse(session);
         const res = await fetch(`${getBaseUrl()}/post/delete/${post_uuid}`, {
             method: 'DELETE',
             headers: {
@@ -416,6 +436,7 @@ export default function ProfilePage() {
     return (
         <PageWrapperNormalTop>
             <Navbar />
+            <Toast />
             {/* Setting Dialogue Open */}
             {settingToggleDialogue && (
                 <div className="z-50 fixed top-0 left-0 right-0 bottom-0 bg-black/80 flex justify-center items-center">
@@ -733,23 +754,30 @@ export default function ProfilePage() {
                         {/* Profile Meta Data */}
                         <div className="flex flex-col gap-1">
                             {/* Name & Verification Status */}
-                            <div className="flex justify-start items-center gap-2 text-shadow-black/20 text-shadow-md text-2xl font-semibold">
+                            <div className="flex justify-start items-center
+                            gap-1 text-shadow-black/20 text-shadow-md text-2xl font-semibold">
                                 {/* Username */}
                                 <Link href={`/profile/${uuid}`}>
                                     @{profileDetails!.username}
                                 </Link>
                                 {/* Verification badge status */}
-                                <div className="flex justify-center items-center bg-white
-                                rounded-full h-[20px] w-[20px] text-xs shadow-black/20
-                                shadow-xl hover:scale-150 transition-all duration-300">
+                                <div className="flex justify-center items-center h-[30px] w-[30px] hover:scale-150 transition-all duration-300">
                                     {profileDetails!.isVerified ?
-                                        <span className="pb-1 pointer-events-none text-shadow-purple-500 text-shadow-md/30">
-                                            ✔️
-                                        </span>
+                                        <Image
+                                            className="z-2 mt-1 p-1 drop-shadow-[0_4px_6px_rgba(0,255,0,0.5)]"
+                                            src={'/icons/verified.png'}
+                                            height={500}
+                                            width={500}
+                                            alt="verified-logo"
+                                        />
                                         :
-                                        <span className="pointer-events-none text-shadow-red-500 text-shadow-md/30 text-[10px]">
-                                            ❌
-                                        </span>
+                                        <Image
+                                            className="z-2 mt-1 p-1 drop-shadow-[0_4px_6px_rgba(255,0,0,0.5)]"
+                                            src={'/icons/unverified.png'}
+                                            height={500}
+                                            width={500}
+                                            alt="verified-logo"
+                                        />
                                     }
                                 </div>
                             </div>
@@ -765,26 +793,63 @@ export default function ProfilePage() {
 
                     </div>
 
-                    {/* Setting Menu */}
-                    {(isOwner || isAdmin) && (
+                    {/* Right side */}
+                    <div className="flex gap-2">
+                        <div className="w-[18px] relative group min-[480px]:hidden">
+                            <div className="z-5 absolute top-10 right-0 bg-white px-2 py-1
+                            rounded-md shadow-xl text-xs text-nowrap shadow-pink-500/20
+                            border border-pink-300
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                Share Profile
+                            </div>
+                            <button onClick={() => handleCopy('profile', uuid)}>
+                                <Image
+                                    className="absolute top-2 z-2 drop-shadow-[0_4px_6px_rgba(236,72,153,0.5)]"
+                                    src={'/icons/share.png'}
+                                    width={500}
+                                    height={500}
+                                    alt="Settings"
+                                />
+                            </button>
+                        </div>
                         <div className="w-[18px] relative group max-[480px]:hidden">
                             <div className="z-5 absolute top-5 right-0 bg-white px-2 py-1
                             rounded-md shadow-xl text-xs text-nowrap shadow-pink-500/20
                             border border-pink-300
                             opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                Edit Profile
+                                Share Profile
                             </div>
-                            <button onClick={handleSettings}>
+                            <button onClick={() => handleCopy('profile', uuid)}>
                                 <Image
                                     className="z-2 drop-shadow-[0_4px_6px_rgba(236,72,153,0.5)]"
-                                    src={'/icons/setting.png'}
-                                    width={50}
-                                    height={50}
+                                    src={'/icons/share.png'}
+                                    width={500}
+                                    height={500}
                                     alt="Settings"
                                 />
                             </button>
                         </div>
-                    )}
+                        {(isOwner || isAdmin) && (
+                            <div className="w-[18px] relative group max-[480px]:hidden">
+                                <div className="z-5 absolute top-5 right-0 bg-white px-2 py-1
+                            rounded-md shadow-xl text-xs text-nowrap shadow-pink-500/20
+                            border border-pink-300
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    Edit Profile
+                                </div>
+                                <button onClick={handleSettings}>
+                                    <Image
+                                        className="z-2 drop-shadow-[0_4px_6px_rgba(236,72,153,0.5)]"
+                                        src={'/icons/setting.png'}
+                                        width={500}
+                                        height={500}
+                                        alt="Settings"
+                                    />
+                                </button>
+                            </div>
+                        )}
+
+                    </div>
 
                 </div>
 

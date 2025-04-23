@@ -12,7 +12,7 @@ export default function PostCreate() {
     const [heading, setHeading] = useState('');
     const [body, setBody] = useState('');
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
+    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const session = useCheckSession();
 
@@ -66,7 +66,8 @@ export default function PostCreate() {
             router.push(`/post/${generated_post_uuid}`);
         } else {
             setLoading(false);
-            console.error('Failed to create post');
+            const errorData = await res.json();
+            setError(errorData.message || 'Something went wrong!');
         }
     };
 
@@ -80,32 +81,42 @@ export default function PostCreate() {
                 <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center gap-5">
                     <div className="text-center max-[550px]:text-3xl
                     max-[350px]:text-xl text-4xl font-extralight antialiased text-pink-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-pink-500">Create Post</div>
-                    <input
-                        type="text"
-                        placeholder="Title"
-                        value={heading}
-                        onChange={(e) => setHeading(e.target.value)}
-                        required
-                        className="bg-white border border-white font-semibold
+                    {/* Title input */}
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder="Title"
+                            value={heading}
+                            maxLength={100}
+                            onChange={(e) => setHeading(e.target.value)}
+                            required
+                            className="bg-white border border-white font-semibold
                         focus:border-pink-500 focus:outline-none text-pink-500 p-2
                         rounded-lg mb-4 max-[350px]:mb-2 w-[400px] max-[550px]:w-full"
-                    />
+                        />
+                        <p className="absolute bottom-0 left-2 text-[8px] text-gray-500 text-right pointer-events-none">{heading.length} / 100</p>
+                    </div>
 
-                    <textarea
-                        ref={textareaRef}
-                        placeholder="Write something..."
-                        value={body}
-                        onChange={(e) => setBody(e.target.value)}
-                        required
-                        className="bg-white border border-white border-r-0 focus:border-pink-500 focus:outline-none
+                    {/* Body input */}
+                    <div className="relative">
+                        <textarea
+                            ref={textareaRef}
+                            placeholder="Write something..."
+                            value={body}
+                            maxLength={5000}
+                            onChange={(e) => setBody(e.target.value)}
+                            required
+                            className="bg-white border border-white border-r-0 focus:border-pink-500 focus:outline-none
                         text-pink-500 p-2 rounded-lg mb-4 max-[350px]:mb-2 w-[400px] max-[550px]:w-full
                         font-extralight resize-none overflow-y-auto"
-                        style={{
-                            minHeight: '50px',
-                            maxHeight: '50vh',
-                            overflowY: 'auto',
-                        }}
-                    />
+                            style={{
+                                minHeight: '50px',
+                                maxHeight: '50vh',
+                                overflowY: 'auto',
+                            }}
+                        />
+                        <p className="absolute bottom-2 left-2 text-[8px] text-gray-500 text-right pointer-events-none">{body.length} / 5000</p>
+                    </div>
 
                     <button
                         disabled={loading}
@@ -116,6 +127,7 @@ export default function PostCreate() {
                         Post
                     </button>
                 </form>
+                {error && <p className="text-red-500 font-extralight text-xs text-center">Oops! {error}</p>}
             </div>
         </PageWrapperNormal_Top>
     );
