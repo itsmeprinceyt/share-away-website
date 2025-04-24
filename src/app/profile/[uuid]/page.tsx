@@ -565,7 +565,7 @@ export default function ProfilePage() {
                                         </button>
                                     </div>
                                 </form>
-                                
+
                             </div>
                         )}
                         {/* Confirm delete account */}
