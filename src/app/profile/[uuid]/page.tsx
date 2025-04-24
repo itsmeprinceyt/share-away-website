@@ -39,7 +39,7 @@ export default function ProfilePage() {
         pfp: defaultProfilePic,
     });
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [preview, setPreview] = useState<string | null>(defaultProfilePic);
+    const [preview, setPreview] = useState<string | null>('');
 
     {/* Logging */ }
     const [error, setError] = useState('');
@@ -53,6 +53,7 @@ export default function ProfilePage() {
     const [confirmBan, setConfirmBan] = useState(false);
     const [confirmDeletePost, setConfirmDeletePost] = useState(false);
     const [postToDelete, setPostToDelete] = useState<string | null>(null);
+    const [viewEmail, setViewEmail] = useState(false);
     const [settingToggle, setSettingToggle] = useState(false);
     const [settingToggleDialogue, setSettingToggleDialogue] = useState(false);
 
@@ -400,6 +401,11 @@ export default function ProfilePage() {
         setSettingToggleDialogue(!settingToggleDialogue);
     }
 
+    const handleViewEmail = () => {
+        setViewEmail(!viewEmail);
+        setSettingToggleDialogue(!settingToggleDialogue);
+        setSettingToggle(!settingToggle);
+    }
     const handlePasswordChange = () => {
         setPasswordEdit(!passWordEdit);
         setSettingToggleDialogue(!settingToggleDialogue);
@@ -413,6 +419,7 @@ export default function ProfilePage() {
     }
 
     const handleResetPrompts = () => {
+        setViewEmail(false);
         setPasswordEdit(false);
         setPfpChange(false);
         setConfirmDelete(false);
@@ -469,6 +476,23 @@ export default function ProfilePage() {
                             />
                         </button>
 
+                        {/* View Email */}
+                        {(viewEmail) && (
+                            <div className="text-center text-purple-500 font-extralight text-shadow-md text-shadow-pink-500/20 flex flex-col gap-4">
+                                <h1 className="text-xl ">Your Email</h1>
+                                <input
+                                    type="email"
+                                    name="confirmPassword"
+                                    placeholder="Your email"
+                                    className="w-full border p-2 rounded"
+                                    value={session?.user.email}
+                                    disabled={true}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        )}
+
                         {/* Password edit */}
                         {(passWordEdit) && (
                             <div className="text-center text-purple-500 font-extralight text-shadow-md text-shadow-pink-500/20 flex flex-col gap-4">
@@ -520,14 +544,14 @@ export default function ProfilePage() {
                                         ref={fileInputRef}
                                         style={{ display: 'none' }}
                                     />
-                                    {preview && (
+                                    {1 && (
                                         <button
                                             type="button"
                                             onClick={() => fileInputRef.current?.click()}
                                             className="focus:outline-none"
                                         >
                                             <Image
-                                                src={preview}
+                                                src={preview || profileDetails!.pfp || defaultProfilePic}
                                                 alt="Preview"
                                                 width={100}
                                                 height={100}
@@ -565,6 +589,7 @@ export default function ProfilePage() {
                                         </button>
                                     </div>
                                 </form>
+
                             </div>
                         )}
                         {/* Confirm delete account */}
@@ -678,7 +703,7 @@ export default function ProfilePage() {
                             />
                         </button>
                         {/* Setting side image */}
-                        <div className="p-2 max-[510px]:w-[200px] max-[480px]:w-[150px] w-[180px]">
+                        <div className="p-2 max-[510px]:w-[240px] max-[480px]:w-[180px] w-[220px]">
                             <Image
                                 className="rounded-lg shadow-xl shadow-pink-500/20"
                                 src={'/art/art3.jpg'}
@@ -693,6 +718,11 @@ export default function ProfilePage() {
                         max-[480px]:w-[160px] w-[240px] ">
                             {(isOwner || isAdmin) && (
                                 <>
+                                    <button
+                                        onClick={handleViewEmail}
+                                        className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500 text-start">
+                                        View Email
+                                    </button>
                                     <button
                                         onClick={handlePasswordChange}
                                         className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500 text-start">
@@ -746,13 +776,25 @@ export default function ProfilePage() {
 
                     <div className="flex justify-center items-start gap-5">
                         {/* Profile Picture */}
-                        <Image
-                            className="border-2 border-white rounded-full shadow-xl shadow-pink-500/30"
-                            src={profileDetails!.pfp || defaultProfilePic}
-                            alt="Profile"
-                            width={100}
-                            height={100}
-                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (session?.user.isAdmin || session?.user.uuid === uuid) {
+                                    handleResetPrompts();
+                                    handlePfpChange();
+                                    setSettingToggle(false);
+                                }
+                            }}
+                            className="focus:outline-none"
+                        >
+                            <Image
+                                src={profileDetails!.pfp || defaultProfilePic}
+                                alt="Profile"
+                                width={100}
+                                height={100}
+                                className="border-2 border-white rounded-full shadow-xl shadow-pink-500/30"
+                            />
+                        </button>
                         {/* Profile Meta Data */}
                         <div className="flex flex-col gap-1">
                             {/* Name & Verification Status */}
