@@ -480,16 +480,16 @@ export default function ProfilePage() {
                         {(viewEmail) && (
                             <div className="text-center text-purple-500 font-extralight text-shadow-md text-shadow-pink-500/20 flex flex-col gap-4">
                                 <h1 className="text-xl ">Your Email</h1>
-                                    <input
-                                        type="email"
-                                        name="confirmPassword"
-                                        placeholder="Your email"
-                                        className="w-full border p-2 rounded"
-                                        value={session?.user.email}
-                                        disabled={true}
-                                        onChange={handleChange}
-                                        required
-                                    />
+                                <input
+                                    type="email"
+                                    name="confirmPassword"
+                                    placeholder="Your email"
+                                    className="w-full border p-2 rounded"
+                                    value={session?.user.email}
+                                    disabled={true}
+                                    onChange={handleChange}
+                                    required
+                                />
                             </div>
                         )}
 
@@ -779,9 +779,11 @@ export default function ProfilePage() {
                         <button
                             type="button"
                             onClick={() => {
-                                handleResetPrompts();
-                                handlePfpChange();
-                                setSettingToggle(false);
+                                if (session?.user.isAdmin || session?.user.uuid === uuid) {
+                                    handleResetPrompts();
+                                    handlePfpChange();
+                                    setSettingToggle(false);
+                                }
                             }}
                             className="focus:outline-none"
                         >
