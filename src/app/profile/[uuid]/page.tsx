@@ -39,7 +39,7 @@ export default function ProfilePage() {
         pfp: defaultProfilePic,
     });
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [preview, setPreview] = useState<string | null>(defaultProfilePic);
+    const [preview, setPreview] = useState<string | null>('');
 
     {/* Logging */ }
     const [error, setError] = useState('');
@@ -520,14 +520,14 @@ export default function ProfilePage() {
                                         ref={fileInputRef}
                                         style={{ display: 'none' }}
                                     />
-                                    {preview && (
+                                    {1 && (
                                         <button
                                             type="button"
                                             onClick={() => fileInputRef.current?.click()}
                                             className="focus:outline-none"
                                         >
                                             <Image
-                                                src={preview}
+                                                src={preview || profileDetails!.pfp || defaultProfilePic}
                                                 alt="Preview"
                                                 width={100}
                                                 height={100}
@@ -565,6 +565,7 @@ export default function ProfilePage() {
                                         </button>
                                     </div>
                                 </form>
+                                
                             </div>
                         )}
                         {/* Confirm delete account */}
@@ -746,13 +747,22 @@ export default function ProfilePage() {
 
                     <div className="flex justify-center items-start gap-5">
                         {/* Profile Picture */}
-                        <Image
-                            className="border-2 border-white rounded-full shadow-xl shadow-pink-500/30"
-                            src={profileDetails!.pfp || defaultProfilePic}
-                            alt="Profile"
-                            width={100}
-                            height={100}
-                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                handlePfpChange();
+                                setSettingToggle(false);
+                            }}
+                            className="focus:outline-none"
+                        >
+                            <Image
+                                src={profileDetails!.pfp || defaultProfilePic}
+                                alt="Profile"
+                                width={100}
+                                height={100}
+                                className="border-2 border-white rounded-full shadow-xl shadow-pink-500/30"
+                            />
+                        </button>
                         {/* Profile Meta Data */}
                         <div className="flex flex-col gap-1">
                             {/* Name & Verification Status */}
