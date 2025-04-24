@@ -395,6 +395,7 @@ export default function ProfilePage() {
 
     const handleSettings = () => {
         setSettingToggle(!settingToggle);
+        setSettingToggleDialogue(false);
     }
 
     const handleSettingDialogue = () => {
