@@ -140,7 +140,7 @@ export default function PostCreate() {
                 {/* Search Form */}
                 <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center gap-5">
                     <div className="text-center max-[550px]:text-3xl
-                    max-[350px]:text-xl text-4xl font-extralight antialiased text-pink-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-pink-500">Search</div>
+                    max-[350px]:text-xl text-4xl font-extralight antialiased text-pink-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-pink-500">Search through {searchMethod.charAt(0).toUpperCase() + searchMethod.slice(1)}</div>
                     {/* Input field */}
                     <input
                         type="text"
@@ -163,7 +163,7 @@ export default function PostCreate() {
                                 className="w-4 h-4 accent-pink-500 
                             rounded transition"
                             />
-                            Post Title
+                            Posts
                         </label>
                         <label className="text-pink-500 font-medium flex justify-center items-center gap-1">
                             <input

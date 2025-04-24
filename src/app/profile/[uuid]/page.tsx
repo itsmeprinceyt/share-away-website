@@ -53,6 +53,7 @@ export default function ProfilePage() {
     const [confirmBan, setConfirmBan] = useState(false);
     const [confirmDeletePost, setConfirmDeletePost] = useState(false);
     const [postToDelete, setPostToDelete] = useState<string | null>(null);
+    const [viewEmail, setViewEmail] = useState(false);
     const [settingToggle, setSettingToggle] = useState(false);
     const [settingToggleDialogue, setSettingToggleDialogue] = useState(false);
 
@@ -400,6 +401,11 @@ export default function ProfilePage() {
         setSettingToggleDialogue(!settingToggleDialogue);
     }
 
+    const handleViewEmail = () => {
+        setViewEmail(!viewEmail);
+        setSettingToggleDialogue(!settingToggleDialogue);
+        setSettingToggle(!settingToggle);
+    }
     const handlePasswordChange = () => {
         setPasswordEdit(!passWordEdit);
         setSettingToggleDialogue(!settingToggleDialogue);
@@ -413,6 +419,7 @@ export default function ProfilePage() {
     }
 
     const handleResetPrompts = () => {
+        setViewEmail(false);
         setPasswordEdit(false);
         setPfpChange(false);
         setConfirmDelete(false);
@@ -468,6 +475,23 @@ export default function ProfilePage() {
                                 alt="Settings"
                             />
                         </button>
+
+                        {/* View Email */}
+                        {(viewEmail) && (
+                            <div className="text-center text-purple-500 font-extralight text-shadow-md text-shadow-pink-500/20 flex flex-col gap-4">
+                                <h1 className="text-xl ">Your Email</h1>
+                                    <input
+                                        type="email"
+                                        name="confirmPassword"
+                                        placeholder="Your email"
+                                        className="w-full border p-2 rounded"
+                                        value={session?.user.email}
+                                        disabled={true}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                            </div>
+                        )}
 
                         {/* Password edit */}
                         {(passWordEdit) && (
@@ -679,7 +703,7 @@ export default function ProfilePage() {
                             />
                         </button>
                         {/* Setting side image */}
-                        <div className="p-2 max-[510px]:w-[200px] max-[480px]:w-[150px] w-[180px]">
+                        <div className="p-2 max-[510px]:w-[240px] max-[480px]:w-[180px] w-[220px]">
                             <Image
                                 className="rounded-lg shadow-xl shadow-pink-500/20"
                                 src={'/art/art3.jpg'}
@@ -694,6 +718,11 @@ export default function ProfilePage() {
                         max-[480px]:w-[160px] w-[240px] ">
                             {(isOwner || isAdmin) && (
                                 <>
+                                    <button
+                                        onClick={handleViewEmail}
+                                        className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500 text-start">
+                                        View Email
+                                    </button>
                                     <button
                                         onClick={handlePasswordChange}
                                         className="hover:bg-purple-600/10 hover:border-l-[20px] border-l-purple-600 hover:font-semibold py-2 px-3 rounded transition-all duration-300 hover:shadow-lg shadow-purple-500/20 hover:text-purple-500 text-start">
@@ -750,6 +779,7 @@ export default function ProfilePage() {
                         <button
                             type="button"
                             onClick={() => {
+                                handleResetPrompts();
                                 handlePfpChange();
                                 setSettingToggle(false);
                             }}
