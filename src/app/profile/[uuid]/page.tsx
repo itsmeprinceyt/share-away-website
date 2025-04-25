@@ -806,23 +806,37 @@ export default function ProfilePage() {
                                     @{profileDetails!.username}
                                 </Link>
                                 {/* Verification badge status */}
-                                <div className="flex justify-center items-center h-[30px] w-[30px] hover:scale-150 transition-all duration-300">
+                                <div className="flex h-[30px] w-[30px]">
                                     {profileDetails!.isVerified ?
-                                        <Image
-                                            className="z-2 mt-1 p-1 drop-shadow-[0_4px_6px_rgba(0,255,0,0.5)]"
-                                            src={'/icons/verified.png'}
-                                            height={500}
-                                            width={500}
-                                            alt="verified-logo"
-                                        />
+                                        <div className="relative group">
+                                            <div className="z-5 absolute top-10 right-0 bg-white px-2 py-1 rounded-md
+                                            shadow-xl text-xs text-nowrap text-shadow-none shadow-pink-500/20 border border-pink-300
+                                            opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-normal">
+                                                Verified
+                                            </div>
+                                            <Image
+                                                className="hover:scale-125 transition-all duration-300 z-2 mt-1 p-1 drop-shadow-[0_4px_6px_rgba(0,255,0,0.5)]"
+                                                src={'/icons/verified.png'}
+                                                height={500}
+                                                width={500}
+                                                alt="verified-logo"
+                                            />
+                                        </div>
                                         :
-                                        <Image
-                                            className="z-2 mt-1 p-1 drop-shadow-[0_4px_6px_rgba(255,0,0,0.5)]"
-                                            src={'/icons/unverified.png'}
-                                            height={500}
-                                            width={500}
-                                            alt="verified-logo"
-                                        />
+                                        <div className="relative group">
+                                            <div className="z-5 absolute top-10 right-0 bg-white px-2 py-1 rounded-md
+                                            shadow-xl text-xs text-nowrap text-shadow-none shadow-pink-500/20 border border-pink-300
+                                            opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-normal">
+                                                Unverified
+                                            </div>
+                                            <Image
+                                                className="hover:scale-125 transition-all duration-300 z-2 mt-1 p-1 drop-shadow-[0_4px_6px_rgba(255,0,0,0.5)]"
+                                                src={'/icons/unverified.png'}
+                                                height={500}
+                                                width={500}
+                                                alt="verified-logo"
+                                            />
+                                        </div>
                                     }
                                 </div>
                             </div>
@@ -840,7 +854,7 @@ export default function ProfilePage() {
 
                     {/* Right side */}
                     <div className="flex gap-2">
-                        <div className="w-[18px] relative group min-[480px]:hidden">
+                        <div className="w-[18px] relative group">
                             <div className="z-5 absolute top-10 right-0 bg-white px-2 py-1
                             rounded-md shadow-xl text-xs text-nowrap shadow-pink-500/20
                             border border-pink-300
@@ -849,34 +863,17 @@ export default function ProfilePage() {
                             </div>
                             <button onClick={() => handleCopy('profile', uuid)}>
                                 <Image
-                                    className="absolute top-2 z-2 drop-shadow-[0_4px_6px_rgba(236,72,153,0.5)]"
+                                    className="hover:scale-125 transition-all duration-300 absolute top-[10px] z-2 drop-shadow-[0_4px_6px_rgba(236,72,153,0.5)]"
                                     src={'/icons/share.png'}
                                     width={500}
                                     height={500}
-                                    alt="Settings"
-                                />
-                            </button>
-                        </div>
-                        <div className="w-[18px] relative group max-[480px]:hidden">
-                            <div className="z-5 absolute top-5 right-0 bg-white px-2 py-1
-                            rounded-md shadow-xl text-xs text-nowrap shadow-pink-500/20
-                            border border-pink-300
-                            opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                Share Profile
-                            </div>
-                            <button onClick={() => handleCopy('profile', uuid)}>
-                                <Image
-                                    className="z-2 drop-shadow-[0_4px_6px_rgba(236,72,153,0.5)]"
-                                    src={'/icons/share.png'}
-                                    width={500}
-                                    height={500}
-                                    alt="Settings"
+                                    alt="Share"
                                 />
                             </button>
                         </div>
                         {(isOwner || isAdmin) && (
-                            <div className="w-[18px] relative group max-[480px]:hidden">
-                                <div className="z-5 absolute top-5 right-0 bg-white px-2 py-1
+                            <div className="w-[18px] relative group">
+                                <div className="z-5 absolute top-10 right-0 bg-white px-2 py-1
                             rounded-md shadow-xl text-xs text-nowrap shadow-pink-500/20
                             border border-pink-300
                             opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -884,7 +881,7 @@ export default function ProfilePage() {
                                 </div>
                                 <button onClick={handleSettings}>
                                     <Image
-                                        className="z-2 drop-shadow-[0_4px_6px_rgba(236,72,153,0.5)]"
+                                        className="hover:scale-125 transition-all duration-300 absolute top-[10px] z-2 drop-shadow-[0_4px_6px_rgba(236,72,153,0.5)]"
                                         src={'/icons/setting.png'}
                                         width={500}
                                         height={500}
@@ -958,27 +955,6 @@ export default function ProfilePage() {
                 )}
 
             </div>
-
-            {/* Setting Menu - Below 480px */}
-            {(isOwner || isAdmin) && (
-                <div className="w-[18px] z-50 group fixed bottom-15 right-13 min-[480px]:hidden">
-                    <div className="z-50 absolute top-5 right-0 bg-white px-2 py-1
-                            rounded-md shadow-xl text-xs text-nowrap shadow-pink-500/20
-                            border border-pink-300
-                            opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        Edit Profile
-                    </div>
-                    <button onClick={handleSettings}>
-                        <Image
-                            className="z-2 drop-shadow-[0_4px_6px_rgba(236,72,153,0.5)]"
-                            src={'/icons/setting.png'}
-                            width={50}
-                            height={50}
-                            alt="Settings"
-                        />
-                    </button>
-                </div>
-            )}
 
         </PageWrapperNormalTop>
     );
