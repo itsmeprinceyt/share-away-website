@@ -57,7 +57,7 @@ export default function Home() {
             <br /><br /> Whether you&apos;re going through something tough, celebrating a small win, or just need to get something off your chest, just&nbsp;
 
             <Link
-              href="/login"
+              href="/home"
               className="
               inline-block bg-pink-600/20 rounded-md px-2 text-pink-600
               border border-pink-300 hover:border-pink-400 shadow-xl

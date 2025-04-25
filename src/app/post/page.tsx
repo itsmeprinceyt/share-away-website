@@ -80,7 +80,7 @@ export default function PostCreate() {
             mt-24 mb-24 flex flex-col gap-12 text-center">
                 <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center gap-5">
                     <div className="text-center max-[550px]:text-3xl
-                    max-[350px]:text-xl text-4xl font-extralight antialiased text-pink-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-pink-500">Create Post</div>
+                    max-[450px]:text-xl text-4xl font-extralight antialiased text-pink-500 rounded-xl px-5 py-1  text-shadow-lg/20 text-shadow-pink-500">Create Post</div>
                     {/* Title input */}
                     <div className="relative">
                         <input
@@ -92,7 +92,7 @@ export default function PostCreate() {
                             required
                             className="bg-white border border-white font-semibold
                         focus:border-pink-500 focus:outline-none text-pink-500 p-2
-                        rounded-lg mb-4 max-[350px]:mb-2 w-[400px] max-[550px]:w-full"
+                        rounded-lg mb-4  w-[400px] max-[410px]:w-[320px]"
                         />
                         <p className="absolute bottom-0 left-2 text-[8px] text-gray-500 text-right pointer-events-none">{heading.length} / 100</p>
                     </div>
@@ -107,7 +107,7 @@ export default function PostCreate() {
                             onChange={(e) => setBody(e.target.value)}
                             required
                             className="bg-white border border-white border-r-0 focus:border-pink-500 focus:outline-none
-                        text-pink-500 p-2 rounded-lg mb-4 max-[350px]:mb-2 w-[400px] max-[550px]:w-full
+                        text-pink-500 p-2 rounded-lg mb-4 w-[400px] max-[410px]:w-[320px]
                         font-extralight resize-none overflow-y-auto"
                             style={{
                                 minHeight: '50px',

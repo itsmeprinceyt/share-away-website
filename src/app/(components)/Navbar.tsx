@@ -100,18 +100,34 @@ export default function Navbar() {
 
     return (
         <div className="z-50 absolute top-0 min-w-full" ref={menuRef}>
-            {/* Home Button */}
-            <Link
-                className="absolute top-5 left-5"
-                href="/home" >
-                <Image
-                    className="w-[50px] h-[50px] hover:scale-110 transition-all duration-300"
-                    src={'/logo/ShareAway5-png.png'}
-                    alt="Home"
-                    width={500}
-                    height={500}
-                />
-            </Link>
+            {/* Logo: Home for Unlogged in users*/}
+            {!session && (
+                <Link
+                    className="absolute top-5 left-5"
+                    href="/" >
+                    <Image
+                        className="w-[50px] h-[50px] hover:scale-110 transition-all duration-300"
+                        src={'/logo/ShareAway5-png.png'}
+                        alt="Home"
+                        width={500}
+                        height={500}
+                    />
+                </Link>
+            )}
+            {/* Logo: For Logged in users */}
+            {session && (
+                <Link
+                    className="absolute top-5 left-5"
+                    href="/home" >
+                    <Image
+                        className="w-[50px] h-[50px] hover:scale-110 transition-all duration-300"
+                        src={'/logo/ShareAway5-png.png'}
+                        alt="Home"
+                        width={500}
+                        height={500}
+                    />
+                </Link>
+            )}
 
             {/* Right Corner Div */}
             <div className="absolute top-5 right-5 flex justify-between items-center gap-5">

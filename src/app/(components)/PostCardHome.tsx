@@ -104,7 +104,7 @@ const PostCardHome = ({
                         height={35}
                         alt="Post owner pfp"
                     />
-                    <div>
+                    <div className=" font-bold text-xl flex flex-col gap-2 break-all">
                         <LinkifyText text={content.heading} />
                         <div className="flex items-center gap-2">
                             <p className="text-xs text-gray-500 font-extralight">

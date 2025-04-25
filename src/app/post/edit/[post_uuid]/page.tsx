@@ -113,11 +113,12 @@ export default function PostEdit() {
                         <input
                             type="text"
                             value={heading}
+                            maxLength={100}
                             onChange={(e) => setHeading(e.target.value)}
                             required
                             className="bg-white border border-white font-semibold
                         focus:border-pink-500 focus:outline-none text-pink-500 p-2
-                        rounded-lg mb-4 max-[350px]:mb-2 w-[400px] max-[550px]:w-full"
+                        rounded-lg mb-4  w-[400px] max-[410px]:w-[320px]"
                         />
                         <p className="absolute bottom-0 left-2 text-[8px] text-gray-500 text-right pointer-events-none">{heading.length} / 100</p>
                     </div>
@@ -128,10 +129,11 @@ export default function PostEdit() {
                             ref={textareaRef}
                             placeholder="Write something..."
                             value={body}
+                            maxLength={5000}
                             onChange={(e) => setBody(e.target.value)}
                             required
                             className="bg-white border border-white border-r-0 focus:border-pink-500 focus:outline-none
-                        text-pink-500 p-2 rounded-lg mb-4 max-[350px]:mb-2 w-[400px] max-[550px]:w-full
+                        text-pink-500 p-2 rounded-lg mb-4 w-[400px] max-[410px]:w-[320px]
                         font-extralight resize-none overflow-y-auto"
                             style={{
                                 minHeight: '50px',
