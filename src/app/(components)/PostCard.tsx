@@ -118,7 +118,7 @@ const PostCard = ({
 
             <p className="whitespace-pre-line font-extralight
             overflow-y-auto max-h-[500px] px-2 py-1 border border-r-0 border-pink-100
-            rounded-tl-lg rounded-bl-lg rounded-tr-md rounded-br-md"><LinkifyText text={body} /></p>
+            rounded-tl-lg rounded-bl-lg rounded-tr-md rounded-br-md break-all"><LinkifyText text={body} /></p>
 
 
             <div className="flex items-start justify-start gap-5">
