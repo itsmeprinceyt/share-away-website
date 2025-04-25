@@ -37,7 +37,7 @@ export default function Home() {
                 const sessionData = sessionStorage.getItem('userSession') || localStorage.getItem('userSession');
 
                 if (!sessionData) {
-                    router.push('/');
+                    router.push('/login');
                     return;
                 }
 
@@ -45,7 +45,7 @@ export default function Home() {
                 const viewer_uuid = parsed?.user?.uuid;
 
                 if (!viewer_uuid) {
-                    router.push('/');
+                    router.push('/login');
                     return;
                 }
 

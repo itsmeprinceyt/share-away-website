@@ -97,7 +97,7 @@ const PostCard = ({
             )}
 
             <div className="flex justify-between items-start">
-                <div className=" font-bold text-xl flex flex-col gap-2">
+                <div className=" font-bold text-xl flex flex-col gap-2 break-all">
                     <LinkifyText text={heading} />
                     <div className="flex items-center gap-2">
                         <p className="text-xs text-gray-500 font-extralight">
