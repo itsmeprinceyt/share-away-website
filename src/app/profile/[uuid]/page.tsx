@@ -115,7 +115,7 @@ export default function ProfilePage() {
             if (!event.target?.result) return;
 
             img.onload = () => {
-                const maxSize = 128;
+                const maxSize = 200;
                 const canvas = document.createElement('canvas');
                 canvas.width = maxSize;
                 canvas.height = maxSize;
@@ -139,8 +139,8 @@ export default function ProfilePage() {
                 const base64Length = compressedBase64.length - 'data:image/jpeg;base64,'.length;
                 const estimatedSize = (base64Length * 3) / 4;
 
-                if (estimatedSize > 150 * 1024) {
-                    setError("Compressed image still exceeds 150KB. Please choose a smaller image.");
+                if (estimatedSize > 200 * 1024) {
+                    setError("Compressed image still exceeds 200KB. Please choose a smaller image.");
                     return;
                 }
 
