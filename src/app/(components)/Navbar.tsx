@@ -134,7 +134,7 @@ export default function Navbar() {
 
                 {/* Notification Window */}
                 {(showBell) && (
-                    <div className="absolute top-20 max-[350px]:right-12 right-32 bg-white text-pink-600 shadow-xl shadow-pink-500/20 w-48 overflow-y-auto h-[200px] rounded-lg flex flex-col items-center" ref={menuRef2}>
+                    <div className="absolute top-14 max-[350px]:right-12 right-32 bg-white text-pink-600 shadow-xl shadow-pink-500/20 w-48 overflow-y-auto h-[200px] rounded-lg flex flex-col items-center" ref={menuRef2}>
                         {/* Notification Image */}
                         <Image
                             className="rounded-tl shadow-md shadow-pink-500/20"
@@ -260,7 +260,7 @@ export default function Navbar() {
                 {/* Hamburger open */}
                 {(showHamburger) && (
 
-                    <div className="absolute w-[120px] right-6 flex flex-col justify-start text-pink-600 top-20 bg-white rounded-lg shadow-xl shadow-pink-500/20">
+                    <div className="absolute w-[120px] right-6 flex flex-col justify-start text-pink-600 top-14 bg-white rounded-lg shadow-xl shadow-pink-500/20">
                         {/* Image */}
                         <Image
                             className="rounded-tr rounded-tl shadow-md shadow-pink-500/20"
