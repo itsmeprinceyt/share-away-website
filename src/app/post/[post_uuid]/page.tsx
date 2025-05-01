@@ -46,7 +46,7 @@ export default function Post() {
             .then((data) => {
                 if (data && data.post) {
                     setPostData(data.post);
-                    if (postData?.user_uuid === session?.user.uuid) {
+                    if (postData?.uuid === session?.user.uuid) {
                         setIsOwner(true);
                     } else {
                         setIsOwner(false);
@@ -59,7 +59,7 @@ export default function Post() {
             }).finally(() => {
                 setLoading(false);
             });
-    }, [router, postData?.user_uuid, session , post_uuid]);
+    }, [router, postData?.uuid, session , post_uuid]);
 
     if (loading) return <Loading />;
     if (is404) return <NotFound />;
