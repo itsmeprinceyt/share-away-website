@@ -59,6 +59,7 @@ export default function ProfilePage() {
 
     {/* Loaders and 404 Pages */ }
     const [loading, setLoading] = useState(true);
+    const [deleteAcc, setDeleteAcc] = useState(false);
     const [is404, setIs404] = useState(false);
     const { showToast, Toast } = useToast();
 
@@ -237,6 +238,7 @@ export default function ProfilePage() {
     };
 
     const handleDeleteAccount = async () => {
+        setDeleteAcc(true);
         try {
             const userSessionToken = sessionStorage.getItem('userSession');
             const { token } = JSON.parse(userSessionToken!);
@@ -253,9 +255,12 @@ export default function ProfilePage() {
                 if (isOwner) {
                     sessionStorage.removeItem('userSession');
                     localStorage.removeItem('userSession');
+                    await new Promise(resolve => setTimeout(resolve, 2000));
                 }
+                router.push('/');
             } else {
                 setError(data.message || 'Failed to delete account');
+                setDeleteAcc(false);
             }
         } catch (err: unknown) {
             if (err instanceof Error) {
@@ -263,8 +268,7 @@ export default function ProfilePage() {
             } else {
                 setError('Something went wrong');
             }
-        } finally {
-            router.push(`/`);
+            setDeleteAcc(false);
         }
     };
 
@@ -601,6 +605,7 @@ export default function ProfilePage() {
                                 </p>
                                 <div className="flex gap-5 items-center justify-center">
                                     <button
+                                        disabled={deleteAcc}
                                         onClick={handleDeleteAccount}
                                         className="bg-gradient-to-r from-red-500 to-red-400
                                             text-white rounded-lg w-[150px] max-[550px]:w-[100px]
