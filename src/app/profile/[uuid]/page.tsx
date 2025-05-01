@@ -609,7 +609,7 @@ export default function ProfilePage() {
                                         onClick={handleDeleteAccount}
                                         className="bg-gradient-to-r from-red-500 to-red-400
                                             text-white rounded-lg w-[150px] max-[550px]:w-[100px]
-                                            py-2 border border-red-500 hover:scale-105 transition-all duration-300 shadow-xl shadow-red-500/30 hover:shadow-red-500/50 font-extralight">
+                                            py-2 border border-red-500 hover:scale-105 transition-all duration-300 shadow-xl shadow-red-500/30 hover:shadow-red-500/50 font-extralight disabled:opacity-50">
                                         Yes, Delete
                                     </button>
                                     <button
