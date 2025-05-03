@@ -39,7 +39,7 @@ export default function AudioPlayer() {
                 <button
                     onClick={togglePlay}
                 >
-                    {isPlaying ? "🔇" : "🔊"}
+                    {isPlaying ? "🔊" : "🔇"}
                 </button>
 
                 <button
