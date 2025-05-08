@@ -54,24 +54,24 @@ export default function SignUp() {
     const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-    
+
         const img = new window.Image();
         const reader = new FileReader();
-    
+
         reader.onload = function (event) {
             if (!event.target?.result) return;
-    
+
             img.onload = () => {
-                const maxSize = 128;
+                const maxSize = 200;
                 const canvas = document.createElement('canvas');
                 canvas.width = maxSize;
                 canvas.height = maxSize;
-    
+
                 const ctx = canvas.getContext('2d');
                 if (!ctx) return;
-    
+
                 let sx = 0, sy = 0, sWidth = img.width, sHeight = img.height;
-    
+
                 if (img.width > img.height) {
                     sx = (img.width - img.height) / 2;
                     sWidth = img.height;
@@ -79,26 +79,26 @@ export default function SignUp() {
                     sy = (img.height - img.width) / 2;
                     sHeight = img.width;
                 }
-                
+
                 ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, maxSize, maxSize);
-    
+
                 const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
                 const base64Length = compressedBase64.length - 'data:image/jpeg;base64,'.length;
                 const estimatedSize = (base64Length * 3) / 4;
-    
-                if (estimatedSize > 150 * 1024) {
-                    setError("Compressed image still exceeds 150KB. Please choose a smaller image.");
+
+                if (estimatedSize > 200 * 1024) {
+                    setError("Compressed image still exceeds 200KB. Please choose a smaller image.");
                     return;
                 }
-    
+
                 setPreview(compressedBase64);
                 setForm(prev => ({ ...prev, pfp: compressedBase64 }));
                 setError('');
             };
-    
+
             img.src = event.target.result as string;
         };
-    
+
         reader.readAsDataURL(file);
     };
 
@@ -271,7 +271,7 @@ export default function SignUp() {
                             />
                         </button>
                     </div>
-                    
+
                     {/* Agree to T&C Part */}
                     <div className="flex items-center gap-2">
                         <input
