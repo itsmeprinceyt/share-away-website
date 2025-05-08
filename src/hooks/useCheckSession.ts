@@ -71,18 +71,21 @@ export const useCheckSession = (requiredRole: Role = 'USER'): UserSession | null
                         'Authorization': `Bearer ${token}`,
                     },
                 });
+
                 if (!res.ok) {
-                    sessionStorage.removeItem('userSession');
-                    localStorage.removeItem('userSession');
-                    if (!hasRedirected.current) {
-                        hasRedirected.current = true;
-                        router.push('/');
-                    }
-                    return;
+                    throw new Error('Response not OK');
                 }
+
             } catch (err) {
                 console.error('Error checking account existence:', err);
+                sessionStorage.removeItem('userSession');
+                localStorage.removeItem('userSession');
+                if (!hasRedirected.current) {
+                    hasRedirected.current = true;
+                    router.push('/');
+                }
             }
+
 
             if (isAdminCheck) {
                 if (!hasRedirected.current) {
