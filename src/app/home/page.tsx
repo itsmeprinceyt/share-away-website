@@ -259,7 +259,7 @@ export default function Home() {
                         Share Away 🩷...
                     </Link>
                 </div>
-                {/* All posts */}
+                {/* All posts from every user from latest to old */}
                 <ul className="flex flex-col gap-10 text-start">
                     {posts.map((post) => {
                         const parsedContent = typeof post.content === 'string' ? JSON.parse(post.content) : post.content;
