@@ -302,10 +302,16 @@ export default function ProfilePage() {
     };
 
     const handlePostDelete = async (post_uuid: string, type: 'CONFIRM' | 'ASK') => {
+
         if (type === 'ASK') {
             setSettingToggleDialogue(true);
             setPostToDelete(post_uuid);
             setConfirmDeletePost(true);
+            setViewEmail(false);
+            setPasswordEdit(false);
+            setPfpChange(false);
+            setConfirmDelete(false);
+            setConfirmBan(false);
             return;
         }
 
@@ -314,6 +320,11 @@ export default function ProfilePage() {
             setSettingToggleDialogue(false);
             setSettingToggle(false);
             setPostToDelete(null);
+            setViewEmail(false);
+            setPasswordEdit(false);
+            setPfpChange(false);
+            setConfirmDelete(false);
+            setConfirmBan(false);
         }
 
         const session = sessionStorage.getItem('userSession');
@@ -399,6 +410,13 @@ export default function ProfilePage() {
 
     const handleSettings = () => {
         setSettingToggle(!settingToggle);
+        setViewEmail(false);
+        setPasswordEdit(false);
+        setPfpChange(false);
+        setConfirmDelete(false);
+        setConfirmDeletePost(false);
+        setPostToDelete(null);
+        setConfirmBan(false);
         setSettingToggleDialogue(false);
     }
 
@@ -428,9 +446,9 @@ export default function ProfilePage() {
         setPasswordEdit(false);
         setPfpChange(false);
         setConfirmDelete(false);
+        setConfirmBan(false);
         setConfirmDeletePost(false);
         setPostToDelete(null);
-        setConfirmBan(false);
         setSettingToggleDialogue(false);
         setSettingToggle(true);
     }
@@ -778,7 +796,7 @@ export default function ProfilePage() {
             <div className="z-20 max-[680px]:w-full w-[600px] max-[680px]:ml-2 max-[680px]:mr-2 mt-24 mb-24 flex flex-col gap-6">
 
                 {/* Profile container */}
-                <div className=" flex justify-between p-2">
+                <div className="flex justify-between p-2">
 
                     <div className="flex justify-center items-start gap-5">
                         {/* Profile Picture */}
@@ -787,7 +805,8 @@ export default function ProfilePage() {
                             onClick={() => {
                                 if (session?.user.isAdmin || session?.user.uuid === uuid) {
                                     handleResetPrompts();
-                                    handlePfpChange();
+                                    setPfpChange(true);
+                                    setSettingToggleDialogue(true);
                                     setSettingToggle(false);
                                 }
                             }}

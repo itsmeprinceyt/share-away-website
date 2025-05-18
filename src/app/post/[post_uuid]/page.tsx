@@ -232,7 +232,7 @@ export default function Post() {
             {/* ======================================================== */}
             <div className="z-20 max-[680px]:w-full w-[600px] max-[680px]:ml-2 max-[680px]:mr-2 m-10
             mt-24 mb-24 flex flex-col gap-12 text-center">
-                {/* All posts */}
+                {/* Single Post */}
                 {postData && (
                     <ul className="flex flex-col gap-10 text-start">
                         <li key={postData.post_uuid}>
